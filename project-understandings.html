@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stitch Smart — Project Understandings</title>
+<style>
+  /* ── Google Font ── */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg:        #0d0f14;
+    --surface:   #13161e;
+    --card:      #1a1e2a;
+    --border:    #252c3d;
+    --accent:    #7c6af7;
+    --accent2:   #e85d8a;
+    --accent3:   #3ecfa0;
+    --gold:      #f5c842;
+    --text:      #dde1ee;
+    --muted:     #8891a8;
+    --code-bg:   #111420;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ── Animated starfield background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,106,247,.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(232,93,138,.10) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 60% 40%, rgba(62,207,160,.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Layout ── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── Hero header ── */
+  .hero {
+    text-align: center;
+    padding: 80px 20px 60px;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(124,106,247,.2), rgba(232,93,138,.2));
+    border: 1px solid rgba(124,106,247,.4);
+    color: #a89cf7;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #fff 0%, #a89cf7 50%, #e85d8a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 50px;
+  }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot-purple { background: var(--accent); }
+  .dot-pink   { background: var(--accent2); }
+  .dot-green  { background: var(--accent3); }
+  .dot-gold   { background: var(--gold); }
+
+  /* ── Table of Contents ── */
+  .toc-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .toc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .toc-card h2 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all .2s;
+    border: 1px solid transparent;
+  }
+
+  .toc-item:hover {
+    background: rgba(124,106,247,.1);
+    border-color: rgba(124,106,247,.25);
+    color: var(--text);
+  }
+
+  .toc-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(124,106,247,.15);
+    padding: 2px 7px;
+    border-radius: 4px;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 56px;
+    scroll-margin-top: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .num-purple { background: rgba(124,106,247,.2); color: var(--accent); }
+  .num-pink   { background: rgba(232,93,138,.2);  color: var(--accent2); }
+  .num-green  { background: rgba(62,207,160,.2);  color: var(--accent3); }
+  .num-gold   { background: rgba(245,200,66,.2);  color: var(--gold); }
+
+  .section-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+  }
+
+  .card p + p { margin-top: 12px; }
+
+  /* ── Info grid ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .info-tile {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+
+  .info-tile .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .info-tile .value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .info-tile .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* ── Accent tile ── */
+  .tile-purple { border-left: 3px solid var(--accent); }
+  .tile-pink   { border-left: 3px solid var(--accent2); }
+  .tile-green  { border-left: 3px solid var(--accent3); }
+  .tile-gold   { border-left: 3px solid var(--gold); }
+
+  /* ── Tables ── */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 16px; border-radius: 12px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead tr {
+    background: rgba(124,106,247,.12);
+  }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,.03); }
+
+  td {
+    padding: 11px 16px;
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  td:first-child {
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    color: var(--accent3);
+    white-space: nowrap;
+  }
+
+  /* ── Why block ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  @media(max-width: 640px) { .why-grid { grid-template-columns: 1fr; } }
+
+  .why-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+
+  .why-card.good { border-top: 3px solid var(--accent3); }
+  .why-card.bad  { border-top: 3px solid rgba(255,80,80,.6); }
+
+  .why-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .why-card.good h4 { color: var(--accent3); }
+  .why-card.bad  h4 { color: #ff7070; }
+
+  .why-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .why-card ul li {
+    font-size: 13.5px;
+    color: var(--muted);
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .why-card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .why-card.good ul li::before { background: var(--accent3); }
+  .why-card.bad  ul li::before { background: #ff7070; }
+
+  /* ── Flow diagram ── */
+  .flow {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    color: #8cf0c0;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+
+  /* ── File tree ── */
+  .filetree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    line-height: 2;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    color: var(--muted);
+  }
+
+  .filetree .dir  { color: #a89cf7; font-weight: 600; }
+  .filetree .file { color: #dde1ee; }
+  .filetree .desc { color: #596077; }
+  .filetree .hl   { color: var(--accent3); }
+
+  /* ── Comparison table special ── */
+  .better { color: var(--accent3); font-size: 12px; }
+  .avail  { font-size: 12px; padding: 2px 8px; border-radius: 4px; }
+  .avail-yes { background: rgba(62,207,160,.15); color: var(--accent3); }
+
+  /* ── Security table ── */
+  .sec-badge {
+    display: inline-block;
+    background: rgba(62,207,160,.15);
+    color: var(--accent3);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* ── Team cards ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .team-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .team-card:nth-child(1)::after { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .team-card:nth-child(2)::after { background: linear-gradient(90deg, var(--accent2), var(--gold)); }
+  .team-card:nth-child(3)::after { background: linear-gradient(90deg, var(--accent3), var(--accent)); }
+
+  .team-avatar {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .av-1 { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .av-2 { background: linear-gradient(135deg, var(--accent2), var(--gold)); }
+  .av-3 { background: linear-gradient(135deg, var(--accent3), var(--accent)); }
+
+  .team-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .team-card .role { font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .5px; margin-bottom: 10px; }
+  .team-card p { font-size: 13px; color: var(--muted); }
+
+  /* ── Glossary ── */
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .gloss-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+
+  .gloss-term {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .gloss-def { font-size: 13px; color: var(--muted); }
+
+  /* ── Callout box ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(124,106,247,.08);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .callout strong { color: var(--accent); }
+
+  /* ── Limit table ── */
+  .limit-row td:first-child { color: #ff9966; }
+  .limit-row td:last-child  { color: var(--accent3); }
+
+  /* ── API cards ── */
+  .api-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .api-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+
+  .api-card .api-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .api-card .api-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .tag-external { background: rgba(232,93,138,.2); color: var(--accent2); }
+  .tag-local    { background: rgba(62,207,160,.2);  color: var(--accent3); }
+
+  .api-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .api-card ul li { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; }
+  .api-card ul li::before { content: '›'; position: absolute; left: 0; color: var(--accent); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer strong { color: var(--text); }
+
+  /* ── Sticky nav pill ── */
+  .back-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--accent);
+    color: #fff;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 20px;
+    box-shadow: 0 4px 20px rgba(124,106,247,.5);
+    transition: transform .2s;
+    z-index: 100;
+  }
+
+  .back-top:hover { transform: translateY(-3px); }
+
+  /* ── Misc ── */
+  p { color: var(--muted); }
+  strong { color: var(--text); }
+  code {
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent3);
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 48px 0;
+  }
+</style>
+</head>
+<body>
+
+<a href="#top" class="back-top" title="Back to top">↑</a>
+
+<div class="wrapper" id="top">
+
+  <!-- ══ HERO ══ -->
+  <div class="hero">
+    <div class="hero-badge">Final Year Project — 2026</div>
+    <h1>Stitch Smart<br>Project Understanding</h1>
+    <p>Complete technical documentation — architecture, APIs, file structure, language decisions, and competitive analysis.</p>
+    <div class="hero-meta">
+      <span><span class="dot dot-purple"></span> PHP 8.0 Backend</span>
+      <span><span class="dot dot-pink"></span> Google Gemini AI</span>
+      <span><span class="dot dot-green"></span> FAISS + RAG Chatbot</span>
+      <span><span class="dot dot-gold"></span> JazzCash Payments</span>
+    </div>
+  </div>
+
+  <!-- ══ TABLE OF CONTENTS ══ -->
+  <div class="toc-card">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#s1"  class="toc-item"><span class="toc-num">01</span> What Is This Project?</a>
+      <a href="#s2"  class="toc-item"><span class="toc-num">02</span> Who Built It & Why</a>
+      <a href="#s3"  class="toc-item"><span class="toc-num">03</span> Technology Stack</a>
+      <a href="#s4"  class="toc-item"><span class="toc-num">04</span> Why PHP?</a>
+      <a href="#s5"  class="toc-item"><span class="toc-num">05</span> Why Google Gemini?</a>
+      <a href="#s6"  class="toc-item"><span class="toc-num">06</span> Why MySQL?</a>
+      <a href="#s7"  class="toc-item"><span class="toc-num">07</span> File Structure</a>
+      <a href="#s8"  class="toc-item"><span class="toc-num">08</span> How It Works (Flow)</a>
+      <a href="#s9"  class="toc-item"><span class="toc-num">09</span> Database Tables</a>
+      <a href="#s10" class="toc-item"><span class="toc-num">10</span> All APIs Used</a>
+      <a href="#s11" class="toc-item"><span class="toc-num">11</span> Admin Panel</a>
+      <a href="#s12" class="toc-item"><span class="toc-num">12</span> Customer Store</a>
+      <a href="#s13" class="toc-item"><span class="toc-num">13</span> AI Chatbot</a>
+      <a href="#s14" class="toc-item"><span class="toc-num">14</span> JazzCash Payment</a>
+      <a href="#s15" class="toc-item"><span class="toc-num">15</span> Security</a>
+      <a href="#s16" class="toc-item"><span class="toc-num">16</span> Competing Projects</a>
+      <a href="#s17" class="toc-item"><span class="toc-num">17</span> Limitations</a>
+      <a href="#s18" class="toc-item"><span class="toc-num">18</span> Team Members</a>
+      <a href="#s19" class="toc-item"><span class="toc-num">19</span> Glossary</a>
+    </div>
+  </div>
+
+
+  <!-- ══ SECTION 1 ══ -->
+  <section class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num num-purple">01</div>
+      <h2>What Is This Project?</h2>
+    </div>
+    <div class="card">
+      <p><strong>Stitch Smart</strong> is a luxury apparel e-commerce web application — a complete online clothing store built as a Final Year Project (FYP) at a Pakistani university.</p>
+      <p style="margin-top:16px; color:#fff; font-weight:600;">Customers can:</p>
+      <ul style="margin-top:10px; display:flex; flex-direction:column; gap:8px; list-style:none; padding-left:0;">
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent3);">›</span> Browse and buy ready-made garments (hoodies, sweatpants, crewnecks, shorts)</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent3);">›</span> Customize their own garment using a step-by-step <strong>Design Yourself</strong> form</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent3);">›</span> Ask an AI-powered chatbot about products, sizing, and availability</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent3);">›</span> Create accounts, manage orders, write product reviews, manage wishlists</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent3);">›</span> Pay via <strong>JazzCash</strong> (Pakistan's top mobile wallet) or Cash on Delivery</li>
+      </ul>
+      <p style="margin-top:16px; color:#fff; font-weight:600;">Administrators can:</p>
+      <ul style="margin-top:10px; display:flex; flex-direction:column; gap:8px; list-style:none; padding-left:0;">
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent);">›</span> Manage all products, categories, banners, and CMS pages</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent);">›</span> View orders and update their status</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent);">›</span> Access a dashboard with revenue analytics</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent);">›</span> Use an AI assistant (Google Gemini) to generate product descriptions</li>
+        <li style="color:var(--muted); padding-left:18px; position:relative;"><span style="position:absolute;left:0;color:var(--accent);">›</span> Configure website theme dynamically from the admin panel</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 2 ══ -->
+  <section class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num num-pink">02</div>
+      <h2>Who Built It & Why</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar av-1">M</div>
+        <h3>Moiz Ahmed</h3>
+        <div class="role">Lead Developer / Full-Stack</div>
+        <p>PHP MVC architecture, database schema, admin panel, JazzCash integration, security, deployment configuration.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar av-2">B</div>
+        <h3>Bissma Ijaz</h3>
+        <div class="role">Frontend / UI Design</div>
+        <p>CSS theming, all view templates, Design Yourself forms, responsive layout, user experience design.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar av-3">A</div>
+        <h3>Ali Haider</h3>
+        <div class="role">AI / Chatbot Integration</div>
+        <p>Python FastAPI service, FAISS vector index, LangChain RAG pipeline, Gemini LLM, embedding model selection.</p>
+      </div>
+    </div>
+    <div class="card">
+      <p><strong>Why this project?</strong> Most Pakistani clothing brands operate only through Instagram and WhatsApp. Stitch Smart addresses this gap by providing a complete, professional e-commerce platform with AI features that local brands cannot afford from enterprise solutions.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 3 ══ -->
+  <section class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num num-green">03</div>
+      <h2>Technology Stack</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Technology</th>
+            <th>Version</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Backend</td><td>PHP</td><td>8.0+</td><td>Core web application, MVC, routing, database</td></tr>
+          <tr><td>Database</td><td>MySQL / MariaDB</td><td>8.0+ / 10.4+</td><td>Relational data storage</td></tr>
+          <tr><td>Frontend</td><td>HTML5 + CSS3 + JavaScript</td><td>—</td><td>UI, client-side interactions</td></tr>
+          <tr><td>AI Chatbot</td><td>Python + FastAPI</td><td>Python 3.10+</td><td>AI microservice (RAG pipeline)</td></tr>
+          <tr><td>AI LLM</td><td>Google Gemini</td><td>gemini-1.5-flash</td><td>Natural language generation</td></tr>
+          <tr><td>Vector Search</td><td>FAISS</td><td>1.8+</td><td>Product similarity search</td></tr>
+          <tr><td>Embeddings</td><td>sentence-transformers</td><td>all-MiniLM-L6-v2</td><td>Text-to-vector conversion (local)</td></tr>
+          <tr><td>RAG Framework</td><td>LangChain</td><td>1.x</td><td>Prompt management, retrieval chains</td></tr>
+          <tr><td>Mail</td><td>PHPMailer + Gmail SMTP</td><td>Latest</td><td>Transactional email sending</td></tr>
+          <tr><td>Payment</td><td>JazzCash (custom)</td><td>—</td><td>Pakistani mobile wallet payments</td></tr>
+          <tr><td>Web Server</td><td>Apache (XAMPP)</td><td>—</td><td>Local and production web server</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 4 ══ -->
+  <section class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num num-gold">04</div>
+      <h2>Why PHP? Why Not Other Languages?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card good">
+        <h4>Why PHP is the right choice</h4>
+        <ul>
+          <li>XAMPP bundles Apache + MySQL + PHP — zero extra setup for the team</li>
+          <li>Runs natively inside Apache via mod_php (no extra port or process manager)</li>
+          <li>Built-in superglobals make MVC trivial without a heavy framework</li>
+          <li>mysqli extension is built-in — no ORM or driver installation needed</li>
+          <li>Shared PHP hosting is the cheapest globally — cPanel hosts run it instantly</li>
+          <li>Team already had PHP knowledge — no learning curve mid-project</li>
+        </ul>
+      </div>
+      <div class="why-card bad">
+        <h4>Why others were rejected</h4>
+        <ul>
+          <li><strong style="color:#dde1ee;">Node.js</strong> — npm complexity, PM2 needed, async hell for traditional server-rendered HTML</li>
+          <li><strong style="color:#dde1ee;">Python/Django</strong> — Python already used for AI service; running two Python servers wastes memory</li>
+          <li><strong style="color:#dde1ee;">Laravel</strong> — 30MB+ dependencies, Eloquent ORM, Artisan CLI steep learning curve for FYP scope</li>
+          <li><strong style="color:#dde1ee;">Java/Spring</strong> — verbose annotations, DI config, Maven — doubles development time with no benefit</li>
+          <li><strong style="color:#dde1ee;">Ruby/Rails</strong> — no team knowledge, not common in Pakistan's hosting ecosystem</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Conclusion:</strong> PHP 8.0+ is modern, fast, natively supported on XAMPP, cheap to host, and perfectly suited for a university-level e-commerce project demonstrable from a laptop.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 5 ══ -->
+  <section class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num num-purple">05</div>
+      <h2>Why Google Gemini API? Why Not Other AIs?</h2>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <p>Two AI integrations exist. <strong>Admin AI</strong> — PHP calls Gemini REST via cURL to generate product descriptions. <strong>Chatbot AI</strong> — Python calls Gemini via LangChain for customer Q&amp;A responses.</p>
+    </div>
+    <div class="api-grid">
+      <div class="api-card" style="border-top: 3px solid var(--accent3);">
+        <div class="api-name">Google Gemini 1.5 Flash ✓</div>
+        <span class="api-tag tag-external">Chosen</span>
+        <ul>
+          <li>1,500 free requests/day — no credit card needed</li>
+          <li>Optimized for low latency (2–3 second responses)</li>
+          <li>Accessible from Pakistan without VPN</li>
+          <li>Official <code>langchain-google-genai</code> package</li>
+          <li>High-quality natural language for product copy</li>
+        </ul>
+      </div>
+      <div class="api-card" style="border-top: 3px solid rgba(255,80,80,.5);">
+        <div class="api-name">OpenAI GPT-4 ✗</div>
+        <span class="api-tag" style="background:rgba(255,80,80,.15);color:#ff7070;">Rejected</span>
+        <ul>
+          <li>Requires paid API key (credit card)</li>
+          <li>No free tier for GPT-3.5 Turbo anymore</li>
+          <li>Intermittent access issues from Pakistan</li>
+          <li>GPT-4 costs ~$0.03/1K tokens → $5–15/day at FYP scale</li>
+        </ul>
+      </div>
+      <div class="api-card" style="border-top: 3px solid rgba(255,80,80,.5);">
+        <div class="api-name">Anthropic Claude ✗</div>
+        <span class="api-tag" style="background:rgba(255,80,80,.15);color:#ff7070;">Rejected</span>
+        <ul>
+          <li>Very limited free tier</li>
+          <li>Less mature LangChain integration at time of development</li>
+          <li>International payment setup difficult for students</li>
+        </ul>
+      </div>
+      <div class="api-card" style="border-top: 3px solid rgba(255,80,80,.5);">
+        <div class="api-name">Local LLM (Llama/Mistral) ✗</div>
+        <span class="api-tag" style="background:rgba(255,80,80,.15);color:#ff7070;">Rejected</span>
+        <ul>
+          <li>Requires CUDA GPU — team machines are CPU only</li>
+          <li>CPU inference is 30–60 seconds per response</li>
+          <li>Hugging Face cloud API free tier is very restrictive</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Embeddings note:</strong> <code>sentence-transformers</code> (all-MiniLM-L6-v2) runs <strong>100% locally</strong> for generating product vectors — no API cost, no latency. This is why OpenAI Embeddings or Gemini Embeddings were not used for the FAISS index.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 6 ══ -->
+  <section class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num num-green">06</div>
+      <h2>Why MySQL? Why Not Other Databases?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card good">
+        <h4>Why MySQL / MariaDB</h4>
+        <ul>
+          <li>XAMPP bundles MariaDB (MySQL-compatible) — zero setup</li>
+          <li>PHP's mysqli extension is built-in, no driver install</li>
+          <li>Data is relational: orders → items → products → categories</li>
+          <li>phpMyAdmin provides visual DB management (also in XAMPP)</li>
+          <li>Most common PHP database — abundant documentation</li>
+        </ul>
+      </div>
+      <div class="why-card bad">
+        <h4>Alternatives rejected</h4>
+        <ul>
+          <li><strong style="color:#dde1ee;">PostgreSQL</strong> — not bundled with XAMPP, requires separate install</li>
+          <li><strong style="color:#dde1ee;">MongoDB</strong> — our data is relational; NoSQL adds manual join complexity</li>
+          <li><strong style="color:#dde1ee;">SQLite</strong> — single-file, unreliable under concurrent web writes</li>
+          <li><strong style="color:#dde1ee;">Firebase</strong> — requires Google billing, real-time overhead not needed here</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 7 ══ -->
+  <section class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num num-gold">07</div>
+      <h2>Project Folder & File Structure</h2>
+    </div>
+    <div class="filetree">
+<span class="dir">/finalreposito-main/</span>                   <span class="desc">← Project root</span>
+│
+├── <span class="file">index.php</span>                          <span class="desc">Root entry — forwards to public/index.php</span>
+├── <span class="file">.env</span>                               <span class="desc">Secrets: DB creds, API keys, SMTP (never committed)</span>
+├── <span class="file">.env.example</span>                       <span class="desc">Template showing all required keys (no real values)</span>
+├── <span class="file">.gitignore</span>                         <span class="desc">Excludes .env, uploads/, vendor/ from Git</span>
+├── <span class="file">SETUP_GUIDE.md</span>                      <span class="desc">Step-by-step local setup instructions</span>
+│
+├── <span class="dir">config/</span>
+│   ├── <span class="hl">config.php</span>                     <span class="desc">Loads .env, defines APP_NAME, BASE_URL, GOOGLE_API_KEY…</span>
+│   └── <span class="hl">database.php</span>                   <span class="desc">mysqli connection class</span>
+│
+├── <span class="dir">public/</span>
+│   ├── <span class="hl">index.php</span>                      <span class="desc">MAIN ROUTER — reads ?page=, calls controller, manages sessions</span>
+│   ├── <span class="file">logout.php</span>                     <span class="desc">Destroys session, redirects to home</span>
+│   ├── <span class="dir">css/</span>                           <span class="desc">All stylesheets</span>
+│   ├── <span class="dir">js/</span>                            <span class="desc">chatbot.js, cart.js, and other scripts</span>
+│   ├── <span class="dir">images/</span>                        <span class="desc">Logo, hero images</span>
+│   └── <span class="dir">uploads/</span>                       <span class="desc">Admin-uploaded product images, banners</span>
+│
+├── <span class="dir">app/</span>
+│   ├── <span class="dir">controllers/</span>
+│   │   ├── <span class="dir">Admin/</span>
+│   │   │   ├── <span class="hl">BannerController.php</span>       <span class="desc">Homepage banner CRUD</span>
+│   │   │   ├── <span class="hl">CategoryController.php</span>     <span class="desc">3-level category tree management</span>
+│   │   │   ├── <span class="hl">DashboardController.php</span>    <span class="desc">Revenue charts, order stats</span>
+│   │   │   ├── <span class="hl">HomeController.php</span>         <span class="desc">Theme picker, site settings</span>
+│   │   │   ├── <span class="hl">LoginController.php</span>        <span class="desc">Admin auth, rate limiting, forgot password</span>
+│   │   │   ├── <span class="hl">PageController.php</span>         <span class="desc">CMS dynamic page editor</span>
+│   │   │   └── <span class="hl">ProductController.php</span>      <span class="desc">Product CRUD + Gemini AI description generator</span>
+│   │   └── <span class="dir">User/</span>
+│   │       ├── <span class="hl">CartController.php</span>         <span class="desc">Session-based cart (add/update/remove)</span>
+│   │       ├── <span class="hl">ChatController.php</span>         <span class="desc">Receives chat, calls Python API, saves history</span>
+│   │       ├── <span class="hl">ContactController.php</span>      <span class="desc">Contact form → PHPMailer email</span>
+│   │       ├── <span class="hl">CustomOrderController.php</span>  <span class="desc">Design Yourself inquiry to DB</span>
+│   │       ├── <span class="hl">CustomerController.php</span>     <span class="desc">Registration, login, profile, orders, forgot pw</span>
+│   │       ├── <span class="hl">DesignController.php</span>       <span class="desc">Design Yourself feature controller</span>
+│   │       ├── <span class="hl">HomeController.php</span>         <span class="desc">Homepage: featured products, banners, categories</span>
+│   │       ├── <span class="hl">JazzCashController.php</span>     <span class="desc">JazzCash register, MPIN verify, payment, balance</span>
+│   │       ├── <span class="hl">NewsletterController.php</span>   <span class="desc">Newsletter subscription → JSON file storage</span>
+│   │       ├── <span class="hl">OrderController.php</span>        <span class="desc">Checkout, order placement, order detail view</span>
+│   │       ├── <span class="hl">PageController.php</span>         <span class="desc">Renders dynamic CMS pages from DB</span>
+│   │       └── <span class="hl">ProductController.php</span>      <span class="desc">Listing, search, reviews, wishlist, similar</span>
+│   │
+│   ├── <span class="dir">models/</span>
+│   │   ├── <span class="file">Admin.php</span>                  <span class="desc">Admin auth queries</span>
+│   │   ├── <span class="file">Banner.php</span>                 <span class="desc">Banner CRUD</span>
+│   │   ├── <span class="file">Cart.php</span>                   <span class="desc">Cart DB ops</span>
+│   │   ├── <span class="file">Category.php</span>               <span class="desc">3-level category tree queries</span>
+│   │   ├── <span class="file">Customer.php</span>               <span class="desc">Customer account queries</span>
+│   │   ├── <span class="file">Order.php</span>                  <span class="desc">Order create/fetch/status update</span>
+│   │   ├── <span class="file">Product.php</span>                <span class="desc">Product list, search, featured, sale queries</span>
+│   │   ├── <span class="file">Review.php</span>                 <span class="desc">Review insert/retrieve</span>
+│   │   ├── <span class="hl">SchemaBootstrap.php</span>        <span class="desc">Auto-migration: ensures all DB tables exist on startup</span>
+│   │   ├── <span class="file">Settings.php</span>               <span class="desc">Site settings (theme, contact info) from DB</span>
+│   │   └── <span class="file">Wishlist.php</span>               <span class="desc">Wishlist add/remove/check</span>
+│   │
+│   ├── <span class="dir">views/</span>
+│   │   ├── <span class="dir">admin/</span>                     <span class="desc">All admin panel HTML templates</span>
+│   │   ├── <span class="file">home.php</span>                   <span class="desc">Customer homepage (hero, featured, sale)</span>
+│   │   ├── <span class="file">products.php</span>               <span class="desc">Product listing with filters</span>
+│   │   ├── <span class="file">single-product.php</span>         <span class="desc">Product detail + reviews</span>
+│   │   ├── <span class="file">cart.php</span>                   <span class="desc">Shopping cart view</span>
+│   │   ├── <span class="file">checkout.php</span>               <span class="desc">Checkout + JazzCash / COD payment selection</span>
+│   │   ├── <span class="dir">designyourself/</span>            <span class="desc">4 multi-step garment customization forms</span>
+│   │   ├── <span class="dir">partials/</span>
+│   │   │   ├── <span class="file">header.php</span>             <span class="desc">HTML head, navbar, flash messages</span>
+│   │   │   ├── <span class="file">footer.php</span>             <span class="desc">Footer, newsletter, chatbot widget trigger</span>
+│   │   │   └── <span class="file">chatbot.php</span>            <span class="desc">Floating chatbot popup HTML</span>
+│   │   └── <span class="dir">errors/</span>                    <span class="desc">404 and 500 error pages</span>
+│   │
+│   └── <span class="dir">libraries/PHPMailer/</span>           <span class="desc">PHPMailer library for SMTP email</span>
+│
+├── <span class="dir">FYP-Chatbot/FYP-Chatbot/</span>           <span class="desc">Python AI Chatbot microservice</span>
+│   ├── <span class="dir">app/</span>
+│   │   ├── <span class="hl">config.py</span>                  <span class="desc">Loads .env for Python service</span>
+│   │   ├── <span class="hl">llm.py</span>                     <span class="desc">Initializes Gemini LLM via langchain-google-genai</span>
+│   │   ├── <span class="hl">prompts.py</span>                 <span class="desc">System prompt (defines chatbot as Stitch Smart assistant)</span>
+│   │   ├── <span class="hl">rag_chain.py</span>               <span class="desc">Core RAG: FAISS retrieval → Gemini generation, chat history</span>
+│   │   ├── <span class="hl">routes.py</span>                  <span class="desc">FastAPI endpoints: /chat /health /build-index /similar</span>
+│   │   └── <span class="hl">vector_store.py</span>            <span class="desc">FAISS index: build from products.json, load, save</span>
+│   ├── <span class="file">streamlit_app.py</span>               <span class="desc">Dev-only browser UI to test chatbot directly</span>
+│   └── <span class="file">requirements.txt</span>               <span class="desc">All Python dependencies with exact versions</span>
+│
+├── <span class="dir">db/</span>
+│   └── <span class="file">stitchsmart (2).sql</span>            <span class="desc">Full MySQL dump — import into phpMyAdmin to set up</span>
+│
+├── <span class="dir">storage/</span>
+│   └── <span class="file">newsletter_subscribers.json</span>    <span class="desc">Newsletter emails stored as flat JSON (no DB table)</span>
+│
+├── <span class="dir">tools/</span>                             <span class="desc">20+ developer debug scripts (NOT for production)</span>
+│   ├── <span class="file">generate_products_json.php</span>     <span class="desc">Exports products to JSON for FAISS indexing</span>
+│   ├── <span class="file">test_gemini_api.php</span>            <span class="desc">Verifies Gemini API key works</span>
+│   ├── <span class="file">reset_admin_password.php</span>       <span class="desc">Emergency admin password reset</span>
+│   └── <span class="file">...</span>                            <span class="desc">check_schema, test_chatbot, init_db, etc.</span>
+│
+└── <span class="dir">scratch/</span>                           <span class="desc">Throwaway investigation scripts — safe to delete</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 8 ══ -->
+  <section class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num num-purple">08</div>
+      <h2>How the Application Works</h2>
+    </div>
+    <p style="margin-bottom:16px;"><strong>PHP MVC Request Flow:</strong></p>
+    <div class="flow">Browser ──► Apache ──► public/index.php (Router)
+                              │
+                     reads ?page=products
+                              │
+             matches ──► ProductController::index()
+                              │
+                    calls Product model (SQL)
+                              │
+                         MySQL returns rows
+                              │
+             controller passes $data to views/products.php
+                              │
+                   view renders HTML ──► Browser</div>
+
+    <p style="margin-bottom:16px; margin-top:24px;"><strong>AI Chatbot RAG Pipeline:</strong></p>
+    <div class="flow">Customer types: "do you have hoodies under Rs 3000?"
+        │
+        ▼
+chatbot.js ──► AJAX POST ──► ChatController.php
+                                      │
+                       HTTP POST ──► FastAPI :5000/chat
+                                      │
+                              rag_chain.py
+                             ╱               ╲
+              vector_store.py              Google Gemini API
+              FAISS top-5 similar          generates response
+              products from index          using product context
+                             ╲               ╱
+                              full_response text
+                                      │
+        PHP saves to chat_history DB table
+                                      │
+        JSON returned to chatbot.js ──► displayed to customer</div>
+
+    <p style="margin-bottom:16px; margin-top:24px;"><strong>Admin AI Description Generation:</strong></p>
+    <div class="flow">Admin clicks "Generate Description" button
+        │
+        ▼
+ProductController.php ──► cURL POST ──► Gemini REST API
+        │
+        ▼
+Gemini returns product description text
+        │
+        ▼
+PHP echoes it into the textarea — admin can edit and save</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 9 ══ -->
+  <section class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num num-green">09</div>
+      <h2>Database Tables — Purpose of Each</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Table Name</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>admin</td><td>Admin user accounts — email, bcrypt password, access_type, reset token</td></tr>
+          <tr><td>banners</td><td>Homepage hero banner images, alt text, and display text</td></tr>
+          <tr><td>cart</td><td>Customer shopping cart items linked to user session</td></tr>
+          <tr><td>categories</td><td>3-level category tree (level1 → level2 → level3, e.g. Men → Tops → Hoodies)</td></tr>
+          <tr><td>chat_history</td><td>All chatbot conversations stored per customer for history view</td></tr>
+          <tr><td>custom_orders</td><td>"Design Yourself" garment customization inquiries submitted by customers</td></tr>
+          <tr><td>jazzcash_accounts</td><td>JazzCash mobile wallet registrations (mobile number, hashed MPIN, balance)</td></tr>
+          <tr><td>jazzcash_transactions</td><td>Payment transaction records for all JazzCash payments processed</td></tr>
+          <tr><td>order_items</td><td>Individual line items within each order (product, quantity, price, size)</td></tr>
+          <tr><td>orders</td><td>Customer orders — total amount, status, payment method, shipping address</td></tr>
+          <tr><td>pages</td><td>CMS dynamic pages — About Us, Our Story, Payment Info (editable from admin)</td></tr>
+          <tr><td>products</td><td>Full product catalog — name, description, price, discount, stock, images, category</td></tr>
+          <tr><td>reviews</td><td>Customer product reviews — star rating, comment, date, verified purchase</td></tr>
+          <tr><td>settings</td><td>Global site configuration — active theme, contact info, social media links</td></tr>
+          <tr><td>users</td><td>Customer accounts — name, email, bcrypt password, phone number</td></tr>
+          <tr><td>wishlist</td><td>Customer saved/favorited products (user_id + product_id pairs)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 10 ══ -->
+  <section class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num num-gold">10</div>
+      <h2>All APIs Used — Why Each Was Chosen</h2>
+    </div>
+    <div class="api-grid">
+      <div class="api-card tile-purple">
+        <div class="api-name">Google Gemini API</div>
+        <span class="api-tag tag-external">External API</span>
+        <ul>
+          <li>Admin: product description generation (PHP cURL)</li>
+          <li>Chatbot: response generation (Python LangChain)</li>
+          <li>Key: <code>GOOGLE_API_KEY</code> in <code>.env</code></li>
+          <li>Free: 1,500 req/day, no credit card</li>
+        </ul>
+      </div>
+      <div class="api-card tile-green">
+        <div class="api-name">FAISS (Facebook AI)</div>
+        <span class="api-tag tag-local">Local Library</span>
+        <ul>
+          <li>Vector similarity search for chatbot RAG</li>
+          <li>Runs 100% locally — zero API cost</li>
+          <li>Millisecond search speed</li>
+          <li>CPU mode — no GPU required</li>
+        </ul>
+      </div>
+      <div class="api-card tile-green">
+        <div class="api-name">sentence-transformers</div>
+        <span class="api-tag tag-local">Local Library</span>
+        <ul>
+          <li>Converts product text to embedding vectors</li>
+          <li>Model: all-MiniLM-L6-v2 (22 MB, cached locally)</li>
+          <li>No network calls during runtime</li>
+          <li>Zero cost — downloaded once</li>
+        </ul>
+      </div>
+      <div class="api-card tile-pink">
+        <div class="api-name">Gmail SMTP (PHPMailer)</div>
+        <span class="api-tag tag-external">External Service</span>
+        <ul>
+          <li>Order confirmations, contact replies, password resets</li>
+          <li>Free up to 500 emails/day</li>
+          <li>PHPMailer handles TLS and MIME encoding</li>
+          <li>Config: <code>MAIL_*</code> vars in <code>.env</code></li>
+        </ul>
+      </div>
+      <div class="api-card tile-gold">
+        <div class="api-name">JazzCash (Custom)</div>
+        <span class="api-tag tag-external">Simulated Integration</span>
+        <ul>
+          <li>Pakistani mobile wallet payment at checkout</li>
+          <li>MPIN stored as bcrypt hash in DB</li>
+          <li>Simulated flow — real API needs merchant account</li>
+          <li>Models real Pakistani payment ecosystem</li>
+        </ul>
+      </div>
+      <div class="api-card" style="border-left:3px solid var(--border); opacity:.6;">
+        <div class="api-name">PayPal (Planned)</div>
+        <span class="api-tag" style="background:rgba(255,255,255,.08);color:var(--muted);">Not Implemented</span>
+        <ul>
+          <li>Constants defined: <code>PAYPAL_CLIENT_ID</code>, <code>PAYPAL_ENV</code></li>
+          <li>Full checkout flow planned for future version</li>
+          <li>Target: international buyers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 11 ══ -->
+  <section class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num num-purple">11</div>
+      <h2>Admin Panel — Features & Files</h2>
+    </div>
+    <div class="callout" style="margin-bottom:16px;">
+      <strong>Access:</strong> <code>/?page=admin_login</code> — every admin route requires <code>$_SESSION['admin_logged_in']</code>. Session expires after 30 minutes of inactivity.
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Controller</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td>Login</td><td>Admin/LoginController.php</td><td>Secure login with rate limiting, bcrypt password verify, forgot password</td></tr>
+          <tr><td>Dashboard</td><td>Admin/DashboardController.php</td><td>Revenue charts, order counts, recent activity analytics</td></tr>
+          <tr><td>Products (CRUD)</td><td>Admin/ProductController.php</td><td>Add/edit/delete products, upload images, set price/discount/stock, <strong>AI description generation</strong></td></tr>
+          <tr><td>Categories</td><td>Admin/CategoryController.php</td><td>3-level category tree (e.g. Men → Tops → Hoodies)</td></tr>
+          <tr><td>Banners</td><td>Admin/BannerController.php</td><td>Upload and manage homepage hero banner images</td></tr>
+          <tr><td>Orders</td><td>User/OrderController.php</td><td>View all orders, update status (pending / confirmed / shipped / delivered)</td></tr>
+          <tr><td>CMS Pages</td><td>Admin/PageController.php</td><td>Create/edit dynamic pages (About Us, Our Story) without touching code</td></tr>
+          <tr><td>Site Settings</td><td>Admin/HomeController.php</td><td>Theme selection, site name, contact info, social links</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 12 ══ -->
+  <section class="section" id="s12">
+    <div class="section-header">
+      <div class="section-num num-green">12</div>
+      <h2>Customer-Facing Store — Features & Files</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Controller</th><th>View File</th></tr></thead>
+        <tbody>
+          <tr><td>Homepage</td><td>User/HomeController.php</td><td>views/home.php</td></tr>
+          <tr><td>Product Listing</td><td>User/ProductController.php</td><td>views/products.php</td></tr>
+          <tr><td>Single Product</td><td>User/ProductController.php</td><td>views/single-product.php</td></tr>
+          <tr><td>Search</td><td>User/ProductController.php</td><td>views/search.php</td></tr>
+          <tr><td>Cart</td><td>User/CartController.php</td><td>views/cart.php</td></tr>
+          <tr><td>Checkout</td><td>User/OrderController.php</td><td>views/checkout.php</td></tr>
+          <tr><td>Register / Login</td><td>User/CustomerController.php</td><td>views/register.php, login.php</td></tr>
+          <tr><td>Profile</td><td>User/CustomerController.php</td><td>views/profile.php</td></tr>
+          <tr><td>Order History</td><td>User/CustomerController.php</td><td>views/orders.php</td></tr>
+          <tr><td>Wishlist</td><td>User/ProductController.php</td><td>views/wishlist.php</td></tr>
+          <tr><td>AI Chatbot</td><td>User/ChatController.php</td><td>partials/chatbot.php + js/chatbot.js</td></tr>
+          <tr><td>Contact Us</td><td>User/ContactController.php</td><td>views/contact.php</td></tr>
+          <tr><td>Design Yourself</td><td>User/DesignController.php</td><td>views/designyourself/ (4 forms)</td></tr>
+          <tr><td>JazzCash Payment</td><td>User/JazzCashController.php</td><td>(checkout integration)</td></tr>
+          <tr><td>CMS Pages</td><td>User/PageController.php</td><td>(rendered from DB)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <p><strong>Design Yourself — 6-Step Flow:</strong><br>
+      Step 1: Fit &amp; Fabric → Step 2: Labels → Step 3: Prints → Step 4: Finishing → Step 5: Quantity → Step 6: Contact &amp; Submit.<br>
+      Generates a pre-filled <code>mailto:</code> inquiry to the business — bridges digital design with WhatsApp/email-based production common in Pakistan.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 13 ══ -->
+  <section class="section" id="s13">
+    <div class="section-header">
+      <div class="section-num num-gold">13</div>
+      <h2>AI Chatbot — Technical Deep Dive</h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-tile tile-purple">
+        <div class="label">Architecture</div>
+        <div class="value">RAG Pipeline</div>
+        <div class="sub">Retrieval Augmented Generation</div>
+      </div>
+      <div class="info-tile tile-green">
+        <div class="label">Vector Search</div>
+        <div class="value">FAISS (local)</div>
+        <div class="sub">top-5 similar products</div>
+      </div>
+      <div class="info-tile tile-pink">
+        <div class="label">LLM</div>
+        <div class="value">Gemini 1.5 Flash</div>
+        <div class="sub">response generation</div>
+      </div>
+      <div class="info-tile tile-gold">
+        <div class="label">Memory</div>
+        <div class="value">Last 10 messages</div>
+        <div class="sub">per user session</div>
+      </div>
+    </div>
+    <div class="card">
+      <p><strong>What is RAG?</strong> Instead of asking AI to answer from its generic training data, we build a searchable index of YOUR products. When a customer asks a question, we find relevant products first, then give the AI question + product context → the AI answers using real store data.</p>
+    </div>
+    <div class="tbl-wrap" style="margin-top:16px;">
+      <table>
+        <thead><tr><th>Step</th><th>What Happens</th><th>File Responsible</th></tr></thead>
+        <tbody>
+          <tr><td>Indexing</td><td>Admin exports products.json → Python builds FAISS index using sentence-transformers</td><td>vector_store.py</td></tr>
+          <tr><td>Question received</td><td>Customer types question → chatbot.js AJAX → ChatController.php → FastAPI</td><td>routes.py</td></tr>
+          <tr><td>Retrieval</td><td>Question embedded → FAISS returns top-5 similar products</td><td>rag_chain.py</td></tr>
+          <tr><td>Generation</td><td>Prompt = system + product context + history + question → Gemini LLM</td><td>rag_chain.py + prompts.py</td></tr>
+          <tr><td>Response</td><td>Answer returned → saved to DB chat_history → displayed in widget</td><td>ChatController.php</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:16px;">
+      <strong>Greeting shortcut:</strong> Inputs like "hi", "hello", "hey" skip FAISS retrieval — the AI responds conversationally without searching the product index, reducing unnecessary API calls.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 14 ══ -->
+  <section class="section" id="s14">
+    <div class="section-header">
+      <div class="section-num num-purple">14</div>
+      <h2>Payment System — JazzCash</h2>
+    </div>
+    <div class="card">
+      <p><strong>JazzCash</strong> is Pakistan's most popular mobile wallet (40+ million users, owned by Jazz Telecom).</p>
+    </div>
+    <div class="tbl-wrap" style="margin-top:16px;">
+      <table>
+        <thead><tr><th>Step</th><th>What Happens</th></tr></thead>
+        <tbody>
+          <tr><td>1. Register</td><td>Customer enters Jazz mobile number + sets 4–6 digit MPIN inside Stitch Smart</td></tr>
+          <tr><td>2. Store</td><td>MPIN is hashed with <code>password_hash()</code> (bcrypt) and stored in jazzcash_accounts table</td></tr>
+          <tr><td>3. Checkout</td><td>Customer selects "JazzCash" as payment method</td></tr>
+          <tr><td>4. Verify</td><td>Customer enters mobile + MPIN → system runs <code>password_verify()</code> against stored hash</td></tr>
+          <tr><td>5. Process</td><td>If verified: order placed, transaction recorded in jazzcash_transactions, balance debited</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="why-grid" style="margin-top:16px;">
+      <div class="why-card good">
+        <h4>Why JazzCash</h4>
+        <ul>
+          <li>40+ million Pakistani users — largest local mobile wallet</li>
+          <li>No international payment method required</li>
+          <li>Real Pakistani e-commerce payment ecosystem</li>
+          <li>Demonstrates full payment UX for FYP purposes</li>
+        </ul>
+      </div>
+      <div class="why-card bad">
+        <h4>Why not Stripe / PayPal</h4>
+        <ul>
+          <li>Stripe has no Pakistani merchant account support</li>
+          <li>PayPal Pakistan is receive-only (cannot process payments)</li>
+          <li>Both require USD international bank accounts</li>
+          <li>Neither is used by typical Pakistani online shoppers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Note:</strong> This is a simulated JazzCash integration. A real merchant integration requires a JazzCash Business Account + official REST API access (requires NTN/CNIC business verification). The current implementation demonstrates the complete UX flow and data model correctly — appropriate for an FYP.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 15 ══ -->
+  <section class="section" id="s15">
+    <div class="section-header">
+      <div class="section-num num-green">15</div>
+      <h2>Security Measures</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Threat</th><th>Protection</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>SQL Injection</td><td>ALL queries use <code>mysqli</code> prepared statements with bound parameters — no raw string interpolation in SQL</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>XSS</td><td>All user input rendered in HTML is wrapped in <code>htmlspecialchars()</code></td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>CSRF</td><td>Every form includes a hidden CSRF token stored in session, validated on every POST</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>Password Security</td><td><code>password_hash()</code> with <code>PASSWORD_DEFAULT</code> (bcrypt). Never stored plain text</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>Session Security</td><td>httponly + samesite=Lax cookies, session ID regeneration on login, 30-min timeout</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>File Uploads</td><td>MIME type validation (images only), stored with randomized names, outside web root</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>Admin Routes</td><td>Every admin page checks <code>$_SESSION['admin_logged_in']</code> before rendering</td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>Secrets</td><td>All credentials in <code>.env</code> file, excluded from Git via <code>.gitignore</code></td><td><span class="sec-badge">Implemented</span></td></tr>
+          <tr><td>Brute Force</td><td>Failed login attempts tracked per IP/username; temporary lockout after repeated failures</td><td><span class="sec-badge">Implemented</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 16 ══ -->
+  <section class="section" id="s16">
+    <div class="section-header">
+      <div class="section-num num-gold">16</div>
+      <h2>Similar / Competing Projects — Comparison</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Project / Platform</th><th>Type</th><th>Available?</th><th>Why Ours Is Better</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Daraz.pk</td>
+            <td>B2C Marketplace</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">Marketplace, not brand store. No custom garment design. No AI chatbot. High seller fees. Brands lose control of UX.</td>
+          </tr>
+          <tr>
+            <td>Khaadi Online Store</td>
+            <td>Brand E-Commerce</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">No AI chatbot. No custom design workflow. Not open-source. Standard Shopify/Magento with high licensing costs.</td>
+          </tr>
+          <tr>
+            <td>Bonanza Satrangi</td>
+            <td>Brand E-Commerce</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">No AI features. No customization. Standard platform with no local payment innovation.</td>
+          </tr>
+          <tr>
+            <td>Shopify (Custom Store)</td>
+            <td>SaaS Platform</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">$29–299/month cost. No built-in JazzCash. No RAG chatbot. Fully generic — no competitive differentiation.</td>
+          </tr>
+          <tr>
+            <td>WooCommerce</td>
+            <td>WordPress Plugin</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">Heavy WordPress dependency. No AI built-in. Plugin conflicts common. Not fully controlled codebase.</td>
+          </tr>
+          <tr>
+            <td>Printful / Printify</td>
+            <td>Print-on-Demand</td>
+            <td><span class="avail avail-yes">Yes</span></td>
+            <td class="better">US-based, no Pakistani payment. Not a full store. No RAG chatbot. No direct brand ownership.</td>
+          </tr>
+          <tr>
+            <td>Generic FYP Projects</td>
+            <td>Academic / Student</td>
+            <td><span class="avail avail-yes">Many exist</span></td>
+            <td class="better">Most use Laravel/CodeIgniter with basic CRUD only. None integrate FAISS + RAG + Gemini + JazzCash + 6-step garment designer.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-grid" style="margin-top:20px;">
+      <div class="info-tile tile-purple">
+        <div class="label">Unique Feature 1</div>
+        <div class="value">RAG-Powered Chatbot</div>
+        <div class="sub">FAISS + Gemini — reads actual product catalog</div>
+      </div>
+      <div class="info-tile tile-pink">
+        <div class="label">Unique Feature 2</div>
+        <div class="value">6-Step Garment Designer</div>
+        <div class="sub">4 garment types, bridges online + physical</div>
+      </div>
+      <div class="info-tile tile-green">
+        <div class="label">Unique Feature 3</div>
+        <div class="value">JazzCash Integration</div>
+        <div class="sub">Real Pakistani payment ecosystem modeled</div>
+      </div>
+      <div class="info-tile tile-gold">
+        <div class="label">Unique Feature 4</div>
+        <div class="value">Multi-Theme CMS</div>
+        <div class="sub">Admin switches theme + edits pages from panel</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 17 ══ -->
+  <section class="section" id="s17">
+    <div class="section-header">
+      <div class="section-num num-purple">17</div>
+      <h2>Limitations & Future Work</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Current Limitation</th><th>Planned Solution</th></tr></thead>
+        <tbody class="limit-row">
+          <tr class="limit-row"><td>JazzCash is simulated</td><td>Apply for real JazzCash merchant API (requires NTN/CNIC business verification)</td></tr>
+          <tr class="limit-row"><td>No real-time order tracking</td><td>Add order status webhooks and automated email updates</td></tr>
+          <tr class="limit-row"><td>Chatbot quota (1,500 req/day free)</td><td>Upgrade to paid Gemini tier or rotate API keys</td></tr>
+          <tr class="limit-row"><td>Product JSON sync is manual</td><td>Auto-trigger FAISS index rebuild when product is saved/updated</td></tr>
+          <tr class="limit-row"><td>No automated tests</td><td>Add PHPUnit tests for all models and controllers</td></tr>
+          <tr class="limit-row"><td>PayPal not fully integrated</td><td>Integrate PayPal REST API for international buyers</td></tr>
+          <tr class="limit-row"><td>No mobile app</td><td>React Native app planned as next development phase</td></tr>
+          <tr class="limit-row"><td>Gmail SMTP (500 emails/day limit)</td><td>Switch to Postmark or Amazon SES for production volumes</td></tr>
+          <tr class="limit-row"><td>Chat history lost on server restart</td><td>Use Redis for persistent in-memory chat history storage</td></tr>
+          <tr class="limit-row"><td>No image CDN</td><td>Add Cloudflare CDN or AWS S3 for product image hosting</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 18 ══ -->
+  <section class="section" id="s18">
+    <div class="section-header">
+      <div class="section-num num-green">18</div>
+      <h2>Team Members</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar av-1">M</div>
+        <h3>Moiz Ahmed</h3>
+        <div class="role">Lead Developer / Full-Stack</div>
+        <p>Full PHP MVC architecture from scratch, complete database schema design, admin panel all features, JazzCash payment simulation, CSRF/session security hardening, XAMPP deployment configuration.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar av-2">B</div>
+        <h3>Bissma Ijaz</h3>
+        <div class="role">Frontend Developer / UI Designer</div>
+        <p>All CSS theming and multi-theme system, every customer-facing view template, 4 Design Yourself multi-step forms, responsive layouts, UX flow and visual design language.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar av-3">A</div>
+        <h3>Ali Haider</h3>
+        <div class="role">AI Integration Specialist</div>
+        <p>Python FastAPI microservice, FAISS vector index build pipeline, LangChain RAG chain, Google Gemini LLM integration, sentence-transformers embedding model, chat history management.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══ SECTION 19 ══ -->
+  <section class="section" id="s19">
+    <div class="section-header">
+      <div class="section-num num-gold">19</div>
+      <h2>Glossary</h2>
+    </div>
+    <div class="glossary-grid">
+      <div class="gloss-item"><div class="gloss-term">MVC</div><div class="gloss-def">Model-View-Controller — separates database logic (Model), HTML templates (View), and business logic (Controller)</div></div>
+      <div class="gloss-item"><div class="gloss-term">RAG</div><div class="gloss-def">Retrieval Augmented Generation — AI searches a local knowledge base first, then generates an answer using that specific data</div></div>
+      <div class="gloss-item"><div class="gloss-term">FAISS</div><div class="gloss-def">Facebook AI Similarity Search — library for lightning-fast vector nearest-neighbor search (finds "similar" items)</div></div>
+      <div class="gloss-item"><div class="gloss-term">Embedding</div><div class="gloss-def">Converting text into a list of numbers (a vector) that encodes meaning, allowing mathematical similarity comparison</div></div>
+      <div class="gloss-item"><div class="gloss-term">LLM</div><div class="gloss-def">Large Language Model — AI model trained on vast text that generates human-like responses (e.g. Gemini, GPT)</div></div>
+      <div class="gloss-item"><div class="gloss-term">FastAPI</div><div class="gloss-def">Python web framework for building APIs. Used for the chatbot microservice running on port 5000</div></div>
+      <div class="gloss-item"><div class="gloss-term">CSRF Token</div><div class="gloss-def">Cross-Site Request Forgery token — hidden secret in forms that proves the form came from our own website</div></div>
+      <div class="gloss-item"><div class="gloss-term">Bcrypt</div><div class="gloss-def">Strong one-way password hashing algorithm — makes stored passwords uncrackable even if the database is stolen</div></div>
+      <div class="gloss-item"><div class="gloss-term">XAMPP</div><div class="gloss-def">Free software bundle (Apache + MySQL + PHP) for running web applications locally on Windows/Mac</div></div>
+      <div class="gloss-item"><div class="gloss-term">PHPMailer</div><div class="gloss-def">PHP library that handles sending emails via SMTP, including TLS authentication and MIME encoding</div></div>
+      <div class="gloss-item"><div class="gloss-term">SMTP</div><div class="gloss-def">Simple Mail Transfer Protocol — the internet standard for sending email between servers</div></div>
+      <div class="gloss-item"><div class="gloss-term">JazzCash</div><div class="gloss-def">Pakistan's most popular mobile wallet, owned by Jazz Telecom, with 40+ million registered users</div></div>
+      <div class="gloss-item"><div class="gloss-term">MPIN</div><div class="gloss-def">Mobile PIN — a 4–6 digit code customers use to authenticate and authorize JazzCash transactions</div></div>
+      <div class="gloss-item"><div class="gloss-term">LangChain</div><div class="gloss-def">Python framework for building LLM applications — handles prompt templates, retrieval chains, and memory</div></div>
+      <div class="gloss-item"><div class="gloss-term">sentence-transformers</div><div class="gloss-def">Python library converting sentences to vectors using pre-trained transformer models — runs locally for free</div></div>
+      <div class="gloss-item"><div class="gloss-term">CMS</div><div class="gloss-def">Content Management System — ability to edit website pages and content from an admin panel without writing code</div></div>
+      <div class="gloss-item"><div class="gloss-term">FYP</div><div class="gloss-def">Final Year Project — the capstone academic project completed in the last year of an undergraduate degree</div></div>
+      <div class="gloss-item"><div class="gloss-term">CRON</div><div class="gloss-def">Scheduled tasks that run automatically at set intervals (e.g. rebuild product index every night at 2am)</div></div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <p><strong>Stitch Smart</strong> — Final Year Project &copy; 2026</p>
+    <p style="margin-top:6px;">Moiz Ahmed &nbsp;·&nbsp; Bissma Ijaz &nbsp;·&nbsp; Ali Haider</p>
+    <p style="margin-top:6px; font-size:11px; color:#3d4459;">Built with PHP 8 · Python 3 · Google Gemini · FAISS · MySQL · XAMPP</p>
+  </div>
+
+</div><!-- /wrapper -->
+</body>
+</html>

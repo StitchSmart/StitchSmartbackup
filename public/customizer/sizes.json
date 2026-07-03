@@ -1,0 +1,8 @@
+[
+  {"label": "XS", "measurements": "Chest 32-34", "description": "Slim fit for smaller frames."},
+  {"label": "S", "measurements": "Chest 34-36", "description": "Classic fit for everyday comfort."},
+  {"label": "M", "measurements": "Chest 38-40", "description": "Balanced fit with room to move."},
+  {"label": "L", "measurements": "Chest 42-44", "description": "Relaxed fit with a relaxed silhouette."},
+  {"label": "XL", "measurements": "Chest 46-48", "description": "Roomy fit with extra coverage."},
+  {"label": "XXL", "measurements": "Chest 50-52", "description": "Oversized styling for a bold look."}
+]

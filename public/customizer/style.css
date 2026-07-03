@@ -1,0 +1,276 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f3f5f8;
+  color: #1e2432;
+}
+button, input, select, textarea {
+  font: inherit;
+}
+.customizer-shell {
+  display: flex;
+  min-height: 100vh;
+}
+.preview-panel {
+  flex: 1 1 70%;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #eef3f9 0%, #ffffff 100%);
+}
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.preview-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 2.4vw, 2.8rem);
+  line-height: 1.05;
+}
+.preview-header p {
+  margin: 8px 0 0;
+  color: #5c6676;
+  max-width: 45rem;
+}
+#preview-frame {
+  flex: 1;
+  position: relative;
+  min-height: 520px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, rgba(72, 133, 237, 0.12), transparent 28%),
+              radial-gradient(circle at 80% 20%, rgba(228, 113, 187, 0.12), transparent 24%),
+              #ffffff;
+  box-shadow: 0 24px 90px rgba(38, 57, 99, 0.08);
+}
+#hoodie-canvas {
+  width: 100%;
+  height: 100%;
+}
+.footer-note {
+  margin-top: 16px;
+  color: #5c6676;
+  font-size: 0.95rem;
+}
+.control-panel {
+  width: 360px;
+  min-width: 320px;
+  padding: 28px;
+  border-left: 1px solid rgba(23, 34, 60, 0.08);
+  background: #ffffff;
+  overflow-y: auto;
+}
+.control-panel h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #2f3a4a;
+}
+.control-group {
+  margin-bottom: 28px;
+}
+.swatch-grid, .option-buttons, .fabric-grid {
+  display: grid;
+  gap: 10px;
+}
+.swatch-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.option-buttons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.option-button, .swatch-button {
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  background: #f8f9fb;
+}
+.option-button.active, .swatch-button.active {
+  border-color: #2b80ff;
+  box-shadow: 0 10px 30px rgba(43, 128, 255, 0.16);
+}
+.swatch-button {
+  padding: 0;
+  min-height: 56px;
+  aspect-ratio: 1 / 1;
+}
+.swatch-button[data-color="#1a2234"] { background: #1a2234; }
+.swatch-button[data-color="#2b80ff"] { background: #2b80ff; }
+.swatch-button[data-color="#d84f8e"] { background: #d84f8e; }
+.swatch-button[data-color="#f6b73d"] { background: #f6b73d; }
+.swatch-button[data-color="#3a8d59"] { background: #3a8d59; }
+.swatch-button[data-color="#ece7e2"] { background: #ece7e2; border: 1px solid rgba(22, 27, 34, 0.12); }
+.fabric-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.fabric-option {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  justify-items: start;
+}
+.fabric-chip {
+  width: 100%;
+  min-height: 64px;
+  border-radius: 18px;
+  padding: 16px;
+  text-align: left;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(249,250,252,0.92));
+}
+.fabric-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.fabric-option label {
+  width: 100%;
+  cursor: pointer;
+}
+.fabric-option input:checked + .fabric-chip {
+  border-color: #2b80ff;
+  box-shadow: 0 16px 32px rgba(43, 128, 255, 0.14);
+}
+.fabric-chip strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.range-field {
+  display: grid;
+  gap: 10px;
+}
+.range-field label {
+  display: block;
+  font-size: 0.88rem;
+  color: #4d5b72;
+}
+.range-field input[type=range] {
+  width: 100%;
+}
+.logo-upload-box {
+  background: #f7f9fb;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(48, 58, 83, 0.08);
+}
+.logo-upload-box label {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: #2f3a4a;
+}
+.logo-upload-box input[type=file] {
+  width: 100%;
+}
+.logo-controls {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+#logo-positioner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  background: #eef3f9;
+  border: 1px dashed rgba(79, 98, 136, 0.26);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#logo-positioner::before {
+  content: "Logo position";
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-size: 0.82rem;
+  color: #6981a1;
+}
+#logo-handle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2b80ff;
+  border: 3px solid #ffffff;
+  box-shadow: 0 10px 24px rgba(43, 128, 255, 0.24);
+  cursor: grab;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+}
+.summary-card {
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(244,247,251,0.98));
+  box-shadow: 0 24px 40px rgba(48, 66, 103, 0.08);
+}
+.summary-card h3 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+.summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: grid;
+  gap: 10px;
+}
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(41, 53, 80, 0.06);
+}
+#download-button, #save-logo-server {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-weight: 700;
+  background: #2b80ff;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+#download-button:hover, #save-logo-server:hover {
+  background: #1f67d1;
+}
+.status-text {
+  color: #5c6676;
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
+@media (max-width: 1120px) {
+  .customizer-shell {
+    flex-direction: column;
+  }
+  .control-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(23, 34, 60, 0.08);
+  }
+}
+@media (max-width: 720px) {
+  .preview-panel {
+    padding: 18px;
+  }
+  .control-panel {
+    padding: 18px;
+  }
+}
