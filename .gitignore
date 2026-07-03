@@ -1,5 +1,5 @@
-# Environment files
-.env
+# Environment files — .env is committed with Railway variable placeholders
+# .env
 .env.local
 .env.development.local
 .env.test.local
