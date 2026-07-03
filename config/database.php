@@ -21,7 +21,7 @@ class Database
         $this->host     = env('DB_HOST', 'localhost');
         $this->port     = (int) env('DB_PORT', 3306);
         $this->username = env('DB_USER', 'root');
-        $this->password = env('DB_PASS', '');
+        $this->password = env('DB_PASSWORD', '');
         $this->dbname   = env('DB_NAME', 'StitchSmart');
     }
 
