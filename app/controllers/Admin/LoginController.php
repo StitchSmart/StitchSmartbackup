@@ -156,6 +156,9 @@ class LoginController {
                         $mail->send();
                         $_SESSION['forgot_success'] = "One-Time Password (OTP) has been sent to your administrator Gmail.";
                     } catch (\Throwable $e) {
+                        // Log exact error for debugging
+                        $smtpError = $mail->ErrorInfo ?: $e->getMessage();
+                        error_log('[StitchSmart SMTP] Admin forgot password mail FAILED: ' . $smtpError . ' | MAIL_USERNAME=' . MAIL_USERNAME . ' | MAIL_HOST=' . MAIL_HOST . ' | MAIL_PORT=' . MAIL_PORT);
                         // Offline simulator helper
                         $_SESSION['forgot_success'] = "One-Time Password (OTP) has been generated: <strong>{$otp}</strong> (Email system simulation fallback enabled)";
                     }
