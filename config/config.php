@@ -110,7 +110,7 @@ if (!function_exists('url')) {
 
 // ── Google Gemini Constants for Admin AI ─────────────────────────────────────
 define('GOOGLE_API_KEY', env('GOOGLE_API_KEY', ''));
-define('GEMINI_MODEL',    env('GEMINI_MODEL',    'gemini-1.5-flash'));
+define('GEMINI_MODEL',    env('GEMINI_MODEL',    'gemini-2.5-flash-lite'));
 
 // ── Chatbot ──────────────────────────────────────────────────────────────────
 $chatbotUrl = env('CHATBOT_API_URL', 'http://localhost:5000');

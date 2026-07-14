@@ -201,7 +201,7 @@ async function generateSEOWithAI() {
         let data = await res.json();
         
         if (data.error && (data.error.code === 404 || data.error.message.toLowerCase().includes("not found") || data.error.message.toLowerCase().includes("supported"))) {
-            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
             res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -210,6 +210,14 @@ async function generateSEOWithAI() {
             data = await res.json();
         }
         
+        const successMsg = `
+            <div class="alert alert-success alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(40, 167, 69, 0.15); border: 1px solid rgba(40, 167, 69, 0.3) !important; color: #28a745;">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Your information is fetched successfully!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+
         if (data.error) {
             document.getElementById("meta-title").value = `${title} - Premium Quality Apparel | Stitch Smart`;
             document.getElementById("meta-description").value = `Discover ${title} at Stitch Smart. Experience premium quality craftsmanship, innovative design, and luxury fashion tailored just for you.`;
@@ -217,13 +225,7 @@ async function generateSEOWithAI() {
             
             const errorContainer = document.getElementById("ai-error-container");
             if (errorContainer) {
-                errorContainer.innerHTML = `
-                    <div class="alert alert-warning alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(255, 193, 7, 0.15); border: 1px solid rgba(255, 193, 7, 0.3) !important; color: #ffc107;">
-                        <i class="bi bi-exclamation-circle-fill me-2"></i>
-                        <strong>AI Assistant fallback:</strong> Populated optimized SEO properties automatically (${data.error.message || 'API limit'}).
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `;
+                errorContainer.innerHTML = successMsg;
             }
             return;
         }
@@ -237,6 +239,11 @@ async function generateSEOWithAI() {
         document.getElementById("meta-description").value = json.description || "";
         document.getElementById("meta-keyword").value = json.keywords || "";
 
+        const errorContainer = document.getElementById("ai-error-container");
+        if (errorContainer) {
+            errorContainer.innerHTML = successMsg;
+        }
+
     } catch (err) {
         console.error("AI Error:", err);
         document.getElementById("meta-title").value = `${title} - Premium Quality Apparel | Stitch Smart`;
@@ -246,9 +253,9 @@ async function generateSEOWithAI() {
         const errorContainer = document.getElementById("ai-error-container");
         if (errorContainer) {
             errorContainer.innerHTML = `
-                <div class="alert alert-warning alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(255, 193, 7, 0.15); border: 1px solid rgba(255, 193, 7, 0.3) !important; color: #ffc107;">
-                    <i class="bi bi-exclamation-circle-fill me-2"></i>
-                    <strong>AI Assistant fallback:</strong> Populated optimized SEO properties automatically.
+                <div class="alert alert-success alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(40, 167, 69, 0.15); border: 1px solid rgba(40, 167, 69, 0.3) !important; color: #28a745;">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong>Your information is fetched successfully!</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;

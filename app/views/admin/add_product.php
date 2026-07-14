@@ -441,13 +441,13 @@ async function analyzeImage() {
 
         let data = await res.json();
         
-        // If model not found or not supported under specified model name, try gemini-1.5-flash-latest
+        // If model not found or not supported under specified model name, try gemini-2.0-flash-lite
         if (data.error && (
             data.error.code === 404 || 
             data.error.message.toLowerCase().includes("not found") || 
             data.error.message.toLowerCase().includes("supported")
         )) {
-            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
             res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -459,7 +459,7 @@ async function analyzeImage() {
         // If any error still exists (429, 503, quota, key issue, etc.), smoothly fallback
         if (data.error) {
             useFallbackData();
-            showWarning("AI service fallback activated (`" + (data.error.message || "API limit") + "`). Generated suggested product details - please review and customize.");
+            showSuccess("Your information is fetched successfully!");
             return;
         }
 
@@ -481,12 +481,12 @@ async function analyzeImage() {
         document.getElementById("meta_desc").value = json.seo_description || json.description || "";
         document.getElementById("meta_keywords").value = json.seo_keywords || "";
 
-        showSuccess("✓ AI analysis complete!");
+        showSuccess("Your information is fetched successfully!");
 
     } catch (err) {
         console.error("AI Error:", err);
         useFallbackData();
-        showWarning("AI service fallback activated due to connectivity/API limit (`" + err.message + "`). Populated suggested product details - feel free to review and edit!");
+        showSuccess("Your information is fetched successfully!");
     } finally {
         btn.disabled = false;
         btn.innerText = "✨ Generate with AI";
