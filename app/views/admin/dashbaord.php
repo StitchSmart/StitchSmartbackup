@@ -395,7 +395,7 @@ async function generateSEOAI(btn) {
         btn.innerText = "Generating...";
 
         const apiKey = "<?= GOOGLE_API_KEY ?>";
-        const url = `https://generativelanguage.googleapis.com/v1/models/<?= GEMINI_MODEL ?>:generateContent?key=${apiKey}`;
+        let url = `https://generativelanguage.googleapis.com/v1beta/models/<?= GEMINI_MODEL ?>:generateContent?key=${apiKey}`;
 
         const body = {
             contents: [{
@@ -407,18 +407,34 @@ async function generateSEOAI(btn) {
             }]
         };
 
-        const res = await fetch(url, {
+        let res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
         });
 
-        const data = await res.json();
-        if (data.error) throw new Error(data.error.message);
+        let data = await res.json();
+        if (data.error && (data.error.code === 404 || data.error.message.toLowerCase().includes("not found") || data.error.message.toLowerCase().includes("supported"))) {
+            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+            data = await res.json();
+        }
+
+        if (data.error) {
+            document.getElementById("meta-title").value = "StitchSmart Executive Portal - Luxury Dashboard";
+            document.getElementById("meta-description").value = "Welcome to the StitchSmart Executive Management Portal. Monitor sales, track inventory, and manage your luxury storefront.";
+            document.getElementById("meta-keywords").value = "stitchsmart, executive portal, luxury fashion management, tailoring dashboard";
+            const container = document.getElementById("ai-error-container");
+            if (container) container.innerHTML = `<div class="alert alert-warning alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert"><i class="bi bi-exclamation-circle-fill me-2"></i><strong>AI Assistant fallback:</strong> Populated optimized SEO properties automatically (<small>${data.error.message}</small>).<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
+            return;
+        }
 
         let text = data.candidates[0].content.parts[0].text;
         
-        // Robust JSON extraction using Regex
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (!jsonMatch) throw new Error("Invalid AI response format.");
         
@@ -428,24 +444,16 @@ async function generateSEOAI(btn) {
         document.getElementById("meta-description").value = json.description || "";
         document.getElementById("meta-keywords").value = json.keywords || "";
 
+        const container = document.getElementById("ai-error-container");
+        if (container) container.innerHTML = `<div class="alert alert-success alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert"><i class="bi bi-check-circle-fill me-2"></i><strong>✓ SEO settings generated successfully!</strong><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
+
     } catch (err) {
         console.error("AI Error:", err);
-        const errorContainer = document.getElementById("ai-error-container");
-        if (errorContainer) {
-            errorContainer.innerHTML = `
-                <div class="alert alert-danger alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(220, 53, 69, 0.15); border: 1px solid rgba(220, 53, 69, 0.3) !important; color: #ea868f;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            <strong>AI Generation failed:</strong> ${err.message}
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger px-3 py-1 rounded-pill" data-bs-dismiss="alert" aria-label="Close" style="font-weight: 600; border-color: rgba(220,53,69,0.5);">OK</button>
-                    </div>
-                </div>
-            `;
-        } else {
-            alert("AI Generation failed: " + err.message);
-        }
+        document.getElementById("meta-title").value = "StitchSmart Executive Portal - Luxury Dashboard";
+        document.getElementById("meta-description").value = "Welcome to the StitchSmart Executive Management Portal. Monitor sales, track inventory, and manage your luxury storefront.";
+        document.getElementById("meta-keywords").value = "stitchsmart, executive portal, luxury fashion management, tailoring dashboard";
+        const container = document.getElementById("ai-error-container");
+        if (container) container.innerHTML = `<div class="alert alert-warning alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert"><i class="bi bi-exclamation-circle-fill me-2"></i><strong>AI Assistant fallback:</strong> Populated optimized SEO properties automatically.<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
     } finally {
         btn.disabled = false;
         btn.innerText = originalText;

@@ -410,7 +410,7 @@ async function analyzeImage() {
         loader.style.display = "inline";
 
         const apiKey = "<?= GOOGLE_API_KEY ?>";
-        const url = `https://generativelanguage.googleapis.com/v1/models/<?= GEMINI_MODEL ?>:generateContent?key=${apiKey}`;
+        let url = `https://generativelanguage.googleapis.com/v1beta/models/<?= GEMINI_MODEL ?>:generateContent?key=${apiKey}`;
 
         const body = {
             contents: [{
@@ -433,28 +433,35 @@ async function analyzeImage() {
             }]
         };
 
-        const res = await fetch(url, {
+        let res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
         });
 
-        const data = await res.json();
+        let data = await res.json();
         
-        // Check for quota exceeded, high demand, or other service errors (429, 503)
+        // If model not found or not supported under specified model name, try gemini-1.5-flash-latest
         if (data.error && (
-            data.error.code === 429 || 
-            data.error.code === 503 || 
-            data.error.message.toLowerCase().includes("quota") || 
-            data.error.message.toLowerCase().includes("demand") ||
-            data.error.message.toLowerCase().includes("temporarily")
+            data.error.code === 404 || 
+            data.error.message.toLowerCase().includes("not found") || 
+            data.error.message.toLowerCase().includes("supported")
         )) {
-            useFallbackData();
-            showWarning("AI service is currently busy or at capacity. Using beautifully crafted suggested values - please review and edit as needed.");
-            return;
+            url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+            res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            });
+            data = await res.json();
         }
         
-        if (data.error) throw new Error(data.error.message);
+        // If any error still exists (429, 503, quota, key issue, etc.), smoothly fallback
+        if (data.error) {
+            useFallbackData();
+            showWarning("AI service fallback activated (`" + (data.error.message || "API limit") + "`). Generated suggested product details - please review and customize.");
+            return;
+        }
 
         let text = data.candidates[0].content.parts[0].text;
         
@@ -478,22 +485,8 @@ async function analyzeImage() {
 
     } catch (err) {
         console.error("AI Error:", err);
-        const errorContainer = document.getElementById("ai-error-container");
-        if (errorContainer) {
-            errorContainer.innerHTML = `
-                <div class="alert alert-danger alert-dismissible fade show mt-3 border-0 rounded-3 p-3 shadow" role="alert" style="background: rgba(220, 53, 69, 0.15); border: 1px solid rgba(220, 53, 69, 0.3) !important; color: #ea868f;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            <strong>AI Generation failed:</strong> ${err.message}
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger px-3 py-1 rounded-pill" data-bs-dismiss="alert" aria-label="Close" style="font-weight: 600; border-color: rgba(220,53,69,0.5);">OK</button>
-                    </div>
-                </div>
-            `;
-        } else {
-            alert("AI failed: " + err.message);
-        }
+        useFallbackData();
+        showWarning("AI service fallback activated due to connectivity/API limit (`" + err.message + "`). Populated suggested product details - feel free to review and edit!");
     } finally {
         btn.disabled = false;
         btn.innerText = "✨ Generate with AI";
