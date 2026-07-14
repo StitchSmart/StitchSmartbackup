@@ -62,7 +62,7 @@ class MockGeminiLLM(LLM):
 
         # Custom Training Responses (Sizes, Budget, Payment, Shipping, Returns, Customization, Fabric, Contact, Wholesale, Style Guide, Product Types)
         if any(w in question_lower for w in ["kis type", "what type", "kinds of product", "types of product", "type ki", "kis kis type", "kya kya milta", "products kis type"]):
-            base_url = "http://localhost/Stitch-Smart/public/"
+            base_url = "https://web-production-d2c0a.up.railway.app/"
             return f"👕 **Our Product Categories & Types:** At Stitch Smart, we offer a wide variety of high-quality clothing across multiple categories:\n\n• **Men's Apparel:** Casual Shirts, T-Shirts, Activewear, Winter Wear/Jackets, and Denim Jeans/Pants.\n• **Women's Collection:** Western Dresses, Tops, Skirts, and Co-ord Sets.\n• **Kids & Infants:** Stylish Outfits, T-Shirts, Shorts, and Baby Accessories/Socks.\n• **Custom Design ('Design Yourself'):** Custom printed hoodies, crewnecks, shorts, and shirts made to order!\n\nYou can explore our complete catalog right here:\n**[Browse All Products]({base_url}allproducts)**"
 
         if "size" in question_lower or "fitting" in question_lower or "measurement" in question_lower or "chart" in question_lower:
@@ -179,7 +179,7 @@ class MockGeminiLLM(LLM):
         products = filtered_products
         
         # 4. Generate response
-        base_url = "http://localhost/Stitch-Smart/public/"
+        base_url = "https://web-production-d2c0a.up.railway.app/"
         if not products:
             return f"I couldn't find an exact product matching your specific request or price criteria in our current catalog right now. However, you can browse all our products directly and pick the perfect item here:\n\n**[Browse All Products]({base_url}allproducts)**"
         

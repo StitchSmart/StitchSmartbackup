@@ -16,7 +16,7 @@ class ChatRequest(BaseModel):
     query: str
     session_id: str
     user_id: str = "anonymous"
-    base_url: str = "http://localhost/Stitch-Smart/public/"
+    base_url: str = "https://web-production-d2c0a.up.railway.app/"
 
 
 def set_vector_store(vs):
