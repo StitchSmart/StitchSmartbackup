@@ -43,8 +43,14 @@ class Database
             }
         }
 
+        if (!class_exists('mysqli')) {
+            die('Database connection failed: PHP extension "mysqli" is not installed or enabled on this server.');
+        }
+
         try {
-            mysqli_report(MYSQLI_REPORT_OFF);
+            if (function_exists('mysqli_report')) {
+                mysqli_report(MYSQLI_REPORT_OFF);
+            }
             self::$sharedConn = @new mysqli(
                 $this->host,
                 $this->username,
