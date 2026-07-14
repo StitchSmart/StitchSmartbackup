@@ -4,7 +4,10 @@
  * Allows running `php -S 0.0.0.0:$PORT router.php` on Railway cleanly without mod_rewrite.
  */
 
-$uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
+$rawUri = $_SERVER['REQUEST_URI'] ?? '/';
+$rawUri = '/' . ltrim($rawUri, '/');
+$uri = urldecode(parse_url($rawUri, PHP_URL_PATH));
+$uri = preg_replace('#/+#', '/', $uri);
 $path = __DIR__ . $uri;
 
 // Serve static files directly if they exist in the root or public folders
