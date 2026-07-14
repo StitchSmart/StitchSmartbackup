@@ -1,4 +1,5 @@
-# Railway Nixpacks Configuration for Stitch Smart PHP Web Application
+providers = ["php"]
+
 [phases.setup]
 nixPkgs = ["php82", "php82Packages.composer"]
 

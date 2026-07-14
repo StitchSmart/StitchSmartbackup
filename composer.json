@@ -1,0 +1,8 @@
+{
+    "name": "stitchsmart/storefront",
+    "description": "StitchSmart PHP E-Commerce Storefront",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    }
+}
