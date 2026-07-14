@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+/* =========================================================
+   STITCHSMART EXECUTIVE DEFAULT THEME (LIGHT CARAMEL & TOFFEE GOLD)
+   Warm, Creamy, Buttery Caramel Aesthetics (No Whitish Look)
+========================================================= */
+
+:root {
+  /* Caramel & Warm Toffee Palette */
+  --admin-bg: #EEDDCC; /* Rich Light Caramel */
+  --admin-bg-gradient: linear-gradient(180deg, #EFE3D5 0%, #E5D0BC 50%, #DAC0A8 100%);
+  
+  --admin-surface: #F8EFE4; /* Warm Buttery Caramel Card Surface */
+  --admin-surface-secondary: #EADECC; /* Deeper Caramel Accent Surface */
+  --admin-surface-hover: #F2E3D2;
+  
+  --admin-text: #2B1810; /* Deep Espresso Brown Typography */
+  --admin-text-secondary: #5A3825; /* Rich Caramel Espresso Paragraphs */
+  --admin-text-muted: #845B43; /* Toffee Brown details */
+  
+  --admin-accent: #C4863C; /* Signature Caramel Gold / Bronze */
+  --admin-accent-hover: #A86D27; /* Deep Toffee Gold */
+  --admin-border: rgba(139, 90, 43, 0.25); /* Caramel Bronze Border */
+  --admin-shadow: 0 14px 35px rgba(85, 45, 20, 0.12);
+}
+
+/* Animations & Shimmering Caramel Glows */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes caramelShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes caramelPulseGlow {
+  0% { box-shadow: 0 4px 18px rgba(196, 134, 60, 0.35); }
+  50% { box-shadow: 0 10px 30px rgba(196, 134, 60, 0.7), 0 0 15px rgba(232, 197, 71, 0.5); }
+  100% { box-shadow: 0 4px 18px rgba(196, 134, 60, 0.35); }
+}
+
+@keyframes caramelSlideBar {
+  0% { width: 0; opacity: 0; }
+  100% { width: 90px; opacity: 1; }
+}
+
+/* GLOBAL OVERRIDES FOR LIGHT CARAMEL THEME */
+body, .main-content, .container-fluid, .wrapper, main {
+  background: var(--admin-bg-gradient) !important;
+  background-attachment: fixed !important;
+  color: var(--admin-text) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, .card-title {
+  font-family: 'Playfair Display', serif !important;
+  color: var(--admin-text) !important;
+  font-weight: 700 !important;
+}
+
+p, span, label, td, th {
+  color: inherit;
+}
+
+/* Top Navbar & Header Overrides */
+.admin-top-navbar, .head, header {
+  background: #EADECC !important;
+  border-bottom: 1px solid var(--admin-border) !important;
+  box-shadow: 0 4px 22px rgba(85, 45, 20, 0.1) !important;
+  color: var(--admin-text) !important;
+}
+
+.admin-top-navbar h3, .admin-top-navbar .brand-name, .admin-top-navbar a {
+  color: var(--admin-text) !important;
+}
+
+.admin-top-navbar .badge {
+  background: rgba(196, 134, 60, 0.2) !important;
+  color: #8A551E !important;
+  border-color: rgba(196, 134, 60, 0.5) !important;
+}
+
+/* Sidebar Overrides */
+.admin-sidebar-card, .sidebar, .sidenav {
+  background: #F8EFE4 !important;
+  border: 1px solid var(--admin-border) !important;
+  box-shadow: var(--admin-shadow) !important;
+  color: var(--admin-text) !important;
+}
+
+.admin-sidebar-card .border-bottom, .admin-sidebar-card .border-top {
+  border-color: var(--admin-border) !important;
+}
+
+.admin-sidebar-card span.text-uppercase {
+  color: var(--admin-accent) !important;
+  font-weight: 800 !important;
+}
+
+.admin-nav-item, .sidebar .nav-link {
+  color: var(--admin-text-secondary) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-nav-item:hover, .sidebar .nav-link:hover {
+  background: rgba(196, 134, 60, 0.15) !important;
+  color: #2B1810 !important;
+  border-color: rgba(196, 134, 60, 0.35) !important;
+  transform: translateX(5px);
+}
+
+.admin-nav-item.active, .sidebar .nav-link.active {
+  background: linear-gradient(135deg, var(--admin-accent) 0%, #E5A85C 100%) !important;
+  color: #1A0F08 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 18px rgba(196, 134, 60, 0.4) !important;
+  border-color: var(--admin-accent) !important;
+}
+
+.admin-nav-item.active i, .sidebar .nav-link.active i {
+  color: #1A0F08 !important;
+}
+
+/* CARDS & CONTAINERS (Rich Warm Caramel Surface) */
+.card, .box, .stats-card, .card-body, .modal-content, .admin-header-card, .admin-feature-hero, .admin-sale-hero {
+  background: #F8EFE4 !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--admin-shadow) !important;
+  color: var(--admin-text) !important;
+  animation: slideUpFade 0.5s ease forwards;
+}
+
+/* Hero Cards in Light Caramel Theme */
+.admin-header-card, .admin-feature-hero, .admin-sale-hero {
+  background: linear-gradient(135deg, rgba(248, 239, 228, 0.94) 0%, rgba(234, 222, 204, 0.96) 100%) !important;
+  border: 1px solid rgba(196, 134, 60, 0.45) !important;
+}
+
+.admin-header-card h2, .admin-feature-hero h2, .admin-sale-hero h2 {
+  color: #2B1810 !important;
+  text-shadow: none !important;
+}
+
+.admin-header-card p, .admin-feature-hero p, .admin-sale-hero p {
+  color: var(--admin-text-secondary) !important;
+}
+
+/* Hide large decorative background icons in caramel theme (too bright on light bg) */
+.admin-header-card .opacity-5,
+.admin-header-card .opacity-10,
+.admin-feature-hero .opacity-5,
+.admin-feature-hero .opacity-10,
+.admin-sale-hero .opacity-5,
+.admin-sale-hero .opacity-10 {
+  display: none !important;
+}
+
+/* TABLES IN CARAMEL THEME */
+.table, .table-responsive {
+  background: transparent !important;
+  color: var(--admin-text) !important;
+  border-color: var(--admin-border) !important;
+}
+
+.table thead th, .table thead tr {
+  background: #EADECC !important;
+  color: var(--admin-accent) !important;
+  border-bottom: 2px solid var(--admin-accent) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+  background: #F8EFE4 !important;
+  transition: background 0.25s ease;
+}
+
+.table tbody tr:hover {
+  background: #F2E3D2 !important;
+}
+
+.table td {
+  border-bottom: 1px solid var(--admin-border) !important;
+  color: var(--admin-text) !important;
+  background: transparent !important;
+}
+
+/* FORMS & INPUTS */
+.form-control, .form-select, textarea {
+  background: #FFFDFC !important;
+  border: 1px solid var(--admin-border) !important;
+  color: var(--admin-text) !important;
+  border-radius: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--admin-accent) !important;
+  background: #FFFDFC !important;
+  box-shadow: 0 0 0 3px rgba(196, 134, 60, 0.2) !important;
+}
+
+/* BUTTONS */
+.btn-primary, .btn-success, .btn-info, .btn-warning, .btn-blue, 
+.btn-add, .btn-edit, button[type="submit"] {
+  background: linear-gradient(135deg, var(--admin-accent) 0%, #A86D27 100%) !important;
+  border: none !important;
+  color: #1A0F08 !important;
+  font-weight: 700 !important;
+  border-radius: 50px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 14px rgba(196, 134, 60, 0.3) !important;
+}
+
+.btn-primary:hover, .btn-info:hover, button[type="submit"]:hover {
+  background: linear-gradient(135deg, #D49348 0%, var(--admin-accent) 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(196, 134, 60, 0.45) !important;
+}
+
+.btn-danger, .btn-delete {
+  background: #d21f3c !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+}
+
+.btn-danger:hover, .btn-delete:hover {
+  background: #b01830 !important;
+  transform: translateY(-2px);
+}
+
+.admin-feature-strip, .admin-sale-strip {
+  background: linear-gradient(90deg, #EADECC 0%, #E8C547 33%, #EADECC 66%, #E8C547 100%) !important;
+  background-size: 200% auto !important;
+  animation: caramelShimmer 3.5s linear infinite !important;
+  color: #2B1810 !important;
+  border: 1px solid var(--admin-border) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 15px rgba(85, 45, 20, 0.12) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #EADECC; }
+::-webkit-scrollbar-thumb { background: var(--admin-accent); border-radius: 10px; }

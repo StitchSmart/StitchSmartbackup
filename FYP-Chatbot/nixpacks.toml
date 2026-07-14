@@ -1,0 +1,9 @@
+# Railway Nixpacks Configuration for outer FYP-Chatbot directory
+[phases.setup]
+nixPkgs = ["python311"]
+
+[phases.install]
+cmds = ["cd FYP-Chatbot && python -m venv --copy /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
+
+[start]
+cmd = "cd FYP-Chatbot && uvicorn app.main:app --host 0.0.0.0 --port $PORT"

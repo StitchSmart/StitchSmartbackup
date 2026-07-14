@@ -1,0 +1,472 @@
+/* =========================================================
+   PREMIUM THEME-AWARE DESIGN EDITORS STYLING
+   ========================================================= */
+
+body {
+    background-color: transparent !important;
+    background: transparent !important;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+    min-height: auto !important;
+    height: auto !important;
+}
+
+html {
+    min-height: auto !important;
+    height: auto !important;
+}
+
+/* Container limits and centering - wider to match main page */
+.container {
+    max-width: 1380px !important;
+    width: 100% !important;
+    padding: 0 1.5rem !important;
+    margin: 0 auto !important;
+}
+
+/* Beautiful animations for steps */
+@keyframes stepEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.step.active {
+    animation: stepEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Hide duplicate redundant titles inside the iframe */
+.container > h1.text-center, 
+.container > h1 {
+    display: none !important;
+}
+
+.top-bar {
+    display: none !important;
+}
+
+/* Premium Card Wrapper - Re-enabled container box with ultra-premium styling */
+.card {
+    backdrop-filter: blur(20px) !important;
+    border-radius: 24px !important;
+    padding: clamp(1.8rem, 5vw, 3.2rem) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Light Theme Card */
+body.theme-default .card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border: 1px solid rgba(205, 154, 72, 0.2) !important;
+    box-shadow: 
+        0 24px 64px rgba(92, 67, 53, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    color: #3D241C !important;
+}
+
+/* Dark/Luxury Theme Card */
+body.theme-luxury .card {
+    background: rgba(18, 14, 10, 0.8) !important;
+    border: 1px solid rgba(202, 151, 69, 0.3) !important;
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+/* Typography & Headings */
+h1, h2, h3, h4, h5 {
+    font-family: 'Outfit', 'Playfair Display', serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+}
+
+body.theme-default h1, body.theme-default h2, body.theme-default h3, body.theme-default h4, body.theme-default h5 {
+    color: #3D241C !important;
+}
+
+body.theme-luxury h1, body.theme-luxury h2, body.theme-luxury h3, body.theme-luxury h4, body.theme-luxury h5 {
+    color: var(--accent-bronze, #ca9745) !important;
+}
+
+/* Heading Step Header Style */
+h2 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem) !important;
+    margin-bottom: 1.8rem !important;
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+
+h5 {
+    font-size: 1.05rem !important;
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Form Controls & Inputs */
+.form-label, .form-check-label {
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.4rem !important;
+}
+
+body.theme-default .form-label, body.theme-default .form-check-label {
+    color: #5C4335 !important;
+}
+
+body.theme-luxury .form-label, body.theme-luxury .form-check-label {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.form-control, .form-select {
+    padding: 0.8rem 1.1rem !important;
+    border-radius: 14px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Input Light Theme */
+body.theme-default .form-control, body.theme-default .form-select {
+    background: #ffffff !important;
+    border: 1.5px solid #E6DCD2 !important;
+    color: #3D241C !important;
+    box-shadow: 0 4px 12px rgba(92, 67, 53, 0.03) !important;
+    border-radius: 16px !important;
+}
+
+body.theme-default .form-control:focus, body.theme-default .form-select:focus {
+    background: #ffffff !important;
+    border-color: #ca9745 !important;
+    box-shadow: 0 0 0 4px rgba(205, 154, 72, 0.16) !important;
+    color: #24150F !important;
+}
+
+/* Input Dark Theme */
+body.theme-luxury .form-control, body.theme-luxury .form-select {
+    background: rgba(22, 19, 16, 0.6) !important;
+    border: 1.5px solid rgba(202, 151, 69, 0.25) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+body.theme-luxury .form-control:focus, body.theme-luxury .form-select:focus {
+    background: rgba(30, 26, 22, 0.8) !important;
+    border-color: #ca9745 !important;
+    box-shadow: 0 0 0 4px rgba(202, 151, 69, 0.22) !important;
+    color: #ffffff !important;
+}
+
+/* Form Check / Radios Custom Styles */
+.form-check {
+    padding-left: 1.85em !important;
+    margin-bottom: 0.65rem !important;
+}
+
+.form-check-input {
+    width: 1.2em !important;
+    height: 1.2em !important;
+    margin-left: -1.85em !important;
+    margin-top: 0.2em !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+body.theme-default .form-check-input {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border: 1.5px solid rgba(92, 67, 53, 0.3) !important;
+}
+
+body.theme-default .form-check-input:checked {
+    background-color: #ca9745 !important;
+    border-color: #ca9745 !important;
+}
+
+body.theme-luxury .form-check-input {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1.5px solid rgba(202, 151, 69, 0.35) !important;
+}
+
+body.theme-luxury .form-check-input:checked {
+    background-color: #ca9745 !important;
+    border-color: #ca9745 !important;
+}
+
+/* Custom Select Options */
+.form-select option, select option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+body.theme-default .form-control::placeholder {
+    color: rgba(92, 67, 53, 0.45) !important;
+}
+
+body.theme-luxury .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Buttons Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #FFD254, #F7C034) !important;
+    border: 1px solid #E6B52F !important;
+    color: #1a0f0a !important;
+    font-weight: 800 !important;
+    border-radius: 50px !important;
+    padding: 0.85rem 2.4rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    box-shadow: 0 8px 24px rgba(255, 210, 84, 0.22) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 30px rgba(255, 210, 84, 0.42) !important;
+    background: linear-gradient(135deg, #F7C034, #e0ad2b) !important;
+}
+
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    border-radius: 50px !important;
+    padding: 0.85rem 2.4rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    transition: all 0.25s ease !important;
+}
+
+body.theme-default .btn-secondary {
+    background-color: rgba(92, 67, 53, 0.05) !important;
+    border: 1px solid rgba(92, 67, 53, 0.16) !important;
+    color: #5C4335 !important;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+body.theme-default .btn-secondary:hover {
+    background-color: rgba(92, 67, 53, 0.1) !important;
+}
+
+/* Beautiful custom styling to enhance card layout for a professional look */
+.card h2 {
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid rgba(205, 154, 72, 0.15) !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 24px !important;
+}
+
+.card h5 {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+    color: var(--accent-bronze, #ca9745) !important;
+}
+
+body.theme-default .card h5 {
+    color: #5C4335 !important;
+}
+
+/* Flexbox/grid gap tuning */
+.row {
+    --bs-gutter-x: 1.5rem !important;
+    --bs-gutter-y: 1.5rem !important;
+}
+
+/* Quantities design refinement */
+.quantity-row div {
+    margin-bottom: 10px;
+}
+
+.quantity-row label {
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase;
+    margin-bottom: 4px !important;
+    display: block;
+}
+
+/* Elegant Thin Progress Line */
+.progress {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    height: 5px !important;
+    border-radius: 10px !important;
+    margin-bottom: 2.2rem !important;
+    overflow: hidden !important;
+}
+
+body.theme-default .progress {
+    background-color: rgba(92, 67, 53, 0.06) !important;
+}
+
+body.theme-luxury .progress {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--accent-bronze, #ca9745), #b3853b) !important;
+    border-radius: 10px !important;
+}
+
+/* Validation Alerts */
+.validation-alert {
+    display: none !important;
+    margin-bottom: 1.5rem !important;
+    padding: 14px 18px !important;
+    border-radius: 14px !important;
+    background: rgba(248, 215, 218, 0.92) !important;
+    border: 1px solid rgba(220, 53, 69, 0.35) !important;
+    color: #7f1d1d !important;
+    font-weight: 700 !important;
+}
+
+.validation-alert.show {
+    display: block !important;
+}
+
+/* Custom color circle selection */
+.color-circle {
+    width: 32px !important;
+    height: 32px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50% !important;
+    margin: 6px !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+}
+
+body.theme-default .color-circle {
+    border-color: rgba(92, 67, 53, 0.2) !important;
+}
+
+.color-circle.selected {
+    border: 3px solid var(--accent-bronze, #ca9745) !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 6px 15px rgba(205, 154, 72, 0.35) !important;
+}
+
+/* Specification Tables & Charts */
+.size-chart th {
+    background-color: rgba(205, 154, 72, 0.12) !important;
+    color: var(--accent-bronze, #ca9745) !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body.theme-default .size-chart th {
+    background-color: rgba(205, 154, 72, 0.08) !important;
+    color: #5c3c26 !important;
+}
+
+.size-chart td {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    font-size: 0.92rem;
+}
+
+body.theme-default .size-chart td {
+    border-color: rgba(92, 67, 53, 0.1) !important;
+    color: #5C4335 !important;
+}
+
+body.theme-luxury .size-chart td {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Dynamic Previews & Gallery */
+.dynamic-image, .template-gallery img {
+    border: 1px solid rgba(205, 154, 72, 0.2) !important;
+    border-radius: 18px !important;
+    background: rgba(0, 0, 0, 0.15) !important;
+    padding: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+body.theme-default .dynamic-image, body.theme-default .template-gallery img {
+    border-color: rgba(92, 67, 53, 0.12) !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+}
+
+.dynamic-image:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 35px rgba(205, 154, 72, 0.15) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        padding: 1.5rem !important;
+        border-radius: 20px !important;
+    }
+}
+
+/* Premium Configurator Select Tiles (Styling Radio/Checkbox blocks) */
+.step .form-check {
+    position: relative !important;
+    display: block !important;
+    padding: 14px 18px 14px 2.8em !important;
+    margin-bottom: 0.95rem !important;
+    border-radius: 16px !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+
+body.theme-default .step .form-check {
+    background: #ffffff !important;
+    border: 1px solid rgba(92, 67, 53, 0.12) !important;
+    color: #3b2b20 !important;
+}
+body.theme-default .step .form-check:hover {
+    background: #FAF6F0 !important;
+    border-color: rgba(205, 154, 72, 0.35) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(92, 67, 53, 0.05) !important;
+}
+body.theme-default .step .form-check:has(.form-check-input:checked) {
+    background: #FFFDF9 !important;
+    border-color: #ca9745 !important;
+    border-width: 1.5px !important;
+    box-shadow: 0 8px 20px rgba(205, 154, 72, 0.12) !important;
+    transform: translateY(-1px) !important;
+}
+
+body.theme-luxury .step .form-check {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #f4e9d3 !important;
+}
+body.theme-luxury .step .form-check:hover {
+    background: rgba(202, 151, 69, 0.06) !important;
+    border-color: rgba(202, 151, 69, 0.35) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+body.theme-luxury .step .form-check:has(.form-check-input:checked) {
+    background: rgba(202, 151, 69, 0.1) !important;
+    border-color: #ca9745 !important;
+    border-width: 1.5px !important;
+    box-shadow: 0 8px 25px rgba(202, 151, 69, 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+
+.step .form-check-input {
+    margin-left: -2em !important;
+    margin-top: 0.15em !important;
+}

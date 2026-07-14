@@ -1,0 +1,65 @@
+2026-07-14 11:49:06 - liveSearch called: keyword='r', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022546,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:06 - liveSearch called: keyword='red', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022546,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:07 - liveSearch called: keyword='red', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022547,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:10 - liveSearch called: keyword='red', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022550,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:10 - liveSearch called: keyword='re', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022550,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:10 - liveSearch called: keyword='r', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022550,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:11 - liveSearch called: keyword='a', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022551,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:12 - liveSearch called: keyword='ass', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022552,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:15 - liveSearch called: keyword='a', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022555,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:15 - liveSearch called: keyword='as', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022555,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:16 - liveSearch called: keyword='ass', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022556,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:17 - liveSearch called: keyword='a', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022557,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)
+2026-07-14 11:49:18 - liveSearch called: keyword='wh', userId=NULL, SESSION=array (
+  'csrf_token' => '26e873c38f46b9c973f74e036cb54f40606acd2e7c1a6a5be90be4fa811b90de',
+  'last_activity' => 1784022558,
+  'redirect_after_login' => '/Stitch-Smart/public/',
+)

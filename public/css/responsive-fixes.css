@@ -1,0 +1,233 @@
+/* 
+=========================================================
+  GLOBAL RESPONSIVE FIXES 
+  (From Smartwatches to LED Displays)
+=========================================================
+*/
+
+/* 1. Global Overflow Prevention (prevents horizontal scroll on small devices) */
+html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* 
+=========================================================
+  EXTREME SMALL SCREENS (Smartwatches & Tiny Phones)
+  Max-width: 380px (e.g. Galaxy Fold, Watches, old iPhones)
+=========================================================
+*/
+@media screen and (max-width: 380px) {
+    /* Navbar & Header Adjustments */
+    .brand-logo .logo-icon {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .brand-info .brand-name {
+        font-size: 1.2rem !important;
+    }
+    
+    .brand-info .brand-tagline {
+        font-size: 0.75rem !important;
+        display: none !important; /* Hide tagline to save space */
+    }
+    
+    .navbar-right {
+        gap: 0.5rem !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
+    
+    /* Search Bar */
+    .search-input-group {
+        width: 100% !important;
+    }
+    
+    .search-input {
+        font-size: 0.8rem !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Categories Bar buttons stack or scroll horizontally tighter */
+    .categories-bar .btn-action {
+        padding: 6px 10px !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .categories-bar i {
+        margin-right: 4px !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* Hero Section */
+    .hero-left-content h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    .hero-left-content p {
+        font-size: 0.85rem !important;
+    }
+    
+    .hero-btns {
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    
+    .hero-btns a {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Product Grids */
+    .prod-grid-card {
+        padding: 12px !important;
+    }
+    
+    .prod-grid-img-wrap {
+        height: 180px !important;
+        padding: 10px !important;
+    }
+    
+    .prod-grid-title {
+        font-size: 0.95rem !important;
+    }
+    
+    .prod-grid-price {
+        font-size: 1.1rem !important;
+    }
+    
+    .prod-grid-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    /* Footer */
+    .footer-section {
+        padding: 30px 0 !important;
+    }
+    
+    .footer-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+/* 
+=========================================================
+  INTERMEDIATE SMALL SCREENS (Standard Phones)
+  Max-width: 576px
+=========================================================
+*/
+@media screen and (max-width: 576px) {
+    /* Ensure tables (like cart) are scrollable */
+    .table-responsive {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Center text in feature strips */
+    .features-strip .col-6 {
+        margin-bottom: 20px !important;
+    }
+    
+    /* Make product grids strictly 1 or 2 columns based on device width */
+    #productsGrid .col-md-4, #productsGrid .col-md-3, #productsGrid .col-sm-6 {
+        width: 100% !important; /* Stack 1 per row by default on mobile for better visibility */
+    }
+}
+
+/* 
+=========================================================
+  TABLETS (iPads, etc.)
+  Max-width: 991px
+=========================================================
+*/
+@media screen and (max-width: 991px) {
+    /* Tweak Mega menu toggle */
+    .menu-toggle {
+        font-size: 0.9rem !important;
+        padding: 10px 15px !important;
+    }
+    
+    /* Make sidebars stack */
+    .filters-sidebar {
+        margin-bottom: 20px !important;
+        width: 100% !important;
+    }
+    
+    #productsGrid .col-md-4 {
+        width: 50% !important; /* 2 columns on tablet */
+    }
+}
+
+
+
+/* 
+=========================================================
+  ADDITIONAL MOBILE FIXES
+=========================================================
+*/
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .prod-card, .featured-card {
+        margin-bottom: 1rem;
+    }
+    
+    .hero-left-content h1 {
+        font-size: 2rem !important;
+    }
+    
+    .hero-left-content p {
+        font-size: 1rem !important;
+    }
+
+    .carousel-item {
+        height: 350px !important;
+    }
+
+    .hero-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-btns a {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .col-lg-3, .col-md-6, .col-sm-6, .col-md-3, .col-6, .col-12 {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+    
+    .announcement-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+    .announcement-left, .announcement-right {
+        display: none !important;
+    }
+    .announcement-center {
+        width: 100%;
+    }
+    
+    .brand-name {
+        font-size: 1.4rem !important;
+    }
+}

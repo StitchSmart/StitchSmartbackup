@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Luxury Background -->
+    <rect width="200" height="200" rx="48" fill="url(#luxury_grad)"/>
+    <rect x="4" y="4" width="192" height="192" rx="44" stroke="url(#gold_border)" stroke-width="4" stroke-opacity="0.6"/>
+    
+    <!-- Outer Golden Stitching Ring -->
+    <circle cx="100" cy="100" r="76" stroke="url(#gold_border)" stroke-width="2.5" stroke-dasharray="8 6" fill="none" opacity="0.85"/>
+    
+    <!-- Double S Monogram & Needle -->
+    <path d="M118 64C118 57.3726 112.627 52 106 52H92C80.9543 52 72 60.9543 72 72C72 83.0457 80.9543 92 92 92H108C119.046 92 128 100.954 128 112C128 123.046 119.046 132 108 132H94C87.3726 132 82 126.627 82 120" stroke="url(#gold_border)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M100 40V160" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+    
+    <!-- Needle Eye & Thread Flow -->
+    <circle cx="100" cy="46" r="4" fill="#1A0F0A"/>
+    <path d="M100 46C130 46 148 68 140 96C134.542 115.105 116 128 100 148" stroke="url(#gold_border)" stroke-width="3" stroke-dasharray="4 4" fill="none" opacity="0.9"/>
+
+    <defs>
+        <linearGradient id="luxury_grad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#2a1b12"/>
+            <stop offset="50%" stop-color="#180e08"/>
+            <stop offset="100%" stop-color="#0a0503"/>
+        </linearGradient>
+        <linearGradient id="gold_border" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#f5e0a3"/>
+            <stop offset="35%" stop-color="#ca9745"/>
+            <stop offset="70%" stop-color="#e8c547"/>
+            <stop offset="100%" stop-color="#966d28"/>
+        </linearGradient>
+    </defs>
+</svg>
