@@ -114,7 +114,7 @@ if (class_exists('Database')) {
 <main>
     <div class="row mt-5 mx-0 px-3">
         
-        <?php include '../app/views/admin/sidebar.php'; ?>
+        <?php include BASE_PATH . '/app/views/admin/sidebar.php'; ?>
 
         <div class="col-xl-9 col-sm-8">
 
@@ -170,7 +170,7 @@ if (class_exists('Database')) {
                 <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
-            <?php require_once "../app/views/" . $view; ?>
+            <?php require_once BASE_PATH . "/app/views/" . $view; ?>
 
         </div>
 

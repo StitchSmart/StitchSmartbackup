@@ -1,9 +1,9 @@
 <?php
-require_once '../app/models/User.php';
-require_once '../config/database.php';
-require_once '../app/libraries/PHPMailer/src/Exception.php';
-require_once '../app/libraries/PHPMailer/src/PHPMailer.php';
-require_once '../app/libraries/PHPMailer/src/SMTP.php';
+require_once BASE_PATH . '/app/models/User.php';
+require_once BASE_PATH . '/config/database.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -64,7 +64,7 @@ class CustomerController {
                 $_SESSION['customer_phone'] = $user['phone'];
 
                 // Load and merge cart items
-                require_once '../app/models/SchemaBootstrap.php';
+                require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
                 $dbObj = new Database();
                 $schemaBootstrap = new SchemaBootstrap($dbObj->connect());
                 $dbCart = $schemaBootstrap->loadCartFromDb((int)$user['id']);
@@ -111,7 +111,7 @@ class CustomerController {
                 }
             }
 
-            require_once '../app/models/settings.php';
+            require_once BASE_PATH . '/app/models/settings.php';
             $settingsModel = new Settings();
             $webSettings = $settingsModel->getWebSettings();
             $global_theme = $webSettings['theme'] ?? 'theme-luxury';
@@ -124,7 +124,7 @@ class CustomerController {
             $linkdin = $webSettings['linkdin'] ?? '';
             $meta_description = $webSettings['meta_description'] ?? 'StitchSmart - Tailoring quality products with fast shipping.';
 
-            require_once '../app/views/User/customer_login.php';
+            require_once BASE_PATH . '/app/views/User/customer_login.php';
         }
     }
 
@@ -210,7 +210,7 @@ class CustomerController {
     }
 
     public function forgotPasswordForm() {
-        require_once '../app/models/settings.php';
+        require_once BASE_PATH . '/app/models/settings.php';
         $settingsModel = new Settings();
         $webSettings = $settingsModel->getWebSettings();
         
@@ -229,7 +229,7 @@ class CustomerController {
             $_SESSION['reset_step_customer'] = 'request';
         }
 
-        require_once '../app/views/User/customer_forgot_password.php';
+        require_once BASE_PATH . '/app/views/User/customer_forgot_password.php';
     }
 
     public function processForgotPassword() {
