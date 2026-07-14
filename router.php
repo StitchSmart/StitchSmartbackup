@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 /**
  * Router script for Railway / PHP Built-in Web Server.
  * Allows running `php -S 0.0.0.0:$PORT router.php` on Railway cleanly without mod_rewrite.

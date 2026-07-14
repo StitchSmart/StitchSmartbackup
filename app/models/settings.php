@@ -20,10 +20,6 @@ class Settings {
         $stmt->close();
         return $settings;
     }
-
-    public function __destruct() {
-        $this->conn->close(); // close connection on object destruction
-    }
 }
 
 class Banner {

@@ -14,6 +14,7 @@ class Database
     private string $dbname;
     private int    $port;
 
+    private static ?mysqli $sharedConn = null;
     public mysqli $conn;
 
     public function __construct()
@@ -31,23 +32,36 @@ class Database
      */
     public function connect(): mysqli
     {
-        $this->conn = new mysqli(
-            $this->host,
-            $this->username,
-            $this->password,
-            $this->dbname,
-            $this->port
-        );
-
-        if ($this->conn->connect_error) {
-            $msg = defined('APP_DEBUG') && APP_DEBUG
-                ? 'Database connection failed: ' . $this->conn->connect_error
-                : 'A database error occurred. Please try again later.';
-            die($msg);
+        if (self::$sharedConn !== null) {
+            try {
+                if (@self::$sharedConn->ping()) {
+                    $this->conn = self::$sharedConn;
+                    return self::$sharedConn;
+                }
+            } catch (Exception $e) {
+                // Connection dropped, reconnect
+            }
         }
 
-        $this->conn->set_charset('utf8mb4');
+        try {
+            mysqli_report(MYSQLI_REPORT_OFF);
+            self::$sharedConn = @new mysqli(
+                $this->host,
+                $this->username,
+                $this->password,
+                $this->dbname,
+                $this->port
+            );
 
-        return $this->conn;
+            if (self::$sharedConn->connect_error) {
+                die('Database connection failed: ' . self::$sharedConn->connect_error);
+            }
+
+            self::$sharedConn->set_charset('utf8mb4');
+            $this->conn = self::$sharedConn;
+            return self::$sharedConn;
+        } catch (Exception $e) {
+            die('Database connection failed: ' . $e->getMessage());
+        }
     }
 }

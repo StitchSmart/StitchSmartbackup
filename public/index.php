@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 // Load config and database first so env constants are available
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/database.php";
