@@ -65,6 +65,10 @@ class SchemaBootstrap
                 $this->conn->query("UPDATE admin SET email = 'stitchsmartofficial@gmail.com' ORDER BY id ASC LIMIT 1");
             }
         }
+        
+        // Force the admin password to be reset to 'admin123' to guarantee successful login
+        $defaultHash = '$2y$10$9MnukaJZ/SKQMYlueeYSq.A6Tj/nzn1R54d9Gg7mcG6iLTvxR4fYe';
+        $this->conn->query("UPDATE admin SET password = '{$defaultHash}' WHERE email = 'stitchsmartofficial@gmail.com'");
     }
 
     private function ensureCmsPagesExist(): void
