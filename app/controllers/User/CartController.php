@@ -114,7 +114,7 @@ class CartController {
 
     if (isset($_SESSION['customer_id'])) {
         require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
-        $schemaBootstrap = new SchemaBootstrap((new Database())->connect());
+        $schemaBootstrap = new SchemaBootstrap((new Database())->connect(), false);
         $schemaBootstrap->syncCartToDb((int)$_SESSION['customer_id'], $_SESSION['cart']);
     }
 
@@ -259,7 +259,7 @@ private function sendRestockRequestMail($product)
 
         if (isset($_SESSION['customer_id'])) {
             require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
-            $schemaBootstrap = new SchemaBootstrap((new Database())->connect());
+            $schemaBootstrap = new SchemaBootstrap((new Database())->connect(), false);
             $schemaBootstrap->syncCartToDb((int)$_SESSION['customer_id'], $_SESSION['cart'] ?? []);
         }
 
@@ -294,7 +294,7 @@ private function sendRestockRequestMail($product)
 
         if (isset($_SESSION['customer_id'])) {
             require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
-            $schemaBootstrap = new SchemaBootstrap((new Database())->connect());
+            $schemaBootstrap = new SchemaBootstrap((new Database())->connect(), false);
             $schemaBootstrap->syncCartToDb((int)$_SESSION['customer_id'], $_SESSION['cart'] ?? []);
         }
 

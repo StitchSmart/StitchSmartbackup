@@ -98,7 +98,7 @@ public function index() {
     }
     $customerId = $_SESSION['customer_id'] ?? null;
     if ($customerId) {
-        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
         $wishlistedProductIds = $wishlistBootstrap->getWishlistProductIdsForUser((int)$customerId);
     }
 
@@ -257,7 +257,7 @@ public function show(){
     }
     $userId = $_SESSION['customer_id'] ?? null;
     if ($userId) {
-        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
         $isWishlisted = $wishlistBootstrap->isWishlisted((int)$userId, (int)$product['id']);
 
         $purchased = $this->productModel->userHasPurchasedProduct($userId, $product['id']);
@@ -313,7 +313,7 @@ public function toggleWishlist()
 
     $database = new Database();
     $db = $database->connect();
-    $wishlistBootstrap = new SchemaBootstrap($db);
+    $wishlistBootstrap = new SchemaBootstrap($db, false);
 
     $isWishlisted = $wishlistBootstrap->isWishlisted((int)$userId, $productId);
     if ($isWishlisted) {
@@ -357,7 +357,7 @@ public function customerWishlist()
 
     $database = new Database();
     $conn = $database->connect();
-    $schemaBootstrap = new SchemaBootstrap($conn);
+    $schemaBootstrap = new SchemaBootstrap($conn, false);
     $wishlistEntries = $schemaBootstrap->getWishlistEntriesForUser((int)$userId);
 
     require BASE_PATH . '/app/views/User/customer_wishlist.php';

@@ -4,22 +4,24 @@ class SchemaBootstrap
 {
     private mysqli $conn;
 
-    public function __construct(mysqli $conn)
+    public function __construct(mysqli $conn, bool $runMigrations = true)
     {
         $this->conn = $conn;
-        try {
-            $this->ensureInitialDatabaseImport();
-            $this->ensureWishlistTableExists();
-            $this->ensureEmailLogsTableExists();
-            $this->ensureCartTableExists();
-            $this->ensureJazzCashTableExists();
-            $this->ensureCmsPagesExist();
-            $this->ensureAdminEmailIsUpdated();
-        } catch (Throwable $e) {
-            $msg = defined('APP_DEBUG') && APP_DEBUG
-                ? 'Schema Bootstrap Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine()
-                : 'A database initialization error occurred. Please try again later.';
-            die($msg);
+        if ($runMigrations) {
+            try {
+                $this->ensureInitialDatabaseImport();
+                $this->ensureWishlistTableExists();
+                $this->ensureEmailLogsTableExists();
+                $this->ensureCartTableExists();
+                $this->ensureJazzCashTableExists();
+                $this->ensureCmsPagesExist();
+                $this->ensureAdminEmailIsUpdated();
+            } catch (Throwable $e) {
+                $msg = defined('APP_DEBUG') && APP_DEBUG
+                    ? 'Schema Bootstrap Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine()
+                    : 'A database initialization error occurred. Please try again later.';
+                die($msg);
+            }
         }
     }
 

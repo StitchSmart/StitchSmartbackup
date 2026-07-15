@@ -259,7 +259,7 @@ class OrderController {
 
         if (isset($_SESSION['customer_id'])) {
             require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
-            $schemaBootstrap = new SchemaBootstrap($this->conn);
+            $schemaBootstrap = new SchemaBootstrap($this->conn, false);
             $schemaBootstrap->syncCartToDb((int)$_SESSION['customer_id'], []);
         }
 

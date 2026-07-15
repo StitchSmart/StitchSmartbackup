@@ -105,7 +105,7 @@ class DashboardController {
     {
         $database = new Database();
         $conn = $database->connect();
-        $schemaBootstrap = new SchemaBootstrap($conn);
+        $schemaBootstrap = new SchemaBootstrap($conn, false);
 
         $wishlistEntries = $schemaBootstrap->getWishlistEntries();
 

@@ -66,7 +66,7 @@ class CustomerController {
                 // Load and merge cart items
                 require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
                 $dbObj = new Database();
-                $schemaBootstrap = new SchemaBootstrap($dbObj->connect());
+                $schemaBootstrap = new SchemaBootstrap($dbObj->connect(), false);
                 $dbCart = $schemaBootstrap->loadCartFromDb((int)$user['id']);
                 $sessionCart = $_SESSION['cart'] ?? [];
                 
