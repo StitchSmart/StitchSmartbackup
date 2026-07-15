@@ -39,7 +39,7 @@ if (str_starts_with($uri, '/public/') && is_file(__DIR__ . $uri)) {
     return false;
 }
 
-if ($uri !== '/' && is_file(__DIR__ . '/public' . $uri)) {
+if ($uri !== '/' && is_file(__DIR__ . '/public' . $uri) && strtolower(pathinfo($uri, PATHINFO_EXTENSION)) !== 'php') {
     $mime = match (strtolower(pathinfo($uri, PATHINFO_EXTENSION))) {
         'css' => 'text/css',
         'js' => 'application/javascript',
