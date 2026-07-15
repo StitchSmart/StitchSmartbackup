@@ -294,7 +294,7 @@ public function featureIndex()
             exit;
         }
 
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+        $slug = $this->productModel->generateUniqueSlug($name);
         
         $meta_title = trim($_POST['meta_title'] ?? '');
         if (empty($meta_title)) {
@@ -491,7 +491,7 @@ require BASE_PATH.'/app/views/admin/layout.php';
                 exit;
             }
 
-            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+            $slug = $this->productModel->generateUniqueSlug($name, (int)$id);
 
             $meta_title = trim($_POST['meta_title'] ?? '');
             if (empty($meta_title)) {

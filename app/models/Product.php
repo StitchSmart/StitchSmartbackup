@@ -510,6 +510,33 @@ public function getProductBySlug($slug){
 
     return $stmt->get_result()->fetch_assoc();
 }
+
+/**
+ * Generate a URL-safe slug from $name that is guaranteed unique in the DB.
+ * If 'classic-style' already exists, returns 'classic-style-2', then '-3', etc.
+ */
+public function generateUniqueSlug(string $name, int $excludeId = 0): string {
+    $base = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+    $base = trim($base, '-');
+    $slug = $base;
+    $counter = 2;
+
+    while (true) {
+        $stmt = $this->conn->prepare(
+            "SELECT id FROM product WHERE slug = ? AND id != ? LIMIT 1"
+        );
+        $stmt->bind_param("si", $slug, $excludeId);
+        $stmt->execute();
+        $exists = $stmt->get_result()->num_rows > 0;
+        $stmt->close();
+
+        if (!$exists) {
+            return $slug;
+        }
+        $slug = $base . '-' . $counter;
+        $counter++;
+    }
+}
     // delete product
 public function deleteProduct($id){
 
