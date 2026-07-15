@@ -30,7 +30,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
          // fetch data for homepage
@@ -51,7 +51,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
          // fetch data for homepage
@@ -73,7 +73,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
         $allProducts = $this->productModel->getAllProducts();
@@ -109,7 +109,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
          // fetch data for homepage
@@ -130,7 +130,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
          // fetch data for homepage
@@ -152,7 +152,7 @@ class DesignController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
          // fetch data for homepage

@@ -109,7 +109,7 @@ class CustomerController {
             require_once BASE_PATH . '/app/models/settings.php';
             $settingsModel = new Settings();
             $webSettings = $settingsModel->getWebSettings();
-            $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+            $global_theme = $webSettings['theme'] ?? 'theme-default';
             $webname = $webSettings['web_name'] ?? 'StitchSmart';
             $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
             $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';
@@ -209,7 +209,7 @@ class CustomerController {
         $settingsModel = new Settings();
         $webSettings = $settingsModel->getWebSettings();
         
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $webname = $webSettings['web_name'] ?? 'StitchSmart';
         $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
         $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';

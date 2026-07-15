@@ -216,7 +216,7 @@ private function sendRestockRequestMail($product)
         $webname = $ws['web_name'] ?? ''; $webcontact = $ws['web_contact'] ?? ''; $webmail = $ws['web_mail'] ?? '';
         $facebook = $ws['facebook'] ?? ''; $instagram = $ws['instagram'] ?? ''; $pinterest = $ws['pinterest'] ?? ''; $linkdin = $ws['linkdin'] ?? '';
         $meta_description = $ws['meta_description'] ?? '';
-        $global_theme = $ws['theme'] ?? 'theme-luxury';
+        $global_theme = $ws['theme'] ?? 'theme-default';
 
         $cart = $_SESSION['cart'] ?? [];
 
