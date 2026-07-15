@@ -238,8 +238,8 @@ public function createProduct($data){
     $stmt = $this->conn->prepare("
         INSERT INTO product
         (article_number,Fabric_Type, name, description, details, image_url, img2, img3, document, size, price, parent_cat,
-        meta_title, meta_description, meta_keywords,  slug, Designing, quantity)
-        VALUES (?, ?, ?, ?, ?, ?, '', '', '', ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        meta_title, meta_description, meta_keywords,  slug, Designing, quantity, featured)
+        VALUES (?, ?, ?, ?, ?, ?, '', '', '', ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
     ");
 
     if(!$stmt){
@@ -281,11 +281,11 @@ public function toggleFeatured($id, $status)
 {
     $stmt = $this->conn->prepare("
         UPDATE product 
-        SET featured = ? 
+        SET featured = ?, is_featured = ? 
         WHERE id = ?
     ");
 
-    $stmt->bind_param("ii", $status, $id);
+    $stmt->bind_param("iii", $status, $status, $id);
     return $stmt->execute();
 }
 

@@ -148,7 +148,7 @@ public function featureIndex()
             $this->productModel->setSaleDiscount($id, 0);
             $this->productModel->toggleFeatured($id, 0);
             $_SESSION['flash'] = "Product removed from Sale ✅";
-            header("Location: " . url("") . "admin_sale_products&last_discount=" . (int)$discountPercent);
+            header("Location: " . url("") . "admin_sale_products?last_discount=" . (int)$discountPercent);
             exit;
         }
 
@@ -161,7 +161,7 @@ public function featureIndex()
 
         $_SESSION['flash'] = $discountPercent > 0 ? "Product added to Sale ✅" : "Product removed from Sale ✅";
 
-        header("Location: " . url("") . "admin_sale_products&last_discount=" . (int)$discountPercent);
+        header("Location: " . url("") . "admin_sale_products?last_discount=" . (int)$discountPercent);
         exit;
     }
 
