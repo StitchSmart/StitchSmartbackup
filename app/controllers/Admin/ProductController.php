@@ -143,7 +143,7 @@ public function featureIndex()
             $this->productModel->setSaleDiscount($id, 0);
             $this->productModel->toggleFeatured($id, 0);
             $_SESSION['flash'] = "Product removed from Sale ✅";
-            header("Location: " . url("") . "admin_sale_products&last_discount=" . (int)$discountPercent);
+            header("Location: " . url("") . "admin_sale_products?last_discount=" . (int)$discountPercent);
             exit;
         }
 
@@ -156,7 +156,7 @@ public function featureIndex()
 
         $_SESSION['flash'] = $discountPercent > 0 ? "Product added to Sale ✅" : "Product removed from Sale ✅";
 
-        header("Location: " . url("") . "admin_sale_products&last_discount=" . (int)$discountPercent);
+        header("Location: " . url("") . "admin_sale_products?last_discount=" . (int)$discountPercent);
         exit;
     }
 
@@ -482,7 +482,7 @@ require BASE_PATH.'/app/views/admin/layout.php';
 
             if (!empty($errors)) {
                 $_SESSION['errors'] = $errors;
-                header("Location: " . url("") . "edit_product&id=" . $id);
+                header("Location: " . url("") . "edit_product?id=" . $id);
                 exit;
             }
 

@@ -166,7 +166,7 @@ if (isset($_SESSION['cart'])) {
                         <a href="<?= url('product_compare'); ?>" class="btn btn-action position-relative btn-unified">
                             <i class="bi bi-bar-chart-line me-2"></i> Compare
                         </a>
-                        <?php if (isset($_SESSION['customer_logged_in']) && $_SESSION['customer_logged_in'] === true): ?>
+                        <?php if (!empty($_SESSION['customer_id'])): ?>
                             <a href="<?= url('customer_orders'); ?>" class="btn btn-action btn-unified" title="View Orders">
                                 <i class="bi bi-box-seam me-2"></i> Orders
                             </a>
@@ -174,7 +174,10 @@ if (isset($_SESSION['cart'])) {
                     </div>
                     
                     <div class="d-flex align-items-center gap-2">
-                        <?php if (isset($_SESSION['customer_logged_in']) && $_SESSION['customer_logged_in'] === true): ?>
+                        <?php if (!empty($_SESSION['customer_id'])): ?>
+                            <span class="btn btn-action btn-unified text-warning fw-bold px-3" style="cursor: default; background: rgba(202, 151, 69, 0.12); border-color: rgba(202, 151, 69, 0.35);">
+                                <i class="bi bi-person-fill me-2"></i><?= htmlspecialchars($_SESSION['customer_name'] ?? 'Account'); ?>
+                            </span>
                             <a href="<?= url('customer_logout'); ?>" class="btn btn-action btn-unified" title="Logout">
                                 <i class="bi bi-box-arrow-right me-2"></i> Logout
                             </a>

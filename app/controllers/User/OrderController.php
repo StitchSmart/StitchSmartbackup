@@ -254,11 +254,11 @@ class OrderController {
 
         if (isset($_SESSION['customer_id'])) {
             require_once BASE_PATH . '/app/models/SchemaBootstrap.php';
-            $schemaBootstrap = new SchemaBootstrap($this->conn);
+            $schemaBootstrap = new SchemaBootstrap($this->conn, false);
             $schemaBootstrap->syncCartToDb((int)$_SESSION['customer_id'], []);
         }
 
-        header("Location: " . url("") . "order_success&id=" . $order_id);
+        header("Location: " . url("") . "order_success?id=" . $order_id);
         exit;
     } catch (Exception $e) {
         if ($this->conn->errno) {
@@ -1134,7 +1134,7 @@ public function saveReview() {
 
     if ($productId <= 0 || $orderId <= 0 || $rating < 1 || $rating > 5 || empty($reviewText)) {
         $_SESSION['review_error'] = "Please fill in all required fields with valid values.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1149,14 +1149,14 @@ public function saveReview() {
     $stmt->execute();
     if ($stmt->get_result()->num_rows === 0) {
         $_SESSION['review_error'] = "You can only review products from delivered orders.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
     // Check if review already exists using correct model
     if ($this->productModel->userHasReviewedProduct($customerId, $productId)) {
         $_SESSION['review_error'] = "You have already reviewed this product.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1167,7 +1167,7 @@ public function saveReview() {
         $_SESSION['review_error'] = "Failed to submit review. Please try again.";
     }
 
-    header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+    header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
     exit;
 }
 
@@ -1220,7 +1220,7 @@ public function submitReturnRequest() {
 
     if ($orderId <= 0 || $itemId <= 0 || $quantity <= 0) {
         $_SESSION['return_error'] = "Please provide all required fields.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1232,7 +1232,7 @@ public function submitReturnRequest() {
 
     if (!$order || strtolower(trim($order['status'])) !== 'delivered') {
         $_SESSION['return_error'] = "You can only request returns for delivered orders.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1244,13 +1244,13 @@ public function submitReturnRequest() {
 
     if (!$item) {
         $_SESSION['return_error'] = "Invalid item selected.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
     if ($quantity > (int)$item['quantity']) {
         $_SESSION['return_error'] = "Return quantity cannot exceed the purchased amount.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1260,7 +1260,7 @@ public function submitReturnRequest() {
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
         $_SESSION['return_error'] = "A return request already exists for this item.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1287,7 +1287,7 @@ public function submitReturnRequest() {
         $_SESSION['return_error'] = "Failed to submit return request. Please try again.";
     }
 
-    header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+    header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
     exit;
 }
 
@@ -1325,7 +1325,7 @@ public function customerReturnRequestPage() {
 
     if (!$order || strtolower(trim($order['status'])) !== 'delivered') {
         $_SESSION['return_error'] = "You can only request returns for delivered orders.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1337,7 +1337,7 @@ public function customerReturnRequestPage() {
 
     if (!$item) {
         $_SESSION['return_error'] = "Invalid item selected.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 
@@ -1348,7 +1348,7 @@ public function customerReturnRequestPage() {
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
         $_SESSION['return_error'] = "A return request already exists for this item.";
-        header("Location: " . url("") . "customer_order_detail&id=" . $orderId);
+        header("Location: " . url("") . "customer_order_detail?id=" . $orderId);
         exit;
     }
 

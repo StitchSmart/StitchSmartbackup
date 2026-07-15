@@ -73,7 +73,7 @@ class HomeController {
         }
         $customerId = $_SESSION['customer_id'] ?? null;
         if ($customerId) {
-            $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+            $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
             $wishlistedProductIds = $wishlistBootstrap->getWishlistProductIdsForUser((int)$customerId);
         }
 
@@ -137,7 +137,7 @@ class HomeController {
     }
     $customerId = $_SESSION['customer_id'] ?? null;
     if ($customerId) {
-        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
         $wishlistedProductIds = $wishlistBootstrap->getWishlistProductIdsForUser((int)$customerId);
         $deliveredProductIds = $this->productModel->getDeliveredProductIdsForUser((int)$customerId);
         $reviewedProductIds = $this->productModel->getReviewedProductIdsForUser((int)$customerId);
@@ -185,7 +185,7 @@ public function sales(){
  }
  $customerId = $_SESSION['customer_id'] ?? null;
  if ($customerId) {
-     $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+     $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
      $wishlistedProductIds = $wishlistBootstrap->getWishlistProductIdsForUser((int)$customerId);
  }
 
@@ -227,7 +227,7 @@ public function featuredProducts(){
     }
     $customerId = $_SESSION['customer_id'] ?? null;
     if ($customerId) {
-        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect());
+        $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
         $wishlistedProductIds = $wishlistBootstrap->getWishlistProductIdsForUser((int)$customerId);
     }
 
