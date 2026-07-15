@@ -4,13 +4,7 @@ require_once BASE_PATH.'/config/database.php';
 require_once BASE_PATH.'/app/models/settings.php';
 require_once BASE_PATH.'/app/models/Product.php';
 require_once BASE_PATH.'/app/models/ad_category.php';
-
-require BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+require_once BASE_PATH . '/app/services/MailService.php';
 
 class DesignController {
  private $productModel;
@@ -184,43 +178,26 @@ class DesignController {
                 exit;
             }
 
-            $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
             try {
-                $mail->isSMTP();
-                $mail->Host       = MAIL_HOST;
-                $mail->SMTPAuth   = true;
-                $mail->Username   = MAIL_USERNAME;
-                $mail->Password   = MAIL_PASSWORD;
-                $mail->SMTPSecure = MAIL_ENCRYPTION;
-                $mail->Port       = MAIL_PORT;
+                $mailBody = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message);
 
-                $mail->setFrom(MAIL_USERNAME, 'Stitch Smart Design Inquiry');
-                $mail->addAddress(MAIL_USERNAME);
-                $mail->addReplyTo($email, $name);
-
-                $mail->isHTML(true);
-                $mail->Subject = $subject;
-                $mail->Body    = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message);
-                $mail->AltBody = $body;
-
+                $attachments = [];
                 if (isset($_FILES['labelImage']) && $_FILES['labelImage']['error'] === UPLOAD_ERR_OK) {
-                    $mail->addAttachment($_FILES['labelImage']['tmp_name'], $_FILES['labelImage']['name']);
+                    $attachments[] = ['path' => $_FILES['labelImage']['tmp_name'], 'name' => $_FILES['labelImage']['name']];
                 }
                 if (isset($_FILES['designImage']) && $_FILES['designImage']['error'] === UPLOAD_ERR_OK) {
-                    $mail->addAttachment($_FILES['designImage']['tmp_name'], $_FILES['designImage']['name']);
+                    $attachments[] = ['path' => $_FILES['designImage']['tmp_name'], 'name' => $_FILES['designImage']['name']];
                 }
 
-                $mail->send();
+                MailService::send(MAIL_USERNAME, 'Stitch Smart Design Inquiry', $subject, $mailBody, $body, $email, $name, $attachments);
 
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Inquiry sent successfully!']);
                 exit;
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 header('Content-Type: application/json');
                 http_response_code(500);
-                echo json_encode(['success' => false, 'message' => 'Mailer Error: ' . $mail->ErrorInfo]);
+                echo json_encode(['success' => false, 'message' => 'Mailer Error: ' . $e->getMessage()]);
                 exit;
             }
         }

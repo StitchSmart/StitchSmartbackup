@@ -5,13 +5,8 @@ require_once BASE_PATH.'/app/models/settings.php';
 require_once BASE_PATH.'/app/models/Product.php';
 require_once BASE_PATH.'/app/models/ad_category.php';
 require_once BASE_PATH . '/app/models/Voucher.php';
+require_once BASE_PATH . '/app/services/MailService.php';
 
-require BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 class OrderController {
 
     private $conn;
@@ -277,27 +272,7 @@ class OrderController {
 }
 private function sendOrderEmail($toEmail, $name, $order_id, $total, $cart, $discountAmount = 0, $voucher_code = '')
 {
-    $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
     try {
-
-        $mail->isSMTP();
-        $mail->Host = MAIL_HOST;
-        $mail->SMTPAuth = true;
-
-        $mail->Username = MAIL_USERNAME;
-        $mail->Password = MAIL_PASSWORD;
-
-        $mail->SMTPSecure = MAIL_ENCRYPTION;
-        $mail->Port = MAIL_PORT;
-
-        $mail->setFrom(MAIL_USERNAME, 'Stitch Smart');
-        $mail->addAddress($toEmail, $name);
-
-        $mail->isHTML(true);
-        $mail->Subject = "Order Confirmation #$order_id";
-
         // -----------------------------
         // BUILD ITEMS TABLE
         // -----------------------------
@@ -333,7 +308,7 @@ private function sendOrderEmail($toEmail, $name, $order_id, $total, $cart, $disc
             $voucherHtml = "<p style='color:#1a7f37;'><strong>Voucher {$voucher_code} saved Rs " . number_format($discountAmount, 2) . "</strong></p>";
         }
 
-        $mail->Body = "
+        $mailBody = "
 
         <div style='font-family:Arial;padding:20px'>
 
@@ -369,41 +344,19 @@ private function sendOrderEmail($toEmail, $name, $order_id, $total, $cart, $disc
         ";
 
         // fallback text
-        $mail->AltBody = "Order #$order_id placed. Total: Rs $total" .
+        $altBody = "Order #$order_id placed. Total: Rs $total" .
                         (!empty($voucher_code) && $discountAmount > 0 ? " (Voucher $voucher_code saved Rs " . number_format($discountAmount, 2) . ")" : "");
 
-        $mail->send();
+        MailService::send($toEmail, $name, "Order Confirmation #$order_id", $mailBody, $altBody);
 
-    } catch (Exception $e) {
-        error_log("Mailer Error: " . $mail->ErrorInfo);
-        echo $mail->ErrorInfo;
+    } catch (\Throwable $e) {
+        error_log("Mailer Error: " . $e->getMessage());
     }
 }
 private function sendOutOfStockMail($product)
 {
-    $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
     try {
-
-        $mail->isSMTP();
-        $mail->Host = MAIL_HOST;
-        $mail->SMTPAuth = true;
-        $mail->Username = MAIL_USERNAME;
-        $mail->Password = MAIL_PASSWORD;
-        $mail->SMTPSecure = MAIL_ENCRYPTION;
-        $mail->Port = MAIL_PORT;
-
-        $mail->setFrom(MAIL_USERNAME, 'Stock Alert');
-
-        // admin email
-        $mail->addAddress(MAIL_USERNAME);
-
-        $mail->isHTML(true);
-
-        $mail->Subject = 'Restock Needed: ' . $product['name'] . ' (Out of Stock)';
-
-        $mail->Body = "
+        $mailBody = "
         <div style='font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; background-color: #fdfcf9; padding: 40px 0; color: #1a1a1a;'>
             <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(193, 154, 78, 0.2);'>
                 
@@ -468,38 +421,16 @@ private function sendOutOfStockMail($product)
         </div>
         ";
 
-        $mail->send();
+        MailService::send(MAIL_USERNAME, 'Stock Alert', 'Restock Needed: ' . $product['name'] . ' (Out of Stock)', $mailBody);
 
-    } catch (Exception $e) {
-
-        error_log('Stock Mail Error: ' . $mail->ErrorInfo);
+    } catch (\Throwable $e) {
+        error_log('Stock Mail Error: ' . $e->getMessage());
     }
 }
 private function sendLowStockMail($product, $remainingQty)
 {
-    $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
     try {
-
-        $mail->isSMTP();
-        $mail->Host = MAIL_HOST;
-        $mail->SMTPAuth = true;
-        $mail->Username = MAIL_USERNAME;
-        $mail->Password = MAIL_PASSWORD;
-        $mail->SMTPSecure = MAIL_ENCRYPTION;
-        $mail->Port = MAIL_PORT;
-
-        $mail->setFrom(MAIL_USERNAME, 'Stock Alert');
-
-        // admin email
-        $mail->addAddress(MAIL_USERNAME);
-
-        $mail->isHTML(true);
-
-        $mail->Subject = 'Low Stock Alert: ' . $product['name'];
-
-        $mail->Body = "
+        $mailBody = "
         <div style='font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; background-color: #fdfcf9; padding: 40px 0; color: #1a1a1a;'>
             <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(193, 154, 78, 0.2);'>
                 
@@ -560,11 +491,10 @@ private function sendLowStockMail($product, $remainingQty)
         </div>
         ";
 
-        $mail->send();
+        MailService::send(MAIL_USERNAME, 'Stock Alert', 'Low Stock Alert: ' . $product['name'], $mailBody);
 
-    } catch (Exception $e) {
-
-        error_log('Low Stock Mail Error: ' . $mail->ErrorInfo);
+    } catch (\Throwable $e) {
+        error_log('Low Stock Mail Error: ' . $e->getMessage());
     }
 }
 public function success(){

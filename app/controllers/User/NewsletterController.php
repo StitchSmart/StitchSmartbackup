@@ -1,12 +1,7 @@
 <?php
 
 require_once BASE_PATH . '/app/models/NewsletterSubscriber.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+require_once BASE_PATH . '/app/services/MailService.php';
 
 class NewsletterController {
 
@@ -62,21 +57,7 @@ class NewsletterController {
 
     private function sendSubscriberConfirmationEmail(string $email): void {
         try {
-            $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-            $mail->isSMTP();
-            $mail->Host = MAIL_HOST;
-            $mail->SMTPAuth = true;
-            $mail->Username = MAIL_USERNAME;
-            $mail->Password = MAIL_PASSWORD;
-            $mail->SMTPSecure = MAIL_ENCRYPTION;
-            $mail->Port = MAIL_PORT;
-
-            $mail->setFrom(MAIL_USERNAME, APP_NAME);
-            $mail->addAddress($email);
-            $mail->isHTML(true);
-            $mail->Subject = 'Subscription Confirmed — ' . APP_NAME;
-            $mail->Body = "
+            $mailBody = "
                 <div style='font-family:Arial,sans-serif;padding:20px;color:#111;'>
                     <h2>Subscription Confirmed ✅</h2>
                     <p>Thanks for joining the StitchSmart newsletter.</p>
@@ -86,30 +67,16 @@ class NewsletterController {
                     <p style='font-size:0.95rem;color:#555;'>If you did not sign up for this newsletter, please ignore this email.</p>
                 </div>
             ";
-            $mail->AltBody = 'Thanks for joining the StitchSmart newsletter. We will email you when new products arrive and exclusive offers are available.';
-            $mail->send();
-        } catch (Exception $e) {
-            error_log('Newsletter subscriber mail error: ' . $mail->ErrorInfo);
+            $altBody = 'Thanks for joining the StitchSmart newsletter. We will email you when new products arrive and exclusive offers are available.';
+            MailService::send($email, '', 'Subscription Confirmed — ' . APP_NAME, $mailBody, $altBody);
+        } catch (\Throwable $e) {
+            error_log('Newsletter subscriber mail error: ' . $e->getMessage());
         }
     }
 
     private function sendAdminNotificationEmail(string $email): void {
         try {
-            $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-            $mail->isSMTP();
-            $mail->Host = MAIL_HOST;
-            $mail->SMTPAuth = true;
-            $mail->Username = MAIL_USERNAME;
-            $mail->Password = MAIL_PASSWORD;
-            $mail->SMTPSecure = MAIL_ENCRYPTION;
-            $mail->Port = MAIL_PORT;
-
-            $mail->setFrom(MAIL_USERNAME, APP_NAME . ' Notifications');
-            $mail->addAddress(MAIL_USERNAME);
-            $mail->isHTML(true);
-            $mail->Subject = 'New Newsletter Subscriber';
-            $mail->Body = "
+            $mailBody = "
                 <div style='font-family:Arial,sans-serif;padding:20px;color:#111;'>
                     <h2>New subscriber added</h2>
                     <p>The following email just subscribed to the newsletter:</p>
@@ -119,10 +86,10 @@ class NewsletterController {
                     <p>Subscribers will now receive new product announcements.</p>
                 </div>
             ";
-            $mail->AltBody = 'New subscriber added: ' . $email;
-            $mail->send();
-        } catch (Exception $e) {
-            error_log('Newsletter admin mail error: ' . $mail->ErrorInfo);
+            $altBody = 'New subscriber added: ' . $email;
+            MailService::send(MAIL_USERNAME, APP_NAME . ' Notifications', 'New Newsletter Subscriber', $mailBody, $altBody);
+        } catch (\Throwable $e) {
+            error_log('Newsletter admin mail error: ' . $e->getMessage());
         }
     }
 }

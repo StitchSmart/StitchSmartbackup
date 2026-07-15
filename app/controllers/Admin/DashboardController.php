@@ -2,13 +2,7 @@
 require_once __DIR__ . '/../../models/settings.php';
 require_once __DIR__ . '/../../../config/database.php';
 require_once BASE_PATH . '/app/models/Voucher.php';
-
-require BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+require_once BASE_PATH . '/app/services/MailService.php';
 
 class DashboardController {
     public function index() {
@@ -196,24 +190,7 @@ class DashboardController {
             exit;
         }
 
-        $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
         try {
-            $mail->isSMTP();
-            $mail->Host       = MAIL_HOST;
-            $mail->SMTPAuth   = true;
-            $mail->Username   = MAIL_USERNAME;
-            $mail->Password   = MAIL_PASSWORD;
-            $mail->SMTPSecure = MAIL_ENCRYPTION;
-            $mail->Port       = MAIL_PORT;
-
-            $mail->setFrom(MAIL_USERNAME, MAIL_FROM_NAME);
-            $mail->addAddress($email, $name);
-
-            $mail->isHTML(true);
-            $mail->Subject = "Special Stitch Smart offer: {$discountPercent}% off your saved product";
-
             $mailBody = '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;">'
                 . '<div style="text-align:center; margin-bottom:20px;">'
                 . '<h2 style="color:#c19a4e; margin-bottom:0;">We saved your pick!</h2>'
@@ -234,13 +211,12 @@ class DashboardController {
                 . '<p style="color:#6b7280; font-size:13px;">Voucher valid for one use only. Redeem it on your next order.</p>'
                 . '</div>';
 
-            $mail->Body = $mailBody;
-            $mail->AltBody = "Hi {$name},\nUse voucher {$voucherCode} for {$discountPercent}% off your next order at Stitch Smart. Product: {$product}.";
+            $altBody = "Hi {$name},\nUse voucher {$voucherCode} for {$discountPercent}% off your next order at Stitch Smart. Product: {$product}.";
 
-            $mail->send();
+            MailService::send($email, $name, "Special Stitch Smart offer: {$discountPercent}% off your saved product", $mailBody, $altBody);
             $_SESSION['success'] = "Email sent to " . htmlspecialchars($name) . " with a {$discountPercent}% voucher.";
-        } catch (Exception $e) {
-            $_SESSION['error'] = "Unable to send the voucher email. Mailer Error: " . $mail->ErrorInfo;
+        } catch (\Throwable $e) {
+            $_SESSION['error'] = "Unable to send the voucher email. Mailer Error: " . $e->getMessage();
         }
 
         header("Location: " . url("") . "wishlist_report");
@@ -328,28 +304,8 @@ class DashboardController {
             exit;
         }
 
-        $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
-
         try {
-            // SMTP Settings
-            $mail->isSMTP();
-            $mail->Host       = MAIL_HOST;
-            $mail->SMTPAuth   = true;
-            $mail->Username   = MAIL_USERNAME;
-            $mail->Password   = MAIL_PASSWORD;
-            $mail->SMTPSecure = MAIL_ENCRYPTION;
-            $mail->Port       = MAIL_PORT;
-
-            // From / To
-            $mail->setFrom(MAIL_USERNAME, MAIL_FROM_NAME);
-            $mail->addAddress($email, $name);
-
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'We miss you at Stitch Smart! Here is your special voucher';
-
-            $mail->Body = "
+            $mailBody = "
                 <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #ffffff; color: #111827;'>
                     <div style='text-align: center; margin-bottom: 20px;'>
                         <h2 style='color: #c19a4e; font-size: 24px; margin-top: 0;'>Hello " . htmlspecialchars($name) . " 👋</h2>
@@ -370,12 +326,12 @@ class DashboardController {
                 </div>
             ";
 
-            $mail->AltBody = "Hello {$name}, we miss you at Stitch Smart! Use voucher {$voucherCode} for {$discountPercent}% off on your next order at " . url("") . "checkout";
+            $altBody = "Hello {$name}, we miss you at Stitch Smart! Use voucher {$voucherCode} for {$discountPercent}% off on your next order at " . url("") . "checkout";
 
-            $mail->send();
+            MailService::send($email, $name, 'We miss you at Stitch Smart! Here is your special voucher', $mailBody, $altBody);
             $_SESSION['success'] = "Retention email sent successfully to " . htmlspecialchars($name) . " with voucher code {$voucherCode}.";
-        } catch (Exception $e) {
-            $_SESSION['error'] = "Failed to send email. Mailer Error: " . $mail->ErrorInfo;
+        } catch (\Throwable $e) {
+            $_SESSION['error'] = "Failed to send email. Mailer Error: " . $e->getMessage();
         }
 
         header("Location: " . url("") . "sales_report");

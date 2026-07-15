@@ -115,31 +115,12 @@ class JazzCashController
         $_SESSION['jc_otp_time']  = time();
         $_SESSION['jc_logged_in'] = true;
 
-        // Send OTP via Email using PHPMailer
-        require_once BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-        require_once BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-        require_once BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
-        
-        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        // Send OTP via Brevo API
+        require_once BASE_PATH . '/app/services/MailService.php';
+
         try {
-            $mail->Timeout = 15;
-            $mail->isSMTP();
-            $mail->Host     = MAIL_HOST;
-            $mail->SMTPAuth = true;
-            $mail->Username = MAIL_USERNAME;
-            $mail->Password = MAIL_PASSWORD;
-            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port     = MAIL_PORT;
-
-            $mail->setFrom(MAIL_USERNAME, 'StitchSmart');
-            $mail->addAddress($email);
-
-            $mail->CharSet = 'UTF-8';
-            $mail->isHTML(true);
-            $mail->Subject = "StitchSmart - Payment Verification Code";
-
             $year = date('Y');
-            $mail->Body = "<!DOCTYPE html>
+            $mailBody = "<!DOCTYPE html>
 <html>
 <head><meta charset='UTF-8'></head>
 <body style='margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif;'>
@@ -180,10 +161,10 @@ class JazzCashController
 </body>
 </html>";
 
-            $mail->AltBody = "Your StitchSmart JazzCash code is: {$otp}. Valid for 5 minutes.";
+            $altBody = "Your StitchSmart JazzCash code is: {$otp}. Valid for 5 minutes.";
 
-            $mail->send();
-            
+            MailService::send($email, 'StitchSmart', "StitchSmart - Payment Verification Code", $mailBody, $altBody);
+
             // Log success to email_logs
             $stmt = $this->conn->prepare("INSERT INTO email_logs (recipient_email, subject, template_name, status, sent_at) VALUES (?, ?, ?, 'sent', NOW())");
             $subj = "StitchSmart - Payment Verification Code";
