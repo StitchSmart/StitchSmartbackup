@@ -23,6 +23,27 @@ class Database
         $this->username = env('MYSQLUSER', env('MYSQL_USER', env('DB_USER', 'root')));
         $this->password = env('MYSQLPASSWORD', env('MYSQL_PASSWORD', env('DB_PASS', '')));
         $this->dbname   = env('MYSQLDATABASE', env('MYSQL_DATABASE', env('DB_NAME', 'StitchSmart')));
+
+        // Self-healing check: Parse MYSQL_URL / DATABASE_URL if the host resolves to a mail server or is localhost (on Railway)
+        $mysqlUrl = env('MYSQL_URL', env('DATABASE_URL'));
+        if (!empty($mysqlUrl) && (str_contains($this->host, 'gmail.com') || str_contains($this->host, 'smtp') || (env('RAILWAY_ENVIRONMENT') && $this->host === 'localhost'))) {
+            $parsed = parse_url($mysqlUrl);
+            if ($parsed && !empty($parsed['host'])) {
+                $this->host = $parsed['host'];
+                if (!empty($parsed['port'])) {
+                    $this->port = (int)$parsed['port'];
+                }
+                if (!empty($parsed['user'])) {
+                    $this->username = $parsed['user'];
+                }
+                if (!empty($parsed['pass'])) {
+                    $this->password = $parsed['pass'];
+                }
+                if (!empty($parsed['path'])) {
+                    $this->dbname = ltrim($parsed['path'], '/');
+                }
+            }
+        }
     }
 
     /**
