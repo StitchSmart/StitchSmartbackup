@@ -52,7 +52,8 @@ class Database
             $this->conn->set_charset('utf8mb4');
             return $this->conn;
         } catch (Throwable $e) {
-            $msg = 'Database connection exception: ' . $e->getMessage() . ' | Host: ' . $this->host . ' | Port: ' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname;
+            $envDumps = "MYSQLHOST: " . env('MYSQLHOST') . " | MYSQL_HOST: " . env('MYSQL_HOST') . " | DB_HOST: " . env('DB_HOST') . " | MAIL_HOST: " . env('MAIL_HOST');
+            $msg = 'Database connection exception: ' . $e->getMessage() . ' | Host: ' . $this->host . ' | Port: ' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname . ' | Env: ' . $envDumps;
             die($msg);
         }
     }
