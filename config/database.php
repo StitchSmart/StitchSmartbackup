@@ -40,9 +40,11 @@ class Database
                 $this->port
             );
 
-            if ($this->conn->connect_error) {
+            if ($this->conn->connect_error || mysqli_connect_error()) {
+                $err = $this->conn->connect_error ?: mysqli_connect_error();
+                @file_put_contents(__DIR__ . '/../public/db_error_temp.txt', "Connect Error: " . $err . " | Host: " . $this->host . " | Port: " . $this->port . " | User: " . $this->username . " | DB: " . $this->dbname);
                 $msg = defined('APP_DEBUG') && APP_DEBUG
-                    ? 'Database connection failed: ' . $this->conn->connect_error
+                    ? 'Database connection failed: ' . $err
                     : 'A database error occurred. Please try again later.';
                 die($msg);
             }
@@ -50,6 +52,7 @@ class Database
             $this->conn->set_charset('utf8mb4');
             return $this->conn;
         } catch (Throwable $e) {
+            @file_put_contents(__DIR__ . '/../public/db_error_temp.txt', "Exception: " . $e->getMessage() . " | Host: " . $this->host . " | Port: " . $this->port . " | User: " . $this->username . " | DB: " . $this->dbname);
             $msg = defined('APP_DEBUG') && APP_DEBUG
                 ? 'Database connection exception: ' . $e->getMessage() . ' | Host: ' . $this->host . ' | Port: ' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname
                 : 'A database error occurred. Please try again later.';
