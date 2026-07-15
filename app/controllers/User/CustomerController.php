@@ -85,6 +85,12 @@ class CustomerController {
 
                 // Redirect to the last visited page if available, otherwise default to resolved route
                 $redirectUrl = $_SESSION['redirect_after_login'] ?? (url("") . "" . ($redirect === 'customer_orders' ? 'home' : $redirect));
+                
+                // Prevent customer from being redirected to admin pages (which causes them to see admin login)
+                if (strpos($redirectUrl, '/admin') !== false) {
+                    $redirectUrl = url("");
+                }
+                
                 unset($_SESSION['redirect_after_login']);
                 header("Location: " . $redirectUrl);
                 exit;
