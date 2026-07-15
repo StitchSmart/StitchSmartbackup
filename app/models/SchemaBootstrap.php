@@ -14,6 +14,7 @@ class SchemaBootstrap
             $this->ensureCartTableExists();
             $this->ensureJazzCashTableExists();
             $this->ensureCmsPagesExist();
+            $this->ensureAdminEmailIsUpdated();
         } catch (Throwable $e) {
             $msg = defined('APP_DEBUG') && APP_DEBUG
                 ? 'Schema Bootstrap Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine()
@@ -42,6 +43,24 @@ class SchemaBootstrap
                         // flush multi_query results
                     }
                 }
+            }
+        }
+    }
+
+    private function ensureAdminEmailIsUpdated(): void
+    {
+        $result = $this->conn->query("SHOW TABLES LIKE 'admin'");
+        if (!$result || $result->num_rows === 0) {
+            return;
+        }
+
+        $check = $this->conn->query("SELECT id FROM admin WHERE email = 'stitchsmartofficial@gmail.com' LIMIT 1");
+        if ($check && $check->num_rows === 0) {
+            $this->conn->query("UPDATE admin SET email = 'stitchsmartofficial@gmail.com' WHERE email = 'moizmalikofficiall@gmail.com'");
+            
+            $check2 = $this->conn->query("SELECT id FROM admin WHERE email = 'stitchsmartofficial@gmail.com' LIMIT 1");
+            if ($check2 && $check2->num_rows === 0) {
+                $this->conn->query("UPDATE admin SET email = 'stitchsmartofficial@gmail.com' ORDER BY id ASC LIMIT 1");
             }
         }
     }
