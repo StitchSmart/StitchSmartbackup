@@ -53,25 +53,31 @@ class Database
     public function connect(): mysqli
     {
         try {
-            $this->conn = @new mysqli(
+            $driver = mysqli_init();
+            $driver->options(MYSQLI_OPT_CONNECT_TIMEOUT, 2);
+            @$driver->real_connect(
                 $this->host,
                 $this->username,
                 $this->password,
                 $this->dbname,
                 $this->port
             );
+            $this->conn = $driver;
 
             if ($this->conn->connect_error || mysqli_connect_error()) {
                 $err = $this->conn->connect_error ?: mysqli_connect_error();
-                $msg = 'Database connection failed: ' . $err . ' | Host: ' . $this->host . ' | Port: ' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname;
+                $msg = defined('APP_DEBUG') && APP_DEBUG
+                    ? 'Database connection failed: ' . $err . ' | Host: ' . $this->host . ':' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname
+                    : 'A database error occurred. Please try again later.';
                 die($msg);
             }
 
             $this->conn->set_charset('utf8mb4');
             return $this->conn;
         } catch (Throwable $e) {
-            $envDumps = "MYSQLHOST: " . env('MYSQLHOST') . " | MYSQL_HOST: " . env('MYSQL_HOST') . " | DB_HOST: " . env('DB_HOST') . " | MAIL_HOST: " . env('MAIL_HOST');
-            $msg = 'Database connection exception: ' . $e->getMessage() . ' | Host: ' . $this->host . ' | Port: ' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname . ' | Env: ' . $envDumps;
+            $msg = defined('APP_DEBUG') && APP_DEBUG
+                ? 'Database connection exception: ' . $e->getMessage() . ' | Host: ' . $this->host . ':' . $this->port . ' | User: ' . $this->username . ' | DB: ' . $this->dbname
+                : 'A database error occurred. Please try again later.';
             die($msg);
         }
     }
