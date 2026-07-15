@@ -70,7 +70,7 @@ public function index() {
     $pinterest = $ws['pinterest'] ?? '';
     $linkdin = $ws['linkdin'] ?? '';
     $meta_description = $ws['meta_description'] ?? '';
-    $global_theme = $ws['theme'] ?? 'theme-luxury';
+    $global_theme = $ws['theme'] ?? 'theme-default';
 
     $category_name = null; 
 
@@ -163,7 +163,7 @@ public function show(){
     $pinterest = $ws['pinterest'] ?? ''; 
     $linkdin = $ws['linkdin'] ?? '';
     $meta_description = $ws['meta_description'] ?? '';
-    $global_theme = $ws['theme'] ?? 'theme-luxury';
+    $global_theme = $ws['theme'] ?? 'theme-default';
 
     // Categories for sidebar/menu
     $categories = $this->categoryModel->getCategoriesTree();
@@ -353,7 +353,7 @@ public function customerWishlist()
     $pinterest = $ws['pinterest'] ?? '';
     $linkdin = $ws['linkdin'] ?? '';
     $meta_description = $ws['meta_description'] ?? '';
-    $global_theme = $ws['theme'] ?? 'theme-luxury';
+    $global_theme = $ws['theme'] ?? 'theme-default';
 
     $database = new Database();
     $conn = $database->connect();
@@ -378,7 +378,7 @@ public function compare()
     $pinterest = $ws['pinterest'] ?? '';
     $linkdin = $ws['linkdin'] ?? '';
     $meta_description = $ws['meta_description'] ?? '';
-    $global_theme = $ws['theme'] ?? 'theme-luxury';
+    $global_theme = $ws['theme'] ?? 'theme-default';
 
     $categoriesResult = $this->categoryModel->getAllCategories();
     $categories = [];

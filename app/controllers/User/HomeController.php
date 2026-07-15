@@ -61,7 +61,7 @@ class HomeController {
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         // fetch data for homepage
         $products = $this->productModel->getSaleProductsPaginated(4, 0);
         $featuredProducts = $this->productModel->getFeaturedProducts(4, 0);
@@ -98,7 +98,7 @@ class HomeController {
     $meta_title = $webSettings['meta_title'] ?? '';
     $meta_description = $webSettings['meta_description'] ?? '';
     $meta_keywords = $webSettings['meta_keywords'] ?? '';
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
 
     // Pagination logic
     $limit = 8;
@@ -166,7 +166,7 @@ public function sales(){
     $meta_title = $webSettings['meta_title'] ?? '';
     $meta_description = $webSettings['meta_description'] ?? '';
     $meta_keywords = $webSettings['meta_keywords'] ?? '';
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
 
     $limit = 12;
     $page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
@@ -207,7 +207,7 @@ public function featuredProducts(){
     $meta_title = $webSettings['meta_title'] ?? '';
     $meta_description = $webSettings['meta_description'] ?? '';
     $meta_keywords = $webSettings['meta_keywords'] ?? '';
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
 
     // Pagination logic
     $limit = 16;

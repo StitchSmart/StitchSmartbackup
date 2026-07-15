@@ -20,16 +20,19 @@ session_set_cookie_params([
 ]);
 session_start(); // start session for admin login or user login
 
+// Always create one shared connection per request
+$database = new Database();
+$conn = $database->connect();
+
+// Run schema bootstrap only once per session to avoid repeated table-check queries
 if (empty($_SESSION['db_bootstrapped'])) {
-    $database = new Database();
-    $conn = $database->connect();
     (new SchemaBootstrap($conn));
     $_SESSION['db_bootstrapped'] = true;
 }
 
-// Load site-wide web settings so views can read selected theme
+// Load site-wide web settings using the shared connection (no second connection opened)
 require_once __DIR__ . '/../app/models/settings.php';
-$settingsModel = new Settings();
+$settingsModel = new Settings($conn);
 $ws = $settingsModel->getWebSettings();
 $global_theme = $ws['theme'] ?? 'theme-default';
 

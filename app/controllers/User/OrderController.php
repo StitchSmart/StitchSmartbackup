@@ -42,7 +42,7 @@ class OrderController {
         $linkdin = $webSettings['linkdin'] ?? '';
         $meta_title = $webSettings['meta_title'] ?? '';
         $meta_description = $webSettings['meta_description'] ?? '';
-        $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
 
 
@@ -574,7 +574,7 @@ public function success(){
 
     $settingsModel = new Settings();
     $webSettings = $settingsModel->getWebSettings();
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
     $webname = $webSettings['web_name'] ?? 'StitchSmart';
     $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
     $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';
@@ -603,7 +603,7 @@ public function customerOrders(){
 
     $settingsModel = new Settings();
     $webSettings = $settingsModel->getWebSettings();
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
     $webname = $webSettings['web_name'] ?? 'StitchSmart';
     $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
     $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';
@@ -710,7 +710,7 @@ public function customerOrderDetail(){
 
     $settingsModel = new Settings();
     $webSettings = $settingsModel->getWebSettings();
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
     $webname = $webSettings['web_name'] ?? 'StitchSmart';
     $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
     $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';
@@ -769,7 +769,7 @@ public function customerOrderReview(){
 
     $settingsModel = new Settings();
     $webSettings = $settingsModel->getWebSettings();
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
     $webname = $webSettings['web_name'] ?? 'StitchSmart';
     $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
     $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';
@@ -813,7 +813,7 @@ public function manageOrders(){
 
     $data = [
         'title' => 'Manage Orders',
-        'theme' => $_SESSION['theme'] ?? 'theme-luxury',
+        'theme' => $_SESSION['theme'] ?? 'theme-default',
         'view'  => 'admin/manage_orders.php',
         'orders' => $orders
     ];
@@ -1033,7 +1033,7 @@ public function returnForm()
 
     $data = [
         'title' => 'Process Return',
-        'theme' => $_SESSION['theme'] ?? 'theme-luxury',
+        'theme' => $_SESSION['theme'] ?? 'theme-default',
         'view'  => 'admin/order_return_form.php',
         'order' => $order,
         'items' => $items,
@@ -1136,7 +1136,7 @@ public function returnReport()
 
     $data = [
         'title' => 'Return Requests',
-        'theme' => $_SESSION['theme'] ?? 'theme-luxury',
+        'theme' => $_SESSION['theme'] ?? 'theme-default',
         'view'  => 'admin/returns_report.php',
         'returns' => $returns
     ];
@@ -1165,7 +1165,7 @@ public function returnTrash()
 
     $data = [
         'title' => 'Return Trash',
-        'theme' => $_SESSION['theme'] ?? 'theme-luxury',
+        'theme' => $_SESSION['theme'] ?? 'theme-default',
         'view'  => 'admin/returns_trash.php',
         'returns' => $returns
     ];
@@ -1380,7 +1380,7 @@ public function customerReturnRequestPage() {
     // Web Settings
     $settingsModel = new Settings();
     $webSettings = $settingsModel->getWebSettings();
-    $global_theme = $webSettings['theme'] ?? 'theme-luxury';
+    $global_theme = $webSettings['theme'] ?? 'theme-default';
     $webname = $webSettings['web_name'] ?? 'StitchSmart';
     $webmail = $webSettings['web_mail'] ?? 'info@stitchsmart.com';
     $webcontact = $webSettings['web_contact'] ?? 'StitchSmart';

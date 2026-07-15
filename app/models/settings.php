@@ -4,9 +4,13 @@ require_once __DIR__ . '/../../config/database.php';
 class Settings {
     private $conn;
 
-    public function __construct() {
-        $database = new Database();      // create Database instance
-        $this->conn = $database->connect(); // get MySQLi connection
+    public function __construct($conn = null) {
+        if ($conn !== null) {
+            $this->conn = $conn;
+        } else {
+            $database = new Database();
+            $this->conn = $database->connect();
+        }
     }
 
     // Fetch website settings
@@ -26,10 +30,14 @@ class Banner {
 
     private $conn;
 
-    public function __construct()
+    public function __construct($conn = null)
     {
-        $database = new Database();
-        $this->conn = $database->connect();
+        if ($conn !== null) {
+            $this->conn = $conn;
+        } else {
+            $database = new Database();
+            $this->conn = $database->connect();
+        }
     }
 
     public function getAllBanners()
