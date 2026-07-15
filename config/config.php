@@ -120,7 +120,7 @@ if (env('FYP_CHATBOT_URL')) {
     $chatbotUrl = 'https://' . rtrim(env('RAILWAY_SERVICE_FYP_CHATBOT_URL'), '/');
 }
 define('CHATBOT_API_URL',     $chatbotUrl);
-define('CHATBOT_API_TIMEOUT', (int) env('CHATBOT_API_TIMEOUT', 30));
+define('CHATBOT_API_TIMEOUT', (int) env('CHATBOT_API_TIMEOUT', 8));
 define('CHATBOT_API_TOKEN',   env('CHATBOT_API_TOKEN',   ''));
 
 // ── Mail ─────────────────────────────────────────────────────────────────────

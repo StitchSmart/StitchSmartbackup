@@ -234,7 +234,7 @@ class ApiService {
         }
     }
 
-    // Sync all products to chatbot FAISS index automatically
+    // Sync all products to chatbot FAISS index automatically (fire-and-forget, non-blocking)
     public static function syncProduct($unused = null) {
         // Load all products from DB
         require_once BASE_PATH . '/config/database.php';
@@ -261,21 +261,13 @@ class ApiService {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['products' => $products]));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, CHATBOT_API_TIMEOUT);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
+        // Fire-and-forget: set a tiny timeout so we don't block.
+        // The chatbot server will still receive and process the full request.
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 500);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_exec($ch);
         curl_close($ch);
-
-        if ($error !== '') {
-            error_log('Chatbot sync error: ' . $error);
-            return;
-        }
-
-        if ($httpCode < 200 || $httpCode >= 300) {
-            error_log('Chatbot sync failed with HTTP ' . $httpCode . ': ' . (string)$response);
-        }
+        // Ignore any response — chatbot updates asynchronously in the background
     }
 
     // Generic POST function
@@ -298,8 +290,8 @@ class ApiService {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, CHATBOT_API_TIMEOUT);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
