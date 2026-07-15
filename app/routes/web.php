@@ -45,6 +45,8 @@ return [
     'customer_order_detail'            => ['controller' => 'OrderController',    'method' => 'customerOrderDetail',   'file' => '../app/controllers/User/OrderController.php'],
     'customer_order_review'            => ['controller' => 'OrderController',    'method' => 'customerOrderReview',   'file' => '../app/controllers/User/OrderController.php'],
     'save_review'                      => ['controller' => 'OrderController',    'method' => 'saveReview',            'file' => '../app/controllers/User/OrderController.php'],
+    'customer_return_request'          => ['controller' => 'OrderController',    'method' => 'customerReturnRequestPage', 'file' => '../app/controllers/User/OrderController.php'],
+    'submit_return_request'            => ['controller' => 'OrderController',    'method' => 'submitReturnRequest',       'file' => '../app/controllers/User/OrderController.php'],
 
     // ── Design Customizer ───────────────────────────────────────────────────
     'design'              => ['controller' => 'DesignController', 'method' => 'index',             'file' => '../app/controllers/User/DesignController.php'],

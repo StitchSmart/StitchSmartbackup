@@ -63,8 +63,6 @@ return [
     'mark_cancelled'          => ['controller' => 'OrderController', 'method' => 'markCancelled',           'file' => '../app/controllers/User/OrderController.php'],
     'save_tracking'           => ['controller' => 'OrderController', 'method' => 'saveTracking',            'file' => '../app/controllers/User/OrderController.php'],
     'return_form'             => ['controller' => 'OrderController', 'method' => 'returnForm',              'file' => '../app/controllers/User/OrderController.php'],
-    'submit_return_request'   => ['controller' => 'OrderController', 'method' => 'submitReturnRequest',     'file' => '../app/controllers/User/OrderController.php'],
-    'customer_return_request' => ['controller' => 'OrderController', 'method' => 'customerReturnRequestPage', 'file' => '../app/controllers/User/OrderController.php'],
     'update_return_status'    => ['controller' => 'OrderController', 'method' => 'updateReturnStatus',      'file' => '../app/controllers/User/OrderController.php'],
     'process_return'          => ['controller' => 'OrderController', 'method' => 'processReturn',           'file' => '../app/controllers/User/OrderController.php'],
     'return_report'           => ['controller' => 'OrderController', 'method' => 'returnReport',            'file' => '../app/controllers/User/OrderController.php'],

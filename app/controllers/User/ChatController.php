@@ -4,6 +4,7 @@ require_once BASE_PATH.'/config/database.php';
 
 class ChatController {
     private $apiService;
+    private $conn;
 
     public function __construct() {
         $this->apiService = new ApiService();

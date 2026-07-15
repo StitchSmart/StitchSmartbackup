@@ -175,7 +175,7 @@
                                     </div>
                                 </td>
                                 <td><span class="badge bg-dark border px-3 py-2 rounded-pill"><?= htmlspecialchars($entry['article_number']) ?></span></td>
-                                <td class="fw-bold fs-6" style="color: #ca9745;">₹<?= number_format((float)$entry['price'], 2) ?></td>
+                                <td class="fw-bold fs-6" style="color: #ca9745;">Rs. <?= number_format((float)$entry['price'], 2) ?></td>
                                 <td class="small text-muted"><?= htmlspecialchars($entry['created_at']) ?></td>
                                 <td class="text-end px-4">
                                     <a href="<?= url('') ?>send_customer_voucher&email=<?= urlencode($entry['customer_email']) ?>&name=<?= urlencode($entry['customer_name']) ?>&product=<?= urlencode($entry['product_name']) ?>&article=<?= urlencode($entry['article_number']) ?>" class="btn px-3 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2" style="background: linear-gradient(135deg, #ca9745, #e8c547); color: #1a0f0a; border: none; font-weight: 700; font-size: 0.88rem; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 16px rgba(202, 151, 69, 0.6)';" onmouseout="this.style.transform='scale(1)';">
