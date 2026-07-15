@@ -8,6 +8,16 @@ error_reporting(E_ALL);
 
 $rawUri = $_SERVER['REQUEST_URI'] ?? '/';
 $rawUri = '/' . ltrim($rawUri, '/');
+
+// Parse ampersands as query delimiters if no question mark is present (aligns PHP dev server with Apache rewriting)
+if (!str_contains($rawUri, '?') && str_contains($rawUri, '&')) {
+    $parts = explode('&', $rawUri, 2);
+    $rawUri = $parts[0] . '?' . $parts[1];
+    parse_str($parts[1], $queryParts);
+    $_GET = array_merge($_GET, $queryParts);
+    $_REQUEST = array_merge($_REQUEST, $queryParts);
+}
+
 $uri = urldecode(parse_url($rawUri, PHP_URL_PATH));
 $uri = preg_replace('#/+#', '/', $uri);
 
