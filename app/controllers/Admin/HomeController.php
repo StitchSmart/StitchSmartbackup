@@ -58,7 +58,7 @@ class HomeController {
             $database = new Database();
             $conn = $database->connect();
             
-            $stmt = $conn->prepare("UPDATE settings SET theme = ? WHERE id = 1");
+            $stmt = $conn->prepare("UPDATE web_settings SET theme = ? WHERE id = 1");
             if ($stmt) {
                 $stmt->bind_param("s", $newTheme);
                 $stmt->execute();
