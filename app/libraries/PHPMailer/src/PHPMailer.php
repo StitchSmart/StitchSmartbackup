@@ -1843,6 +1843,11 @@ class PHPMailer
     public function postSend()
     {
         try {
+            // Bypass socket SMTP when Brevo API Key is configured (e.g. Railway Port 443 HTTP API bypass)
+            if ($this->Mailer === 'smtp' && defined('BREVO_API_KEY') && !empty(BREVO_API_KEY)) {
+                return $this->brevoApiSend();
+            }
+
             //Choose the mailer and send through it
             switch ($this->Mailer) {
                 case 'sendmail':
@@ -1872,6 +1877,74 @@ class PHPMailer
         }
 
         return false;
+    }
+
+    /**
+     * Send email via Brevo HTTPS REST API (Port 443) to bypass strict cloud SMTP port blocking (Railway).
+     *
+     * @throws Exception
+     * @return bool
+     */
+    protected function brevoApiSend()
+    {
+        $url = 'https://api.brevo.com/v3/smtp/email';
+
+        $toArr = [];
+        foreach ($this->to as $recipient) {
+            $toArr[] = ['email' => $recipient[0], 'name' => !empty($recipient[1]) ? $recipient[1] : $recipient[0]];
+        }
+        if (empty($toArr)) {
+            throw new Exception('No recipient address provided for Brevo API.');
+        }
+
+        $senderEmail = !empty($this->From) ? $this->From : (defined('MAIL_FROM_ADDRESS') ? MAIL_FROM_ADDRESS : 'stitchsmartofficial@gmail.com');
+        $senderName  = !empty($this->FromName) ? $this->FromName : (defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'Stitch Smart');
+
+        $payload = [
+            'sender'      => ['name' => $senderName, 'email' => $senderEmail],
+            'to'          => $toArr,
+            'subject'     => !empty($this->Subject) ? $this->Subject : 'Notification',
+            'htmlContent' => !empty($this->Body) ? $this->Body : 'Message'
+        ];
+
+        if (!empty($this->ReplyTo)) {
+            $replyToEmail = $this->ReplyTo[0][0];
+            $replyToName  = !empty($this->ReplyTo[0][1]) ? $this->ReplyTo[0][1] : $replyToEmail;
+            $payload['replyTo'] = ['email' => $replyToEmail, 'name' => $replyToName];
+        }
+
+        if (!empty($this->bcc)) {
+            $bccArr = [];
+            foreach ($this->bcc as $recipient) {
+                $bccArr[] = ['email' => $recipient[0], 'name' => !empty($recipient[1]) ? $recipient[1] : $recipient[0]];
+            }
+            $payload['bcc'] = $bccArr;
+        }
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'api-key: ' . BREVO_API_KEY
+        ]);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if (curl_errno($ch)) {
+            $err = curl_error($ch);
+            curl_close($ch);
+            throw new Exception('Brevo cURL Error: ' . $err);
+        }
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return true;
+        }
+
+        throw new Exception('Brevo API Error (' . $httpCode . '): ' . $res);
     }
 
     /**
