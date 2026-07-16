@@ -292,7 +292,7 @@ private function sendOrderEmail($toEmail, $name, $order_id, $total, $cart, $disc
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port = MAIL_PORT;
 
-        $mail->setFrom(MAIL_USERNAME, 'Stitch Smart');
+        $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart');
         $mail->addAddress($toEmail, $name);
 
         $mail->isHTML(true);
@@ -394,7 +394,7 @@ private function sendOutOfStockMail($product)
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port = MAIL_PORT;
 
-        $mail->setFrom(MAIL_USERNAME, 'Stock Alert');
+        $mail->setFrom(MAIL_FROM_ADDRESS, 'Stock Alert');
 
         // admin email
         $mail->addAddress(MAIL_USERNAME);
@@ -490,7 +490,7 @@ private function sendLowStockMail($product, $remainingQty)
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port = MAIL_PORT;
 
-        $mail->setFrom(MAIL_USERNAME, 'Stock Alert');
+        $mail->setFrom(MAIL_FROM_ADDRESS, 'Stock Alert');
 
         // admin email
         $mail->addAddress(MAIL_USERNAME);

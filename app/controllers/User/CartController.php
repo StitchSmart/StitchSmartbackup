@@ -148,7 +148,7 @@ private function sendRestockRequestMail($product)
         $mail->SMTPSecure = MAIL_ENCRYPTION;
         $mail->Port     = MAIL_PORT;
 
-        $mail->setFrom(MAIL_USERNAME, 'Stock Restock Alert');
+        $mail->setFrom(MAIL_FROM_ADDRESS, 'Stock Restock Alert');
         $mail->addAddress(MAIL_USERNAME, 'Stitch Smart Admin');
 
         $mail->isHTML(true);

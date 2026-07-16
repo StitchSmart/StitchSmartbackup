@@ -72,7 +72,7 @@ class NewsletterController {
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, APP_NAME);
+            $mail->setFrom(MAIL_FROM_ADDRESS, APP_NAME);
             $mail->addAddress($email);
             $mail->isHTML(true);
             $mail->Subject = 'Subscription Confirmed — ' . APP_NAME;
@@ -105,7 +105,7 @@ class NewsletterController {
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, APP_NAME . ' Notifications');
+            $mail->setFrom(MAIL_FROM_ADDRESS, APP_NAME . ' Notifications');
             $mail->addAddress(MAIL_USERNAME);
             $mail->isHTML(true);
             $mail->Subject = 'New Newsletter Subscriber';

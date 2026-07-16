@@ -292,7 +292,7 @@ class CustomerController {
                 $mail->SMTPSecure = MAIL_ENCRYPTION;
                 $mail->Port       = MAIL_PORT;
 
-                $mail->setFrom(MAIL_USERNAME, 'Stitch Smart');
+                $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart');
                 $mail->addAddress($email, $user['name']);
                 $mail->isHTML(true);
                 $mail->Subject = "Your OTP Code - Stitch Smart Password Recovery";

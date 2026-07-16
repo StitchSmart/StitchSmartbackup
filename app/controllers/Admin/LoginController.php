@@ -133,7 +133,7 @@ class LoginController {
                         $mail->SMTPSecure = MAIL_ENCRYPTION;
                         $mail->Port = MAIL_PORT;
 
-                        $mail->setFrom(MAIL_USERNAME, 'Stitch Smart Admin');
+                        $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Admin');
                         $mail->addAddress($email);
 
                         $mail->isHTML(true);

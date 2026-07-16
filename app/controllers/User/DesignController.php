@@ -196,7 +196,7 @@ class DesignController {
                 $mail->SMTPSecure = MAIL_ENCRYPTION;
                 $mail->Port       = MAIL_PORT;
 
-                $mail->setFrom(MAIL_USERNAME, 'Stitch Smart Design Inquiry');
+                $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Design Inquiry');
                 $mail->addAddress(MAIL_USERNAME);
                 $mail->addReplyTo($email, $name);
 

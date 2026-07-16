@@ -208,7 +208,7 @@ class DashboardController {
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port       = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, MAIL_FROM_NAME);
+            $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
             $mail->addAddress($email, $name);
 
             $mail->isHTML(true);
@@ -359,7 +359,7 @@ class DashboardController {
             $mail->Port       = MAIL_PORT;
 
             // From / To
-            $mail->setFrom(MAIL_USERNAME, MAIL_FROM_NAME);
+            $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME);
             $mail->addAddress($email, $name);
 
             // Content

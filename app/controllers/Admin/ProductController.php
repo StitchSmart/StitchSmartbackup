@@ -578,7 +578,7 @@ require BASE_PATH.'/app/views/admin/layout.php';
                 $mail->SMTPSecure = MAIL_ENCRYPTION;
                 $mail->Port = MAIL_PORT;
 
-                $mail->setFrom(MAIL_USERNAME, APP_NAME);
+                $mail->setFrom(MAIL_FROM_ADDRESS, APP_NAME);
                 $mail->addAddress(MAIL_USERNAME); // Primary to us, BCC to subscribers
                 
                 foreach ($subscribers as $subscriberEmail) {
@@ -622,7 +622,7 @@ require BASE_PATH.'/app/views/admin/layout.php';
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, APP_NAME . ' Notifications');
+            $mail->setFrom(MAIL_FROM_ADDRESS, APP_NAME . ' Notifications');
             $mail->addAddress(MAIL_USERNAME);
             $mail->isHTML(true);
             $mail->Subject = 'New product added: ' . $product['name'];
@@ -654,7 +654,7 @@ require BASE_PATH.'/app/views/admin/layout.php';
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port       = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, 'StitchSmart Stock Alert');
+            $mail->setFrom(MAIL_FROM_ADDRESS, 'StitchSmart Stock Alert');
             $mail->addAddress(MAIL_USERNAME);
             $mail->isHTML(true);
 

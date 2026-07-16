@@ -131,7 +131,7 @@ class JazzCashController
             $mail->SMTPSecure = MAIL_ENCRYPTION;
             $mail->Port     = MAIL_PORT;
 
-            $mail->setFrom(MAIL_USERNAME, 'StitchSmart');
+            $mail->setFrom(MAIL_FROM_ADDRESS, 'StitchSmart');
             $mail->addAddress($email);
 
             $mail->CharSet = 'UTF-8';

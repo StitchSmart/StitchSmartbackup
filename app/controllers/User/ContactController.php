@@ -45,7 +45,7 @@ class ContactController
                 $mail->Port       = MAIL_PORT;
 
                 // FROM
-                $mail->setFrom(MAIL_USERNAME, 'Website Contact');
+                $mail->setFrom(MAIL_FROM_ADDRESS, 'Website Contact');
 
                 // TO
                 $mail->addAddress(MAIL_USERNAME);
