@@ -1921,6 +1921,24 @@ class PHPMailer
             $payload['bcc'] = $bccArr;
         }
 
+        if (!empty($this->attachment)) {
+            $attachmentsArr = [];
+            foreach ($this->attachment as $att) {
+                $path = $att[0];
+                $filename = !empty($att[1]) ? $att[1] : (!empty($att[2]) ? $att[2] : basename($path));
+                if (!empty($path) && file_exists($path) && is_readable($path)) {
+                    $content = base64_encode(file_get_contents($path));
+                    $attachmentsArr[] = [
+                        'name' => $filename,
+                        'content' => $content
+                    ];
+                }
+            }
+            if (!empty($attachmentsArr)) {
+                $payload['attachment'] = $attachmentsArr;
+            }
+        }
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);

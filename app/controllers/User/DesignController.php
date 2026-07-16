@@ -5,9 +5,9 @@ require_once BASE_PATH.'/app/models/settings.php';
 require_once BASE_PATH.'/app/models/Product.php';
 require_once BASE_PATH.'/app/models/ad_category.php';
 
-require BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
-require BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/Exception.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/PHPMailer.php';
+require_once BASE_PATH . '/app/libraries/PHPMailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -169,6 +169,7 @@ class DesignController {
 
     public function sendInquiry() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            ob_start();
             $name = trim(strip_tags((string)($_POST['name'] ?? '')));
             $email = trim((string)($_POST['email'] ?? ''));
             $mobile = trim(strip_tags((string)($_POST['mobile'] ?? '')));
@@ -178,6 +179,7 @@ class DesignController {
             $subject = trim(strip_tags((string)($_POST['subject'] ?? 'New Design Inquiry')));
 
             if (empty($name) || empty($email) || empty($body)) {
+                if (ob_get_length()) ob_clean();
                 header('Content-Type: application/json');
                 http_response_code(400);
                 echo json_encode(['success' => false, 'message' => 'Name, email and details are required.']);
@@ -185,7 +187,7 @@ class DesignController {
             }
 
             $mail = new PHPMailer(true);
-        $mail->Timeout = 15;
+            $mail->Timeout = 15;
 
             try {
                 $mail->isSMTP();
@@ -215,13 +217,19 @@ class DesignController {
 
                 $mail->send();
 
+                if (ob_get_length()) ob_clean();
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Inquiry sent successfully!']);
                 exit;
             } catch (Exception $e) {
+                $errorMsg = $mail->ErrorInfo;
+                if (empty($errorMsg)) {
+                    $errorMsg = $e->getMessage();
+                }
+                if (ob_get_length()) ob_clean();
                 header('Content-Type: application/json');
                 http_response_code(500);
-                echo json_encode(['success' => false, 'message' => 'Mailer Error: ' . $mail->ErrorInfo]);
+                echo json_encode(['success' => false, 'message' => 'Mailer Error: ' . $errorMsg]);
                 exit;
             }
         }
