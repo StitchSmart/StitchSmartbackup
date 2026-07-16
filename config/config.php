@@ -124,13 +124,13 @@ define('CHATBOT_API_TIMEOUT', (int) env('CHATBOT_API_TIMEOUT', 8));
 define('CHATBOT_API_TOKEN',   env('CHATBOT_API_TOKEN',   ''));
 
 // ── Mail ─────────────────────────────────────────────────────────────────────
-define('MAIL_HOST',       env('MAIL_HOST',       'smtp-relay.brevo.com'));
-define('MAIL_PORT',       (int) env('MAIL_PORT', 2525));
-define('MAIL_USERNAME',   env('MAIL_USERNAME',   'b0f2e4001@smtp-brevo.com'));
-define('MAIL_PASSWORD',   env('MAIL_PASSWORD',   implode('', ['xsm', 'tpsib-', '6f3c866082fa71b97a6c52c2a40c57c48c0c69f88603c6a367ba610d10f26ce0-', '2O4vQ9Vkk0h4DqSL'])));
-define('MAIL_ENCRYPTION', env('MAIL_ENCRYPTION', 'tls'));
-define('MAIL_FROM_ADDRESS', env('MAIL_FROM_ADDRESS', 'stitchsmartofficial@gmail.com'));
-define('MAIL_FROM_NAME',  env('MAIL_FROM_NAME',  APP_NAME));
+define('MAIL_HOST',       'smtp-relay.brevo.com');
+define('MAIL_PORT',       2525);
+define('MAIL_USERNAME',   'b0f2e4001@smtp-brevo.com');
+define('MAIL_PASSWORD',   implode('', ['xsm', 'tpsib-', '6f3c866082fa71b97a6c52c2a40c57c48c0c69f88603c6a367ba610d10f26ce0-', '2O4vQ9Vkk0h4DqSL']));
+define('MAIL_ENCRYPTION', 'tls');
+define('MAIL_FROM_ADDRESS', 'stitchsmartofficial@gmail.com');
+define('MAIL_FROM_NAME',  APP_NAME);
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
 // $global_theme is set dynamically from DB settings in the router / controllers.
