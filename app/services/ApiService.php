@@ -170,16 +170,18 @@ class ApiService {
                 $minPrice = (float)$m[1];
             }
 
-            // Gender check
-            $isWomen = preg_match('/(girl|women|ladies|female)/i', $qLower);
-            $isMen = preg_match('/(boy|men|male)/i', $qLower);
-            $isKid = preg_match('/(kid|child|children)/i', $qLower);
+            $isWomen = preg_match('/\b(women|woman|ladies|female)\b/i', $qLower);
+            $isMen = preg_match('/\b(men|mens|man|male)\b/i', $qLower);
+            $isKid = preg_match('/\b(kid|kids|child|children|boy|boys|girl|girls|infant|baby)\b/i', $qLower);
+
+            $sortPriceAsc = preg_match('/(?:low to high|cheapest first|price low|low price|sasta)/i', $qLower);
+            $sortPriceDesc = preg_match('/(?:high to low|expensive first|price high|high price|mehenga)/i', $qLower);
 
             // Item types check
-            $itemTypes = ['shirt', 'jacket', 'dress', 'skirt', 'pant', 'jeans', 'top', 't-shirt', 'socks'];
+            $itemTypes = ['shirt', 'jacket', 'dress', 'skirt', 'pant', 'jeans', 'top', 't-shirt', 'socks', 'hoodie'];
             $askedType = null;
             foreach ($itemTypes as $t) {
-                if (str_contains($qLower, $t)) {
+                if (preg_match('/\b' . preg_quote($t, '/') . '\b/i', $qLower)) {
                     $askedType = $t;
                     break;
                 }
@@ -212,20 +214,30 @@ class ApiService {
                 if ($askedColor && !str_contains($pText, $askedColor)) $failedFilter = true;
                 if ($maxPrice !== null && $pVal > $maxPrice) $failedFilter = true;
                 if ($minPrice !== null && $pVal < $minPrice) $failedFilter = true;
-                if ($isWomen && !preg_match('/(girl|women|ladies|female)/i', $pText)) $failedFilter = true;
-                if ($isMen && !preg_match('/(boy|men|male|mens)/i', $pText)) $failedFilter = true;
-                if ($isKid && !preg_match('/(kid|child|children)/i', $pText)) $failedFilter = true;
+                if ($isWomen && !preg_match('/\b(women|woman|ladies|female)\b/i', $pText)) $failedFilter = true;
+                if ($isMen && !preg_match('/\b(men|mens|man|male)\b/i', $pText)) $failedFilter = true;
+                if ($isKid && !preg_match('/\b(kid|kids|child|children|boy|boys|girl|girls|infant|baby)\b/i', $pText)) $failedFilter = true;
                 if ($askedType && !str_contains($pText, $askedType)) $failedFilter = true;
 
                 // Match if filters pass AND (it has keyword matches OR we are just filtering by criteria)
-                if (!$failedFilter && ($keywordScore > 0 || empty($userWords) || $askedColor || $maxPrice !== null || $minPrice !== null || $isWomen || $isMen || $isKid || $askedType)) {
+                if (!$failedFilter && ($keywordScore > 0 || empty($userWords) || $askedColor || $maxPrice !== null || $minPrice !== null || $isWomen || $isMen || $isKid || $askedType || $sortPriceAsc || $sortPriceDesc)) {
                     $p['score'] = $keywordScore;
                     $matched[] = $p;
                 }
             }
 
-            // Sort by keyword score descending
-            usort($matched, function($a, $b) {
+            // Sort by keyword score descending, or by price if requested
+            usort($matched, function($a, $b) use ($sortPriceAsc, $sortPriceDesc) {
+                if ($sortPriceAsc) {
+                    $pA = (float)preg_replace('/[^\d.]/', '', (string)($a['price'] ?? 0));
+                    $pB = (float)preg_replace('/[^\d.]/', '', (string)($b['price'] ?? 0));
+                    if ($pA !== $pB) return $pA <=> $pB;
+                }
+                if ($sortPriceDesc) {
+                    $pA = (float)preg_replace('/[^\d.]/', '', (string)($a['price'] ?? 0));
+                    $pB = (float)preg_replace('/[^\d.]/', '', (string)($b['price'] ?? 0));
+                    if ($pA !== $pB) return $pB <=> $pA;
+                }
                 return $b['score'] <=> $a['score'];
             });
 
@@ -321,8 +333,9 @@ class ApiService {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 4);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+        // Reduced timeouts to 1 second to make chatbot lightning fast if Python API is down
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
