@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../../../config/config.php';
 require_once __DIR__ . '/../../../config/database.php';
 
 class JazzCashController
@@ -10,10 +11,37 @@ class JazzCashController
     {
         $db = new Database();
         $this->conn = $db->connect();
+
+        // Self-healing schema bootstrap: ensure tables exist on active database before querying
+        @$this->conn->query(
+            "CREATE TABLE IF NOT EXISTS jazzcash_accounts (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                mobile VARCHAR(15) NOT NULL UNIQUE,
+                mpin VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+        );
+
+        @$this->conn->query(
+            "CREATE TABLE IF NOT EXISTS email_logs (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                recipient_email VARCHAR(255) NOT NULL,
+                subject VARCHAR(255) NOT NULL,
+                template_name VARCHAR(100) DEFAULT NULL,
+                status ENUM('queued', 'sent', 'failed') NOT NULL DEFAULT 'queued',
+                error_message TEXT DEFAULT NULL,
+                sent_at DATETIME DEFAULT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                KEY idx_status_created (status, created_at),
+                KEY idx_recipient_email (recipient_email)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+        );
     }
 
     private function jsonResponse(array $data): void
     {
+        if (ob_get_length()) ob_clean();
         header('Content-Type: application/json');
         echo json_encode($data);
         exit;
@@ -45,6 +73,9 @@ class JazzCashController
 
         // Check if already registered
         $stmt = $this->conn->prepare("SELECT id FROM jazzcash_accounts WHERE mobile = ?");
+        if (!$stmt) {
+            $this->jsonResponse(['success' => false, 'message' => 'Database error: unable to check registration.']);
+        }
         $stmt->bind_param('s', $mobile);
         $stmt->execute();
         $stmt->store_result();
@@ -58,6 +89,9 @@ class JazzCashController
         // Insert
         $hashed = password_hash($mpin, PASSWORD_BCRYPT);
         $stmt = $this->conn->prepare("INSERT INTO jazzcash_accounts (mobile, mpin) VALUES (?, ?)");
+        if (!$stmt) {
+            $this->jsonResponse(['success' => false, 'message' => 'Database error: unable to create account.']);
+        }
         $stmt->bind_param('ss', $mobile, $hashed);
 
         if ($stmt->execute()) {
@@ -94,6 +128,9 @@ class JazzCashController
 
         // Fetch account
         $stmt = $this->conn->prepare("SELECT id, mpin FROM jazzcash_accounts WHERE mobile = ?");
+        if (!$stmt) {
+            $this->jsonResponse(['success' => false, 'message' => 'Database error during account lookup. Please try again.']);
+        }
         $stmt->bind_param('s', $mobile);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -187,20 +224,26 @@ class JazzCashController
             
             // Log success to email_logs
             $stmt = $this->conn->prepare("INSERT INTO email_logs (recipient_email, subject, template_name, status, sent_at) VALUES (?, ?, ?, 'sent', NOW())");
-            $subj = "StitchSmart - Payment Verification Code";
-            $tpl = "jazzcash_otp";
-            $stmt->bind_param('sss', $email, $subj, $tpl);
-            $stmt->execute();
+            if ($stmt) {
+                $subj = "StitchSmart - Payment Verification Code";
+                $tpl = "jazzcash_otp";
+                $stmt->bind_param('sss', $email, $subj, $tpl);
+                $stmt->execute();
+                $stmt->close();
+            }
 
         } catch (\Exception $e) {
             $err = $e->getMessage();
             
             // Log failure to email_logs
             $stmt = $this->conn->prepare("INSERT INTO email_logs (recipient_email, subject, template_name, status, error_message) VALUES (?, ?, ?, 'failed', ?)");
-            $subj = "StitchSmart - Payment Verification Code";
-            $tpl = "jazzcash_otp";
-            $stmt->bind_param('ssss', $email, $subj, $tpl, $err);
-            $stmt->execute();
+            if ($stmt) {
+                $subj = "StitchSmart - Payment Verification Code";
+                $tpl = "jazzcash_otp";
+                $stmt->bind_param('ssss', $email, $subj, $tpl, $err);
+                $stmt->execute();
+                $stmt->close();
+            }
 
             error_log('JazzCash OTP Email Error: ' . $err);
             $this->jsonResponse(['success' => false, 'message' => 'Failed to send OTP email: ' . $err]);

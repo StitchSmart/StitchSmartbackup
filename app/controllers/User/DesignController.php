@@ -200,20 +200,46 @@ class DesignController {
                 $mail->Port       = MAIL_PORT;
 
                 $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Design Inquiry');
-                $mail->addAddress(MAIL_FROM_ADDRESS);
+                if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $mail->addAddress($email, $name);
+                }
+                if (defined('MAIL_FROM_ADDRESS') && !empty(MAIL_FROM_ADDRESS)) {
+                    $mail->addAddress(MAIL_FROM_ADDRESS, 'Stitch Smart Admin');
+                }
                 $mail->addReplyTo($email, $name);
+
+                // Save images on server so direct download URLs are available even if base64 attachments are filtered
+                $uploadDir = __DIR__ . '/../../../public/uploads/inquiries/';
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
+
+                $uploadedLinks = [];
+                if (isset($_FILES['labelImage']) && $_FILES['labelImage']['error'] === UPLOAD_ERR_OK) {
+                    $ext = pathinfo($_FILES['labelImage']['name'], PATHINFO_EXTENSION) ?: 'png';
+                    $safeName = 'label_' . time() . '_' . rand(100, 999) . '.' . $ext;
+                    if (move_uploaded_file($_FILES['labelImage']['tmp_name'], $uploadDir . $safeName)) {
+                        $uploadedLinks['Label Image'] = url('uploads/inquiries/' . $safeName);
+                        $mail->addAttachment($uploadDir . $safeName, $_FILES['labelImage']['name']);
+                    } else {
+                        $mail->addAttachment($_FILES['labelImage']['tmp_name'], $_FILES['labelImage']['name']);
+                    }
+                }
+                if (isset($_FILES['designImage']) && $_FILES['designImage']['error'] === UPLOAD_ERR_OK) {
+                    $ext = pathinfo($_FILES['designImage']['name'], PATHINFO_EXTENSION) ?: 'png';
+                    $safeName = 'design_' . time() . '_' . rand(100, 999) . '.' . $ext;
+                    if (move_uploaded_file($_FILES['designImage']['tmp_name'], $uploadDir . $safeName)) {
+                        $uploadedLinks['Design Image'] = url('uploads/inquiries/' . $safeName);
+                        $mail->addAttachment($uploadDir . $safeName, $_FILES['designImage']['name']);
+                    } else {
+                        $mail->addAttachment($_FILES['designImage']['tmp_name'], $_FILES['designImage']['name']);
+                    }
+                }
 
                 $mail->isHTML(true);
                 $mail->Subject = $subject;
-                $mail->Body    = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message);
+                $mail->Body    = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message, $uploadedLinks);
                 $mail->AltBody = $body;
-
-                if (isset($_FILES['labelImage']) && $_FILES['labelImage']['error'] === UPLOAD_ERR_OK) {
-                    $mail->addAttachment($_FILES['labelImage']['tmp_name'], $_FILES['labelImage']['name']);
-                }
-                if (isset($_FILES['designImage']) && $_FILES['designImage']['error'] === UPLOAD_ERR_OK) {
-                    $mail->addAttachment($_FILES['designImage']['tmp_name'], $_FILES['designImage']['name']);
-                }
 
                 $mail->send();
 
@@ -235,7 +261,7 @@ class DesignController {
         }
     }
 
-    private function formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message) {
+    private function formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message, $uploadedLinks = []) {
         $lines = explode("\n", $body);
         $sections = [];
         $currentSection = 'General';
@@ -596,6 +622,22 @@ class DesignController {
             $html .= '</div>';
         }
  
+        if (!empty($uploadedLinks)) {
+            $html .= '
+            <div class="section-title">Uploaded Design & Label Files</div>
+            <div class="card" style="text-align: center; background: #FFFDF9; border: 1.5px dashed #c19a4e;">
+                <p style="margin: 0 0 15px 0; color: #4b5563; font-size: 15px;">Direct server download links (in case mail clients filter attachments):</p>';
+            foreach ($uploadedLinks as $labelName => $linkUrl) {
+                $html .= '
+                <div style="margin-bottom: 12px;">
+                    <a href="' . htmlspecialchars($linkUrl) . '" target="_blank" style="display: inline-block; padding: 12px 24px; background: #c19a4e; color: #111827; text-decoration: none; border-radius: 999px; font-weight: 700;">
+                        Download / View ' . htmlspecialchars($labelName) . ' &rarr;
+                    </a>
+                </div>';
+            }
+            $html .= '</div>';
+        }
+
         $html .= '
         </div>
         <div class="footer">
