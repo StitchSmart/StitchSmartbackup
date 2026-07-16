@@ -13,12 +13,27 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class DesignController {
- private $productModel;
+    private $productModel;
     private $categoryModel;
+    private $conn;
 
     public function __construct(){
         $database = new Database();
         $db = $database->connect();
+        $this->conn = $db;
+
+        if ($this->conn) {
+            $sqlLogs = "CREATE TABLE IF NOT EXISTS email_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                recipient_email VARCHAR(255) NOT NULL,
+                subject VARCHAR(255) NOT NULL,
+                template_name VARCHAR(100) DEFAULT NULL,
+                status VARCHAR(50) NOT NULL,
+                error_message TEXT DEFAULT NULL,
+                sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            @$this->conn->query($sqlLogs);
+        }
 
         $this->productModel = new Product($db);
         $this->categoryModel = new Category($db);
@@ -226,14 +241,25 @@ class DesignController {
                 $htmlContent = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message, $uploadedLinks);
 
                 // ─── MAIL #1: TO ADMIN (EXACT STRUCTURE CLONE OF CONTACT US WHICH DELIVERS 100%) ───
-                $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Design Inquiry');
+                $mail->setFrom(MAIL_FROM_ADDRESS, 'StitchSmart Design Portal');
                 $mail->addAddress(MAIL_FROM_ADDRESS);
                 $mail->addReplyTo($email, $name);
                 $mail->isHTML(true);
-                $mail->Subject = '[Design Inquiry] ' . $subject . ' - From: ' . $name;
+                $mail->Subject = 'New Design Portal Inquiry - ' . $name;
                 $mail->Body    = $htmlContent;
                 $mail->AltBody = $body;
                 $mail->send();
+
+                if ($this->conn) {
+                    $stmtLog = @$this->conn->prepare("INSERT INTO email_logs (recipient_email, subject, template_name, status, sent_at) VALUES (?, ?, 'design_inquiry', 'sent', NOW())");
+                    if ($stmtLog) {
+                        $adminEmailLog = MAIL_FROM_ADDRESS;
+                        $subjLog = 'New Design Portal Inquiry - ' . $name;
+                        $stmtLog->bind_param('ss', $adminEmailLog, $subjLog);
+                        $stmtLog->execute();
+                        $stmtLog->close();
+                    }
+                }
 
                 // ─── MAIL #2: TO CUSTOMER (IF DIFFERENT FROM ADMIN) ───
                 if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL) && strcasecmp(trim($email), trim(MAIL_FROM_ADDRESS)) !== 0) {
@@ -248,10 +274,10 @@ class DesignController {
                         $mailCustomer->Password   = MAIL_PASSWORD;
                         $mailCustomer->SMTPSecure = MAIL_ENCRYPTION;
                         $mailCustomer->Port       = MAIL_PORT;
-                        $mailCustomer->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart');
+                        $mailCustomer->setFrom(MAIL_FROM_ADDRESS, 'StitchSmart');
                         $mailCustomer->addAddress($email, $name);
                         $mailCustomer->isHTML(true);
-                        $mailCustomer->Subject = 'We received your Design Inquiry: ' . $subject;
+                        $mailCustomer->Subject = 'We received your Design Inquiry - StitchSmart';
                         $mailCustomer->Body    = $htmlContent;
                         $mailCustomer->AltBody = $body;
                         $mailCustomer->send();
@@ -269,6 +295,18 @@ class DesignController {
                 if (empty($errorMsg)) {
                     $errorMsg = $e->getMessage();
                 }
+
+                if ($this->conn) {
+                    $stmtLog = @$this->conn->prepare("INSERT INTO email_logs (recipient_email, subject, template_name, status, error_message) VALUES (?, ?, 'design_inquiry', 'failed', ?)");
+                    if ($stmtLog) {
+                        $adminEmailLog = MAIL_FROM_ADDRESS;
+                        $subjLog = 'New Design Portal Inquiry - ' . $name;
+                        $stmtLog->bind_param('sss', $adminEmailLog, $subjLog, $errorMsg);
+                        $stmtLog->execute();
+                        $stmtLog->close();
+                    }
+                }
+
                 if (ob_get_length()) ob_clean();
                 header('Content-Type: application/json');
                 http_response_code(500);
@@ -365,306 +403,98 @@ class DesignController {
         $logoText = "Stitch Smart";
         $titleText = isset($sections['Title']) ? $sections['Title'] : $subject;
         
-        $html = '<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: \'Outfit\', \'Helvetica Neue\', Helvetica, Arial, sans-serif;
-            background-color: #f5f5f7;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 40px auto;
-            background-color: #ffffff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
-        }
-        .header {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            padding: 35px 20px;
-            text-align: center;
-            border-bottom: 3px solid #c19a4e;
-        }
-        .header h1 {
-            color: #ffffff;
-            font-size: 26px;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .header p {
-            color: #c19a4e;
-            font-size: 14px;
-            margin: 8px 0 0 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .content {
-            padding: 30px 40px;
-        }
-        .section-title {
-            color: #111827;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f3f4f6;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .card {
-            background-color: #f9fafb;
-            border: 1px solid #f3f4f6;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        .detail-row {
-            margin-bottom: 12px;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .detail-label {
-            color: #6b7280;
-            font-weight: 600;
-            width: 140px;
-            display: inline-block;
-            vertical-align: top;
-        }
-        .detail-value {
-            color: #111827;
-            display: inline-block;
-            width: calc(100% - 150px);
-            font-weight: 500;
-        }
-        .message-box {
-            background-color: #fdfbf7;
-            border-left: 4px solid #c19a4e;
-            padding: 15px;
-            border-radius: 4px 12px 12px 4px;
-            font-style: italic;
-            color: #4b5563;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        .qty-badge {
-            display: inline-block;
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin: 5px;
-            text-align: center;
-            min-width: 60px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .qty-size {
-            font-size: 12px;
-            color: #6b7280;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .qty-val {
-            font-size: 16px;
-            color: #111827;
-            font-weight: 700;
-        }
-        .qty-val.has-qty {
-            color: #c19a4e;
-        }
-        .footer {
-            background-color: #f9fafb;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-            font-size: 12px;
-            color: #9ca3af;
-        }
-    </style>
-</head>
-<body>
-    <div class="email-container">
-        <div class="header">
-            <h1>' . htmlspecialchars($logoText) . '</h1>
-            <p>' . htmlspecialchars($titleText) . '</p>
-        </div>
-        <div class="content">
-            <div class="section-title">Client Information</div>
-            <div class="card">
-                <div class="detail-row">
-                    <span class="detail-label">Name</span>
-                    <span class="detail-value" style="font-size: 16px; font-weight: bold; color: #c19a4e;">' . htmlspecialchars($name) . '</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Email</span>
-                    <span class="detail-value">' . htmlspecialchars($email) . '</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Mobile</span>
-                    <span class="detail-value">' . htmlspecialchars($mobile) . '</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">WhatsApp</span>
-                    <span class="detail-value">' . htmlspecialchars($whatsapp) . '</span>
-                </div>
+        $html = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f7f4f0; padding: 30px; border-radius: 10px; border: 1px solid #e8e0d5;'>
+            <div style='text-align: center; margin-bottom: 25px;'>
+                <h2 style='color: #1a0f0a; margin: 0; font-family: Georgia, serif;'>" . htmlspecialchars($logoText) . "</h2>
+                <div style='height: 3px; width: 50px; background: #c19a4e; margin: 15px auto;'></div>
+                <p style='color: #c19a4e; font-size: 14px; margin: 0; font-weight: bold;'>" . htmlspecialchars($titleText) . "</p>
             </div>
- 
-            <div class="section-title">Client Message</div>
-            <div class="message-box">
-                ' . nl2br(htmlspecialchars($message)) . '
-            </div>';
- 
-        if (isset($sections['Order Details']) && !empty($sections['Order Details'])) {
-            $html .= '
-            <div class="section-title">Garment Specifications</div>
-            <div class="card">';
-            foreach ($sections['Order Details'] as $key => $value) {
-                if ($key === '_text') continue;
-                $html .= '
-                <div class="detail-row">
-                    <span class="detail-label">' . htmlspecialchars($key) . '</span>
-                    <span class="detail-value">' . htmlspecialchars($value) . '</span>
-                </div>';
-            }
-            $html .= '</div>';
-        }
- 
-        if (isset($sections['Labels']) && !empty($sections['Labels'])) {
-            $html .= '
-            <div class="section-title">Labels & Branding</div>
-            <div class="card">';
-            foreach ($sections['Labels'] as $key => $value) {
-                if ($key === '_text') continue;
-                $html .= '
-                <div class="detail-row">
-                    <span class="detail-label">' . htmlspecialchars($key) . '</span>
-                    <span class="detail-value">' . htmlspecialchars($value) . '</span>
-                </div>';
-            }
-            $html .= '</div>';
-        }
- 
-        if (isset($sections['Prints/Comments']) && !empty($sections['Prints/Comments'])) {
-            $html .= '
-            <div class="section-title">Prints & Designs</div>
-            <div class="card">';
-            if (isset($sections['Prints/Comments']['_text'])) {
-                foreach ($sections['Prints/Comments']['_text'] as $textLine) {
-                    $html .= '<p style="margin: 0 0 10px 0; color: #4b5563; font-size: 15px; line-height: 1.5;">' . htmlspecialchars($textLine) . '</p>';
+            <div style='background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);'>
+                <h3 style='color: #1a0f0a; margin-top: 0; border-bottom: 1px solid #f0ece1; padding-bottom: 10px; font-size: 16px;'>Client Information</h3>
+                
+                <p style='color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 6px 0;'>
+                    <strong style='color: #1a0f0a; width: 120px; display: inline-block;'>Client Name:</strong> <strong style='color: #c19a4e;'>" . htmlspecialchars($name) . "</strong>
+                </p>
+                <p style='color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 6px 0;'>
+                    <strong style='color: #1a0f0a; width: 120px; display: inline-block;'>Email:</strong> 
+                    <a href='mailto:" . htmlspecialchars($email) . "' style='color: #c19a4e; text-decoration: none;'>" . htmlspecialchars($email) . "</a>
+                </p>
+                <p style='color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 6px 0;'>
+                    <strong style='color: #1a0f0a; width: 120px; display: inline-block;'>Mobile:</strong> " . htmlspecialchars($mobile) . "
+                </p>
+                <p style='color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 6px 0;'>
+                    <strong style='color: #1a0f0a; width: 120px; display: inline-block;'>WhatsApp:</strong> " . htmlspecialchars($whatsapp) . "
+                </p>
+                
+                <div style='margin-top: 20px;'>
+                    <strong style='color: #1a0f0a; display: block; margin-bottom: 8px; font-size: 15px;'>Client Message:</strong>
+                    <div style='background: #fdfaf6; border-left: 4px solid #c19a4e; padding: 15px; color: #5a5a5a; font-size: 14px; line-height: 1.6; border-radius: 0 4px 4px 0;'>
+                        " . nl2br(htmlspecialchars($message)) . "
+                    </div>
+                </div>";
+
+        $appendInlineSection = function($title, $data) {
+            if (empty($data)) return '';
+            $out = "<div style='margin-top: 25px;'><h4 style='color: #1a0f0a; border-bottom: 2px solid #f0ece1; padding-bottom: 6px; margin-bottom: 12px; font-size: 16px;'>" . htmlspecialchars($title) . "</h4>";
+            if (isset($data['_text'])) {
+                foreach ($data['_text'] as $t) {
+                    $out .= "<p style='color: #4a4a4a; font-size: 14px; margin: 4px 0;'>" . htmlspecialchars($t) . "</p>";
                 }
             }
-            foreach ($sections['Prints/Comments'] as $key => $value) {
-                if ($key === '_text') continue;
-                $html .= '
-                <div class="detail-row">
-                    <span class="detail-label">' . htmlspecialchars($key) . '</span>
-                    <span class="detail-value">' . htmlspecialchars($value) . '</span>
-                </div>';
+            foreach ($data as $k => $v) {
+                if ($k === '_text') continue;
+                $out .= "<p style='color: #4a4a4a; font-size: 14px; margin: 6px 0;'><strong style='color: #1a0f0a; width: 160px; display: inline-block;'>" . htmlspecialchars($k) . ":</strong> " . htmlspecialchars($v) . "</p>";
             }
-            $html .= '</div>';
-        }
- 
-        if (isset($sections['Finishing']) && !empty($sections['Finishing'])) {
-            $html .= '
-            <div class="section-title">Finishing Customizations</div>
-            <div class="card">';
-            foreach ($sections['Finishing'] as $key => $value) {
-                if ($key === '_text') continue;
-                $displayKey = trim($key, '- ');
-                $html .= '
-                <div class="detail-row">
-                    <span class="detail-label">' . htmlspecialchars($displayKey) . '</span>
-                    <span class="detail-value">' . htmlspecialchars($value) . '</span>
-                </div>';
-            }
-            $html .= '</div>';
-        }
- 
+            $out .= "</div>";
+            return $out;
+        };
+
+        if (isset($sections['Order Details'])) $html .= $appendInlineSection('Garment Specifications', $sections['Order Details']);
+        if (isset($sections['Labels'])) $html .= $appendInlineSection('Labels & Branding', $sections['Labels']);
+        if (isset($sections['Prints/Comments'])) $html .= $appendInlineSection('Prints & Designs', $sections['Prints/Comments']);
+        if (isset($sections['Finishing'])) $html .= $appendInlineSection('Finishing Details', $sections['Finishing']);
+
         if (isset($sections['Quantities']) && !empty($sections['Quantities'])) {
-            $sampleText = isset($sections['Quantities']['Sample']) ? ' (Sample: ' . $sections['Quantities']['Sample'] . ')' : '';
-            $html .= '
-            <div class="section-title">Order Quantities' . htmlspecialchars($sampleText) . '</div>
-            <div style="margin-bottom: 25px; text-align: center;">';
-            foreach ($sections['Quantities'] as $key => $value) {
-                if ($key === '_text' || strtolower($key) === 'sample') continue;
-                $hasQtyClass = ((int)$value > 0) ? ' has-qty' : '';
-                $html .= '
-                <div class="qty-badge">
-                    <span class="qty-size">' . htmlspecialchars($key) . '</span>
-                    <span class="qty-val' . $hasQtyClass . '">' . htmlspecialchars($value) . '</span>
-                </div>';
+            $html .= "<div style='margin-top: 25px;'><h4 style='color: #1a0f0a; border-bottom: 2px solid #f0ece1; padding-bottom: 6px; margin-bottom: 12px; font-size: 16px;'>Order Quantities</h4><div style='background: #fdfaf6; padding: 12px; border-radius: 6px;'>";
+            if (isset($sections['Quantities']['Sample'])) {
+                $html .= "<p style='margin: 4px 0; font-size: 14px;'><strong style='color: #1a0f0a;'>Sample First:</strong> " . htmlspecialchars($sections['Quantities']['Sample']) . "</p>";
             }
-            $html .= '
-            </div>';
+            $qList = [];
+            foreach ($sections['Quantities'] as $k => $v) {
+                if ($k === '_text' || strtolower($k) === 'sample') continue;
+                $qList[] = "<strong style='color: #1a0f0a;'>" . htmlspecialchars($k) . ":</strong> " . htmlspecialchars($v);
+            }
+            if (!empty($qList)) $html .= "<p style='margin: 6px 0; font-size: 14px; line-height: 1.6;'>" . implode(' &bull; ', $qList) . "</p>";
+            $html .= "</div></div>";
         }
- 
+
         foreach ($sections as $secName => $secData) {
             if (in_array($secName, ['Header', 'Title', 'Order Details', 'Labels', 'Prints/Comments', 'Finishing', 'Quantities', 'General'])) {
                 continue;
             }
             if (empty($secData)) continue;
-            
-            $html .= '
-            <div class="section-title">' . htmlspecialchars($secName) . '</div>
-            <div class="card">';
             if (is_array($secData)) {
-                if (isset($secData['_text'])) {
-                    foreach ($secData['_text'] as $textLine) {
-                        $html .= '<p style="margin: 0 0 10px 0; color: #4b5563; font-size: 15px; line-height: 1.5;">' . htmlspecialchars($textLine) . '</p>';
-                    }
-                }
-                foreach ($secData as $key => $value) {
-                    if ($key === '_text') continue;
-                    $html .= '
-                    <div class="detail-row">
-                        <span class="detail-label">' . htmlspecialchars($key) . '</span>
-                        <span class="detail-value">' . htmlspecialchars($value) . '</span>
-                    </div>';
-                }
+                $html .= $appendInlineSection($secName, $secData);
             } else {
-                $html .= '<p style="margin: 0; color: #4b5563; font-size: 15px; line-height: 1.5;">' . htmlspecialchars($secData) . '</p>';
+                $html .= "<div style='margin-top: 25px;'><h4 style='color: #1a0f0a; border-bottom: 2px solid #f0ece1; padding-bottom: 6px; margin-bottom: 12px; font-size: 16px;'>" . htmlspecialchars($secName) . "</h4><p style='color: #4a4a4a; font-size: 14px;'>" . htmlspecialchars($secData) . "</p></div>";
             }
-            $html .= '</div>';
-        }
- 
-        if (!empty($uploadedLinks)) {
-            $html .= '
-            <div class="section-title">Uploaded Design & Label Files</div>
-            <div class="card" style="text-align: center; background: #FFFDF9; border: 1.5px dashed #c19a4e;">
-                <p style="margin: 0 0 15px 0; color: #4b5563; font-size: 15px;">Direct server download links (in case mail clients filter attachments):</p>';
-            foreach ($uploadedLinks as $labelName => $linkUrl) {
-                $html .= '
-                <div style="margin-bottom: 12px;">
-                    <a href="' . htmlspecialchars($linkUrl) . '" target="_blank" style="display: inline-block; padding: 12px 24px; background: #c19a4e; color: #111827; text-decoration: none; border-radius: 999px; font-weight: 700;">
-                        Download / View ' . htmlspecialchars($labelName) . ' &rarr;
-                    </a>
-                </div>';
-            }
-            $html .= '</div>';
         }
 
-        $html .= '
-        </div>
-        <div class="footer">
-            This is an automated email from the custom design portal at Stitch Smart.<br>
-            &copy; ' . date('Y') . ' Stitch Smart. All rights reserved.
-        </div>
-    </div>
-</body>
-</html>';
- 
+        if (!empty($uploadedLinks)) {
+            $html .= "<div style='margin-top: 25px;'><h4 style='color: #1a0f0a; border-bottom: 2px solid #f0ece1; padding-bottom: 6px; margin-bottom: 12px; font-size: 16px;'>Uploaded Design & Label Files</h4><div style='text-align: center; background: #fdfaf6; padding: 15px; border-radius: 6px; border: 1px dashed #c19a4e;'><p style='margin: 0 0 10px 0; font-size: 13px; color: #5a5a5a;'>Direct download links:</p>";
+            foreach ($uploadedLinks as $labelName => $linkUrl) {
+                $html .= "<div style='margin: 8px 0;'><a href='" . htmlspecialchars($linkUrl) . "' target='_blank' style='display: inline-block; padding: 10px 20px; background: #c19a4e; color: #1a0f0a; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 14px;'>Download / View " . htmlspecialchars($labelName) . " &rarr;</a></div>";
+            }
+            $html .= "</div></div>";
+        }
+
+        $html .= "
+            </div>
+            <div style='text-align: center; margin-top: 25px; color: #8a8a8a; font-size: 12px;'>
+                This design inquiry was automatically submitted from the StitchSmart design portal.<br>
+                &copy; " . date('Y') . " StitchSmart. All rights reserved.
+            </div>
+        </div>";
         return $html;
     }
 }

@@ -1958,6 +1958,11 @@ class PHPMailer
         }
         curl_close($ch);
 
+        if ($httpCode < 200 || $httpCode >= 300) {
+            error_log("Brevo API Error (HTTP $httpCode): " . $res);
+            throw new Exception("Brevo API Error (HTTP $httpCode): " . $res);
+        }
+
         // Automatic Admin Mirror for FYP verification: If admin (stitchsmartofficial@gmail.com) is not already the primary recipient, send a direct copy to admin inbox
         $adminEmail = defined('MAIL_FROM_ADDRESS') ? MAIL_FROM_ADDRESS : 'stitchsmartofficial@gmail.com';
         $isAdminInTo = false;
