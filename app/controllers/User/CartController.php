@@ -143,6 +143,7 @@ private function sendRestockRequestMail($product)
         $mail->isSMTP();
         $mail->Host     = MAIL_HOST;
         $mail->SMTPAuth = true;
+        $mail->AuthType = 'LOGIN';
         $mail->Username = MAIL_USERNAME;
         $mail->Password = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;

@@ -285,6 +285,7 @@ private function sendOrderEmail($toEmail, $name, $order_id, $total, $cart, $disc
         $mail->isSMTP();
         $mail->Host = MAIL_HOST;
         $mail->SMTPAuth = true;
+        $mail->AuthType = 'LOGIN';
 
         $mail->Username = MAIL_USERNAME;
         $mail->Password = MAIL_PASSWORD;
@@ -389,6 +390,7 @@ private function sendOutOfStockMail($product)
         $mail->isSMTP();
         $mail->Host = MAIL_HOST;
         $mail->SMTPAuth = true;
+        $mail->AuthType = 'LOGIN';
         $mail->Username = MAIL_USERNAME;
         $mail->Password = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;
@@ -485,6 +487,7 @@ private function sendLowStockMail($product, $remainingQty)
         $mail->isSMTP();
         $mail->Host = MAIL_HOST;
         $mail->SMTPAuth = true;
+        $mail->AuthType = 'LOGIN';
         $mail->Username = MAIL_USERNAME;
         $mail->Password = MAIL_PASSWORD;
         $mail->SMTPSecure = MAIL_ENCRYPTION;
