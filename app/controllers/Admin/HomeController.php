@@ -50,11 +50,20 @@ class HomeController {
         if (isset($_GET['theme'])) {
             $newTheme = $_GET['theme'];
             
-            // Save admin panel theme preference to session only.
-            // Do NOT write to web_settings.theme — that column is for the
-            // customer-facing storefront theme and should not change when the
-            // admin toggles their own panel appearance.
+            // Apply to admin session
             $_SESSION['theme'] = $newTheme;
+
+            // Save globally to database so the storefront (User side) also updates
+            require_once BASE_PATH . '/config/database.php';
+            $database = new Database();
+            $conn = $database->connect();
+            
+            $stmt = $conn->prepare("UPDATE settings SET theme = ? WHERE id = 1");
+            if ($stmt) {
+                $stmt->bind_param("s", $newTheme);
+                $stmt->execute();
+                $stmt->close();
+            }
         }
 
         header("Location: " . $_SERVER['HTTP_REFERER']);
