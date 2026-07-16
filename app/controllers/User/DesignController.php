@@ -199,16 +199,7 @@ class DesignController {
                 $mail->SMTPSecure = MAIL_ENCRYPTION;
                 $mail->Port       = MAIL_PORT;
 
-                $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Design Inquiry');
-                if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $mail->addAddress($email, $name);
-                }
-                if (defined('MAIL_FROM_ADDRESS') && !empty(MAIL_FROM_ADDRESS)) {
-                    $mail->addAddress(MAIL_FROM_ADDRESS, 'Stitch Smart Admin');
-                }
-                $mail->addReplyTo($email, $name);
-
-                // Save images on server so direct download URLs are available even if base64 attachments are filtered
+                // Save images on server so direct download URLs are available inside HTML body without triggering Gmail attachment quarantine blocks
                 $uploadDir = __DIR__ . '/../../../public/uploads/inquiries/';
                 if (!is_dir($uploadDir)) {
                     @mkdir($uploadDir, 0777, true);
@@ -218,30 +209,56 @@ class DesignController {
                 if (isset($_FILES['labelImage']) && $_FILES['labelImage']['error'] === UPLOAD_ERR_OK) {
                     $ext = pathinfo($_FILES['labelImage']['name'], PATHINFO_EXTENSION) ?: 'png';
                     $safeName = 'label_' . time() . '_' . rand(100, 999) . '.' . $ext;
-                    if (move_uploaded_file($_FILES['labelImage']['tmp_name'], $uploadDir . $safeName)) {
+                    $destPath = $uploadDir . $safeName;
+                    if (@move_uploaded_file($_FILES['labelImage']['tmp_name'], $destPath) || @copy($_FILES['labelImage']['tmp_name'], $destPath)) {
                         $uploadedLinks['Label Image'] = url('uploads/inquiries/' . $safeName);
-                        $mail->addAttachment($uploadDir . $safeName, $_FILES['labelImage']['name']);
-                    } else {
-                        $mail->addAttachment($_FILES['labelImage']['tmp_name'], $_FILES['labelImage']['name']);
                     }
                 }
                 if (isset($_FILES['designImage']) && $_FILES['designImage']['error'] === UPLOAD_ERR_OK) {
                     $ext = pathinfo($_FILES['designImage']['name'], PATHINFO_EXTENSION) ?: 'png';
                     $safeName = 'design_' . time() . '_' . rand(100, 999) . '.' . $ext;
-                    if (move_uploaded_file($_FILES['designImage']['tmp_name'], $uploadDir . $safeName)) {
+                    $destPath = $uploadDir . $safeName;
+                    if (@move_uploaded_file($_FILES['designImage']['tmp_name'], $destPath) || @copy($_FILES['designImage']['tmp_name'], $destPath)) {
                         $uploadedLinks['Design Image'] = url('uploads/inquiries/' . $safeName);
-                        $mail->addAttachment($uploadDir . $safeName, $_FILES['designImage']['name']);
-                    } else {
-                        $mail->addAttachment($_FILES['designImage']['tmp_name'], $_FILES['designImage']['name']);
                     }
                 }
 
-                $mail->isHTML(true);
-                $mail->Subject = $subject;
-                $mail->Body    = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message, $uploadedLinks);
-                $mail->AltBody = $body;
+                $htmlContent = $this->formatHtmlEmail($subject, $body, $name, $email, $mobile, $whatsapp, $message, $uploadedLinks);
 
+                // ─── MAIL #1: TO ADMIN (EXACT STRUCTURE CLONE OF CONTACT US WHICH DELIVERS 100%) ───
+                $mail->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart Design Inquiry');
+                $mail->addAddress(MAIL_FROM_ADDRESS);
+                $mail->addReplyTo($email, $name);
+                $mail->isHTML(true);
+                $mail->Subject = '[Design Inquiry] ' . $subject . ' - From: ' . $name;
+                $mail->Body    = $htmlContent;
+                $mail->AltBody = $body;
                 $mail->send();
+
+                // ─── MAIL #2: TO CUSTOMER (IF DIFFERENT FROM ADMIN) ───
+                if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL) && strcasecmp(trim($email), trim(MAIL_FROM_ADDRESS)) !== 0) {
+                    try {
+                        $mailCustomer = new PHPMailer(true);
+                        $mailCustomer->Timeout = 15;
+                        $mailCustomer->isSMTP();
+                        $mailCustomer->Host       = MAIL_HOST;
+                        $mailCustomer->SMTPAuth   = true;
+                        $mailCustomer->AuthType   = 'LOGIN';
+                        $mailCustomer->Username   = MAIL_USERNAME;
+                        $mailCustomer->Password   = MAIL_PASSWORD;
+                        $mailCustomer->SMTPSecure = MAIL_ENCRYPTION;
+                        $mailCustomer->Port       = MAIL_PORT;
+                        $mailCustomer->setFrom(MAIL_FROM_ADDRESS, 'Stitch Smart');
+                        $mailCustomer->addAddress($email, $name);
+                        $mailCustomer->isHTML(true);
+                        $mailCustomer->Subject = 'We received your Design Inquiry: ' . $subject;
+                        $mailCustomer->Body    = $htmlContent;
+                        $mailCustomer->AltBody = $body;
+                        $mailCustomer->send();
+                    } catch (Exception $ex) {
+                        // Suppress error on customer copy so admin confirmation success always returns cleanly
+                    }
+                }
 
                 if (ob_get_length()) ob_clean();
                 header('Content-Type: application/json');
