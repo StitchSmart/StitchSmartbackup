@@ -86,9 +86,14 @@ class CustomerController {
                 // Redirect to the last visited page if available, otherwise default to resolved route
                 $redirectUrl = $_SESSION['redirect_after_login'] ?? (url("") . "" . ($redirect === 'customer_orders' ? 'home' : $redirect));
                 
-                // Prevent customer from being redirected to admin pages (which causes them to see admin login)
-                if (strpos($redirectUrl, '/admin') !== false) {
-                    $redirectUrl = url("");
+                // Prevent customer from being redirected to admin pages (which causes them to see admin login or admin panel)
+                $adminRoutes = array_keys(require BASE_PATH . '/app/routes/admin.php');
+                foreach ($adminRoutes as $adminRoute) {
+                    // Check if the redirect URL ends with the admin route or contains it as a parameter
+                    if (preg_match("/\b" . preg_quote($adminRoute, '/') . "\b/i", $redirectUrl)) {
+                        $redirectUrl = url("");
+                        break;
+                    }
                 }
                 
                 unset($_SESSION['redirect_after_login']);
@@ -108,11 +113,21 @@ class CustomerController {
                 $_SESSION['redirect_after_login'] = $_GET['redirect_url'];
             } elseif (!isset($_SESSION['redirect_after_login']) && isset($_SERVER['HTTP_REFERER'])) {
                 $referer = $_SERVER['HTTP_REFERER'];
+                
+                $isAdminRoute = false;
+                $adminRoutes = array_keys(require BASE_PATH . '/app/routes/admin.php');
+                foreach ($adminRoutes as $adminRoute) {
+                    if (preg_match("/\b" . preg_quote($adminRoute, '/') . "\b/i", $referer)) {
+                        $isAdminRoute = true;
+                        break;
+                    }
+                }
+
                 if ((strpos($referer, BASE_URL) !== false || strpos($referer, 'index.php') !== false) &&
                     strpos($referer, 'customer_login') === false &&
                     strpos($referer, 'customer_register') === false &&
                     strpos($referer, 'customer_logout') === false &&
-                    strpos($referer, 'admin_') === false) {
+                    !$isAdminRoute) {
                     $_SESSION['redirect_after_login'] = $referer;
                 }
             }
