@@ -79,17 +79,28 @@ public function index() {
     if ($search) {
         $products = $this->productModel->searchProducts($search, $sort);
         $searchUserId = $_SESSION['customer_id'] ?? null;
-        if ($searchUserId) {
-            $this->productModel->logUserSearch($searchUserId, $search);
+        if (!$searchUserId) {
+            $searchUserId = -((abs(crc32(session_id())) % 1000000) + 1);
         }
-    } elseif ($category_id) {
-        $products = $this->productModel->getProductsByCategory($category_id);
-
-        // Fetch category name safely
-        $category = $this->categoryModel->getCategoryById($category_id);
-        $category_name = $category['c_name'] ?? null;
+        if ($searchUserId) {
+            try {
+                $this->productModel->logUserSearch($searchUserId, $search);
+            } catch (Exception $e) {
+                // ignore
+            }
+        }
+        $_SESSION['last_search'] = $search;
     } else {
-        $products = $this->productModel->getAllProducts();
+        unset($_SESSION['last_search']);
+        if ($category_id) {
+            $products = $this->productModel->getProductsByCategory($category_id);
+
+            // Fetch category name safely
+            $category = $this->categoryModel->getCategoryById($category_id);
+            $category_name = $category['c_name'] ?? null;
+        } else {
+            $products = $this->productModel->getAllProducts();
+        }
     }
 
     $wishlistedProductIds = [];
@@ -119,16 +130,24 @@ public function liveSearch(){
     $keyword = trim((string)($_GET['q'] ?? ''));
     $keyword = mb_substr($keyword, 0, 100);
 
-    // Save search for logged-in users (AI tracking)
+    // Save search for logged-in or guest users (AI tracking)
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     $userId = $_SESSION['customer_id'] ?? null;
+    if (!$userId) {
+        $userId = -((abs(crc32(session_id())) % 1000000) + 1);
+    }
     
-    // DEBUG LOG
-    file_put_contents(BASE_PATH . '/search_debug.txt', date('Y-m-d H:i:s') . " - liveSearch called: keyword='$keyword', userId=" . var_export($userId, true) . ", SESSION=" . var_export($_SESSION, true) . "\n", FILE_APPEND);
+    // Save keyword to session for related products filter
+    if ($keyword !== '') {
+        $_SESSION['last_search'] = $keyword;
+    }
 
     if ($userId && trim($keyword) !== '') {
-        $this->productModel->logUserSearch((int)$userId, $keyword);
-        file_put_contents(BASE_PATH . '/search_debug.txt', "Saved to DB: " . $this->productModel->conn->error . "\n", FILE_APPEND);
+        try {
+            $this->productModel->logUserSearch((int)$userId, $keyword);
+        } catch (Exception $e) {
+            // ignore
+        }
     }
 
     // Search for products
@@ -199,8 +218,15 @@ public function show(){
     // Log the product click (view) for AI recommendations
     if (session_status() === PHP_SESSION_NONE) { session_start(); }
     $clickUserId = $_SESSION['customer_id'] ?? null;
+    if (!$clickUserId) {
+        $clickUserId = -((abs(crc32(session_id())) % 1000000) + 1);
+    }
     if ($clickUserId) {
-        $this->productModel->logProductView($clickUserId, $product['id']);
+        try {
+            $this->productModel->logProductView($clickUserId, $product['id']);
+        } catch (Exception $e) {
+            // ignore
+        }
     }
 
     // Get category name
@@ -212,12 +238,33 @@ public function show(){
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-    $userId = $_SESSION['customer_id'] ?? null;
     
-    if ($userId) {
-        $related_products = $this->productModel->getAiRecommendedProducts($userId, $product['id'], $product['parent_cat'], 4);
+    $activeSearch = $_SESSION['last_search'] ?? null;
+    
+    if ($activeSearch && trim($activeSearch) !== '' && strtolower(trim($activeSearch)) !== 'init') {
+        // Fetch products matching the search query
+        $searchResults = $this->productModel->searchProducts($activeSearch);
         
-        // If we have fewer than 4 items, backfill with products from the same category
+        // Exclude the current product
+        foreach ($searchResults as $item) {
+            if ((int)$item['id'] !== (int)$product['id']) {
+                $related_products[] = $item;
+            }
+        }
+        
+        // Limit to 4 products
+        $related_products = array_slice($related_products, 0, 4);
+    } else {
+        // Default behavior (No active search)
+        $userId = $_SESSION['customer_id'] ?? null;
+        if (!$userId) {
+            $userId = -((abs(crc32(session_id())) % 1000000) + 1);
+        }
+        if ($userId) {
+            $related_products = $this->productModel->getAiRecommendedProducts($userId, $product['id'], $product['parent_cat'], 4);
+        }
+        
+        // If we have fewer than 4 items (or if guest user, which has 0 items so far), backfill with products from the same category
         if (count($related_products) < 4) {
             $existing_ids = array_map(function($p) { return (int)$p['id']; }, $related_products);
             $existing_ids[] = (int)$product['id'];
@@ -232,7 +279,7 @@ public function show(){
             }
         }
 
-        // If STILL fewer than 4 items (because category has few items), universal backfill from all categories
+        // If STILL fewer than 4 items, universal backfill from all categories
         if (count($related_products) < 4) {
             $existing_ids = array_map(function($p) { return (int)$p['id']; }, $related_products);
             $existing_ids[] = (int)$product['id'];

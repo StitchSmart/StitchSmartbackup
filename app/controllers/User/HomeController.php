@@ -48,7 +48,12 @@ class HomeController {
 
     
     public function index(){
-          $settingsModel = new Settings();  
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        unset($_SESSION['last_search']);
+
+        $settingsModel = new Settings();  
         $webSettings = $settingsModel->getWebSettings();
 
         $webname = $webSettings['web_name'] ?? '';
@@ -120,7 +125,16 @@ class HomeController {
     
     // Save search query for AI tracking
     $searchQuery = $_GET['search'] ?? null;
+    if ($searchQuery) {
+        $_SESSION['last_search'] = trim($searchQuery);
+    } else {
+        unset($_SESSION['last_search']);
+    }
+    
     $customerId = $_SESSION['customer_id'] ?? null;
+    if (!$customerId) {
+        $customerId = -((abs(crc32(session_id())) % 1000000) + 1);
+    }
     if ($searchQuery && $customerId) {
         try {
             $this->productModel->logUserSearch((int)$customerId, trim($searchQuery));
@@ -183,6 +197,7 @@ public function sales(){
  if (session_status() === PHP_SESSION_NONE) {
      session_start();
  }
+ unset($_SESSION['last_search']);
  $customerId = $_SESSION['customer_id'] ?? null;
  if ($customerId) {
      $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
@@ -225,6 +240,7 @@ public function featuredProducts(){
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
+    unset($_SESSION['last_search']);
     $customerId = $_SESSION['customer_id'] ?? null;
     if ($customerId) {
         $wishlistBootstrap = new SchemaBootstrap((new Database())->connect(), false);
