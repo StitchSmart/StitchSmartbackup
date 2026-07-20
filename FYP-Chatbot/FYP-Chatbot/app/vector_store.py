@@ -68,6 +68,7 @@ def _product_to_text(product: dict) -> str:
         f"Design: {p.get('designing', 'N/A')}",
         f"Description: {p.get('description', 'N/A')}",
         f"Details: {p.get('details', 'N/A')}",
+        f"Image URL: {p.get('image_url', '')}",
         f"Stock Available: {p.get('quantity', 0)} units",
         f"Category ID: {cat_id}",
     ]
@@ -88,6 +89,7 @@ def _load_products() -> List[Document]:
             "category_id": str(product.get("parent_cat", "")),
             "price": product.get("price"),
             "size": product.get("size"),
+            "image_url": product.get("image_url", ""),
         }
         documents.append(Document(page_content=text, metadata=metadata))
 
