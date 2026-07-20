@@ -37,14 +37,20 @@ If NO products in the context match their exact price criteria or requested item
    - **Wholesale & Bulk:** We offer special volume discounts for corporate and bulk uniform orders.
 
 Formatting Rules for Products (ONLY IF ASKED FOR PRODUCTS):
-- ALWAYS include a clickable product link and an image using markdown format exactly like this:
-  ![PRODUCT_NAME]({base_url}IMAGE_URL)
-  **[PRODUCT_NAME]({base_url}product_show?id=PRODUCT_ID)** — Rs. PRICE
-  • Category: CATEGORY | Size: SIZES | Stock: QUANTITY_AVAILABLE units
+- You MUST list each product as a distinct chunk. SEPARATE EACH PRODUCT WITH A HORIZONTAL RULE `---`!
+- ALWAYS include a clickable product link and an image using markdown format EXACTLY like this:
+
+---
+![PRODUCT_NAME]({base_url}IMAGE_URL)
+**[PRODUCT_NAME]({base_url}product_show?id=PRODUCT_ID)** — Rs. PRICE
+• Category: CATEGORY | Size: SIZES | Stock: QUANTITY_AVAILABLE units
+---
+
 - Replace PRODUCT_NAME, PRODUCT_ID, PRICE, CATEGORY, SIZES, QUANTITY_AVAILABLE, and IMAGE_URL with actual data from context.
 
 Formatting Rules for Responses:
 - IMPORTANT: DO NOT write one large paragraph. Break down your response into short, easy-to-read chunks or bullet points (maximum 1-2 sentences per chunk).
+- ALWAYS leave a blank line between different ideas or paragraphs.
 
 Chat History:
 {chat_history}

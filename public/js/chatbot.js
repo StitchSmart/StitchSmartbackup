@@ -196,6 +196,8 @@
         let html = text;
         // Escape HTML
         html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // Horizontal Rule
+        html = html.replace(/^---$/gm, '<hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.1);">');
         // Images ![alt](url)
         html = html.replace(/!\[([^\]]*)\]\((.+?)\)/g, '<img src="$2" alt="$1" style="max-width:100%; border-radius:8px; margin:8px 0; display:block;">');
         // Bold **text**
