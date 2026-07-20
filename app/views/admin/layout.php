@@ -118,57 +118,7 @@ if (class_exists('Database')) {
 
         <div class="col-xl-9 col-sm-8">
 
-            <!-- Global Notifications -->
-            <?php if (isset($_SESSION['success'])): ?>
-                <div class="ss-toast ss-toast--success" role="alert" aria-live="assertive">
-                    <div class="ss-toast__icon">
-                        <i class="bi bi-check-lg"></i>
-                    </div>
-                    <div class="ss-toast__body">
-                        <div class="ss-toast__label">Success</div>
-                        <div class="ss-toast__message"><?= htmlspecialchars($_SESSION['success']); ?></div>
-                    </div>
-                    <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
-                    <div class="ss-toast__progress"></div>
-                </div>
-                <?php unset($_SESSION['success']); ?>
-            <?php endif; ?>
 
-            <?php if (isset($_SESSION['errors'])): ?>
-                <div class="ss-toast ss-toast--error" role="alert" aria-live="assertive">
-                    <div class="ss-toast__icon">
-                        <i class="bi bi-exclamation-triangle"></i>
-                    </div>
-                    <div class="ss-toast__body">
-                        <div class="ss-toast__label">Errors</div>
-                        <div class="ss-toast__message">
-                            <ul class="mb-0 ps-3">
-                                <?php foreach ($_SESSION['errors'] as $err): ?>
-                                    <li><?= htmlspecialchars($err) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
-                    <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
-                    <div class="ss-toast__progress ss-toast__progress--error"></div>
-                </div>
-                <?php unset($_SESSION['errors']); ?>
-            <?php endif; ?>
-
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="ss-toast ss-toast--error" role="alert" aria-live="assertive">
-                    <div class="ss-toast__icon">
-                        <i class="bi bi-x-circle"></i>
-                    </div>
-                    <div class="ss-toast__body">
-                        <div class="ss-toast__label">Error</div>
-                        <div class="ss-toast__message"><?= htmlspecialchars($_SESSION['error']); ?></div>
-                    </div>
-                    <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
-                    <div class="ss-toast__progress ss-toast__progress--error"></div>
-                </div>
-                <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
 
             <?php require_once BASE_PATH . "/app/views/" . $view; ?>
 
@@ -182,7 +132,59 @@ if (class_exists('Database')) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
 <!-- Toast Container -->
-<div id="ss-toast-container" aria-live="polite" aria-atomic="false"></div>
+<div id="ss-toast-container" aria-live="polite" aria-atomic="false">
+    <!-- Global Notifications -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="ss-toast ss-toast--success" role="alert" aria-live="assertive">
+            <div class="ss-toast__icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+            <div class="ss-toast__body">
+                <div class="ss-toast__label">Success</div>
+                <div class="ss-toast__message"><?= htmlspecialchars($_SESSION['success']); ?></div>
+            </div>
+            <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
+            <div class="ss-toast__progress"></div>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['errors'])): ?>
+        <div class="ss-toast ss-toast--error" role="alert" aria-live="assertive">
+            <div class="ss-toast__icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="ss-toast__body">
+                <div class="ss-toast__label">Errors</div>
+                <div class="ss-toast__message">
+                    <ul class="mb-0 ps-3">
+                        <?php foreach ($_SESSION['errors'] as $err): ?>
+                            <li><?= htmlspecialchars($err) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
+            <div class="ss-toast__progress ss-toast__progress--error"></div>
+        </div>
+        <?php unset($_SESSION['errors']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="ss-toast ss-toast--error" role="alert" aria-live="assertive">
+            <div class="ss-toast__icon">
+                <i class="bi bi-x-circle"></i>
+            </div>
+            <div class="ss-toast__body">
+                <div class="ss-toast__label">Error</div>
+                <div class="ss-toast__message"><?= htmlspecialchars($_SESSION['error']); ?></div>
+            </div>
+            <button class="ss-toast__close" aria-label="Close" onclick="this.closest('.ss-toast').classList.add('ss-toast--hiding'); setTimeout(()=>this.closest('.ss-toast').remove(),350);">&times;</button>
+            <div class="ss-toast__progress ss-toast__progress--error"></div>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+</div>
 
 <style>
 /* ═══════════════════════════════════════════

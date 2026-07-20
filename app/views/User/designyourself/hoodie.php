@@ -280,12 +280,12 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                 <div class="col-md-4">
                     <h5>Sunfade</h5>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="sunfadeChecked" checked onchange="toggleOptions('sunfade')">
-                        <label class="form-check-label" for="sunfadeChecked">Enable Sunfade</label>
+                        <input class="form-check-input" type="radio" name="sunfadeOption" id="noneSunfade" value="None" checked onchange="updateSunfadeImage()">
+                        <label class="form-check-label" for="noneSunfade">None</label>
                     </div>
                     <div id="sunfadeOptions">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="sunfadeOption" id="shoulderSunfade" value="Shoulder Sunfade" checked onchange="updateSunfadeImage()">
+                            <input class="form-check-input" type="radio" name="sunfadeOption" id="shoulderSunfade" value="Shoulder Sunfade" onchange="updateSunfadeImage()">
                             <label class="form-check-label" for="shoulderSunfade">Shoulder Sunfade</label>
                         </div>
                         <div class="form-check">
@@ -301,17 +301,17 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                             <label class="form-check-label" for="allover">All-over Sunfade</label>
                         </div>
                     </div>
-                    <img id="sunfadeImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/Shoulder Sunfade (H).png" alt="Sunfade Preview">
+                    <img id="sunfadeImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_hoodie.png" alt="Sunfade Preview">
                 </div>
                 <div class="col-md-4">
                     <h5>Stitching</h5>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="stitchingChecked" checked onchange="toggleOptions('stitching')">
-                        <label class="form-check-label" for="stitchingChecked">Enable Stitching</label>
+                        <input class="form-check-input" type="radio" name="stitchingOption" id="noneStitching" value="None" checked onchange="updateStitchingImage()">
+                        <label class="form-check-label" for="noneStitching">None</label>
                     </div>
                     <div id="stitchingOptions">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="stitchingOption" id="standardStitching" value="Standard Stitching" checked onchange="updateStitchingImage()">
+                            <input class="form-check-input" type="radio" name="stitchingOption" id="standardStitching" value="Standard Stitching" onchange="updateStitchingImage()">
                             <label class="form-check-label" for="standardStitching">Standard Stitching</label>
                         </div>
                         <div class="form-check">
@@ -328,17 +328,17 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                         </div>
                     </div>
                     <input type="text" class="form-control mt-2" id="stitchingColor" placeholder="Stitching Color (e.g. white, black)">
-                    <img id="stitchingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/standard stitiching (H).png" alt="Stitching Preview">
+                    <img id="stitchingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_hoodie.png" alt="Stitching Preview">
                 </div>
                 <div class="col-md-4">
                     <h5>Distressing</h5>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="distressingChecked" checked onchange="toggleOptions('distressing')">
-                        <label class="form-check-label" for="distressingChecked">Enable Distressing</label>
+                        <input class="form-check-input" type="radio" name="distressingOption" id="noneDistressing" value="None" checked onchange="updateDistressingImage()">
+                        <label class="form-check-label" for="noneDistressing">None</label>
                     </div>
                     <div id="distressingOptions">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="distressingOption" id="heavy" value="Heavy Distressing" checked onchange="updateDistressingImage()">
+                            <input class="form-check-input" type="radio" name="distressingOption" id="heavy" value="Heavy Distressing" onchange="updateDistressingImage()">
                             <label class="form-check-label" for="heavy">Heavy Distressing</label>
                         </div>
                         <div class="form-check">
@@ -346,7 +346,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                             <label class="form-check-label" for="light">Light Distressing</label>
                         </div>
                     </div>
-                    <img id="distressingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/Heavy Distressing (H).png" alt="Distressing Preview">
+                    <img id="distressingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_hoodie.png" alt="Distressing Preview">
                 </div>
             </div>
 
@@ -480,22 +480,20 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
         };
 
         const sunfadeImages = {
-            'Shoulder Sunfade': '<?= BASE_URL ?>/pictures/design/Shoulder Sunfade (H).png',
-            'Shoulder & Bottom Sunfade': '<?= BASE_URL ?>/pictures/design/Shoulder & Bottom Sunfade (H).png',
-            'Circular Sunfade': '<?= BASE_URL ?>/pictures/design/Circular Sunfade (H).png',
-            'All-over Sunfade': '<?= BASE_URL ?>/pictures/design/All-over Sunfade (H).png'
+            'Shoulder Sunfade': '<?= BASE_URL ?>/pictures/design/Shoulder Sunfade (H).png?v=<?= time() ?>',
+            'Shoulder & Bottom Sunfade': '<?= BASE_URL ?>/pictures/design/Shoulder_Bottom_Sunfade_H.png?v=<?= time() ?>',
+            'Circular Sunfade': '<?= BASE_URL ?>/pictures/design/Circular Sunfade (H).png?v=<?= time() ?>',
+            'All-over Sunfade': '<?= BASE_URL ?>/pictures/design/All-over Sunfade (H).png?v=<?= time() ?>'
         };
 
         const stitchingImages = {
-            'Standard Stitching': '<?= BASE_URL ?>/pictures/design/standard stitiching (H).png',
-            'Inside-Out Stitching': '<?= BASE_URL ?>/pictures/design/Inside-Out Stitching (H).png',
             'Raw Edge Stitching': '<?= BASE_URL ?>/pictures/design/Raw Edge Stitching (H).png',
             'Flatlock Stitching': '<?= BASE_URL ?>/pictures/design/Flatlock Stitching (H).png'
         };
 
         const distressingImages = {
             'Heavy Distressing': '<?= BASE_URL ?>/pictures/design/Heavy Distressing (H).png',
-            'Light Distressing': '<?= BASE_URL ?>/pictures/design/light Distressing (H).png'
+            'Light Distressing': '<?= BASE_URL ?>/pictures/design/Light Distressing (H).png'
         };
 
         function renderColors(containerId, selectedColorKey, filteredColors = colors) {
@@ -594,18 +592,14 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             const imagesToDraw = [];
             imagesToDraw.push('<?= BASE_URL ?>/pictures/design/empty_hoodie.png');
             
-            if (document.getElementById('sunfadeChecked').checked) {
-                const opt = document.querySelector('input[name="sunfadeOption"]:checked')?.value;
-                if (opt && sunfadeImages[opt]) imagesToDraw.push(sunfadeImages[opt]);
-            }
-            if (document.getElementById('stitchingChecked').checked) {
-                const opt = document.querySelector('input[name="stitchingOption"]:checked')?.value;
-                if (opt && stitchingImages[opt]) imagesToDraw.push(stitchingImages[opt]);
-            }
-            if (document.getElementById('distressingChecked').checked) {
-                const opt = document.querySelector('input[name="distressingOption"]:checked')?.value;
-                if (opt && distressingImages[opt]) imagesToDraw.push(distressingImages[opt]);
-            }
+            const sunfadeOpt = document.querySelector('input[name="sunfadeOption"]:checked')?.value;
+            if (sunfadeOpt && sunfadeOpt !== 'None' && sunfadeImages[sunfadeOpt]) imagesToDraw.push(sunfadeImages[sunfadeOpt]);
+            
+            const stitchingOpt = document.querySelector('input[name="stitchingOption"]:checked')?.value;
+            if (stitchingOpt && stitchingOpt !== 'None' && stitchingImages[stitchingOpt]) imagesToDraw.push(stitchingImages[stitchingOpt]);
+            
+            const distressingOpt = document.querySelector('input[name="distressingOption"]:checked')?.value;
+            if (distressingOpt && distressingOpt !== 'None' && distressingImages[distressingOpt]) imagesToDraw.push(distressingImages[distressingOpt]);
             
             let loadedCount = 0;
             const loadedImages = [];
@@ -709,13 +703,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
         }
 
         function toggleOptions(type) {
-            const checked = document.getElementById(`${type}Checked`).checked;
-            document.getElementById(`${type}Options`).style.display = checked ? 'block' : 'none';
-            if (!checked) {
-                document.getElementById(`${type}Image`).src = '<?= BASE_URL ?>/pictures/design/empty_hoodie.png';
-            } else {
-                updateImage(type);
-            }
+            // Deprecated logic
         }
 
         function updateSunfadeImage() { updateImage('sunfade'); }
@@ -858,12 +846,9 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             } else if (step === 3) {
                 orderData.establishmentComments = document.getElementById('establishmentComments').value;
             } else if (step === 4) {
-                orderData.sunfadeChecked = document.getElementById('sunfadeChecked').checked;
                 orderData.sunfadeOption = document.querySelector('input[name="sunfadeOption"]:checked')?.value || '';
-                orderData.stitchingChecked = document.getElementById('stitchingChecked').checked;
                 orderData.stitchingOption = document.querySelector('input[name="stitchingOption"]:checked')?.value || '';
                 orderData.stitchingColor = document.getElementById('stitchingColor').value;
-                orderData.distressingChecked = document.getElementById('distressingChecked').checked;
                 orderData.distressingOption = document.querySelector('input[name="distressingOption"]:checked')?.value || '';
                 orderData.pocket = document.querySelector('input[name="pocket"]:checked')?.value || '';
             } else if (step === 5) {
@@ -915,9 +900,9 @@ Labels: ${orderData.labelOption || 'N/A'} - ${orderData.materialOption || ''} ($
 Prints/Comments: ${orderData.establishmentComments || 'None'}
 
 Finishing:
-- Sunfade: ${orderData.sunfadeChecked ? orderData.sunfadeOption : 'No'}
-- Stitching: ${orderData.stitchingChecked ? orderData.stitchingOption + ' (' + (orderData.stitchingColor || 'default') + ')' : 'No'}
-- Distressing: ${orderData.distressingChecked ? orderData.distressingOption : 'No'}
+- Sunfade: ${orderData.sunfadeOption !== 'None' && orderData.sunfadeOption ? orderData.sunfadeOption : 'No'}
+- Stitching: ${orderData.stitchingOption !== 'None' && orderData.stitchingOption ? orderData.stitchingOption + ' (' + (orderData.stitchingColor || 'default') + ')' : 'No'}
+- Distressing: ${orderData.distressingOption !== 'None' && orderData.distressingOption ? orderData.distressingOption : 'No'}
 - Pocket: ${orderData.pocket}
 
 Quantities (Sample: ${orderData.sample}):

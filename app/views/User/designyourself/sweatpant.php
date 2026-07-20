@@ -247,8 +247,91 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             </div>
         </div>
 
-        <!-- Step 4: About Sweatpants (informational only) -->
-        <div id="step4" class="step card p-5 shadow">
+        <!-- Step 4: Customize Finishing -->
+        <div id="step4" class="step card p-4 shadow">
+            <h2 class="text-center mb-4">Step 4: Customize Finishing</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5>Sunfade</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sunfadeOption" id="noneSunfade" value="None" checked onchange="updateSunfadeImage()">
+                        <label class="form-check-label" for="noneSunfade">None</label>
+                    </div>
+                    <div id="sunfadeOptions">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sunfadeOption" id="waistSunfade" value="Waist Sunfade" onchange="updateSunfadeImage()">
+                            <label class="form-check-label" for="waistSunfade">Waist Sunfade</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sunfadeOption" id="waistBottomSunfade" value="Waist & Bottom Sunfade" onchange="updateSunfadeImage()">
+                            <label class="form-check-label" for="waistBottomSunfade">Waist & Bottom Sunfade</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sunfadeOption" id="circular" value="Circular Sunfade" onchange="updateSunfadeImage()">
+                            <label class="form-check-label" for="circular">Circular Sunfade</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sunfadeOption" id="allover" value="All-over Sunfade" onchange="updateSunfadeImage()">
+                            <label class="form-check-label" for="allover">All-over Sunfade</label>
+                        </div>
+                    </div>
+                    <img id="sunfadeImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_pants.png" alt="Sunfade Preview">
+                </div>
+                <div class="col-md-4">
+                    <h5>Stitching</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="stitchingOption" id="noneStitching" value="None" checked onchange="updateStitchingImage()">
+                        <label class="form-check-label" for="noneStitching">None</label>
+                    </div>
+                    <div id="stitchingOptions">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stitchingOption" id="standardStitching" value="Standard Stitching" onchange="updateStitchingImage()">
+                            <label class="form-check-label" for="standardStitching">Standard Stitching</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stitchingOption" id="insideOut" value="Inside-Out Stitching" onchange="updateStitchingImage()">
+                            <label class="form-check-label" for="insideOut">Inside-Out Stitching</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stitchingOption" id="rawEdge" value="Raw Edge Stitching" onchange="updateStitchingImage()">
+                            <label class="form-check-label" for="rawEdge">Raw Edge Stitching</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stitchingOption" id="flatlock" value="Flatlock Stitching" onchange="updateStitchingImage()">
+                            <label class="form-check-label" for="flatlock">Flatlock Stitching</label>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control mt-2" id="stitchingColor" placeholder="Stitching Color (e.g. white, black)">
+                    <img id="stitchingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_pants.png" alt="Stitching Preview">
+                </div>
+                <div class="col-md-4">
+                    <h5>Distressing</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="distressingOption" id="noneDistressing" value="None" checked onchange="updateDistressingImage()">
+                        <label class="form-check-label" for="noneDistressing">None</label>
+                    </div>
+                    <div id="distressingOptions">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="distressingOption" id="heavy" value="Heavy Distressing" onchange="updateDistressingImage()">
+                            <label class="form-check-label" for="heavy">Heavy Distressing</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="distressingOption" id="light" value="Light Distressing" onchange="updateDistressingImage()">
+                            <label class="form-check-label" for="light">Light Distressing</label>
+                        </div>
+                    </div>
+                    <img id="distressingImage" class="dynamic-image mt-3" src="<?= BASE_URL ?>/pictures/design/empty_pants.png" alt="Distressing Preview">
+                </div>
+            </div>
+
+            <div class="text-end mt-5">
+                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(4)">Previous</button>
+                <button class="btn btn-secondary px-5 py-3" onclick="nextStep(4)">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: About Sweatpants (informational only) -->
+        <div id="step5" class="step card p-5 shadow">
             <h2 class="text-center mb-5 fw-bold text-primary">About Your Custom Sweatpants</h2>
 
             <div class="info-card">
@@ -276,14 +359,14 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             </p>
 
             <div class="text-end mt-5">
-                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(4)">Previous</button>
-                <button class="btn btn-secondary px-5 py-3" onclick="nextStep(4)">Next →</button>
+                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(5)">Previous</button>
+                <button class="btn btn-secondary px-5 py-3" onclick="nextStep(5)">Next →</button>
             </div>
         </div>
 
-        <!-- Step 5: Quantity & Sample -->
-        <div id="step5" class="step card p-4 shadow">
-            <h2 class="text-center mb-4">Step 5: Quantity & Sample</h2>
+        <!-- Step 6: Quantity & Sample -->
+        <div id="step6" class="step card p-4 shadow">
+            <h2 class="text-center mb-4">Step 6: Quantity & Sample</h2>
             <div class="row">
                 <div class="col-md-6">
                     <h5 class="mb-3">Do you want a sample first?</h5>
@@ -314,14 +397,14 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             </div>
 
             <div class="text-end mt-5">
-                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(5)">Previous</button>
-                <button class="btn btn-secondary px-5 py-3" onclick="nextStep(5)">Next →</button>
+                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(6)">Previous</button>
+                <button class="btn btn-secondary px-5 py-3" onclick="nextStep(6)">Next →</button>
             </div>
         </div>
 
-        <!-- Step 6: Contact -->
-        <div id="step6" class="step card p-4 shadow">
-            <h2 class="text-center mb-4">Step 6: Contact & Submit</h2>
+        <!-- Step 7: Contact -->
+        <div id="step7" class="step card p-4 shadow">
+            <h2 class="text-center mb-4">Step 7: Contact & Submit</h2>
             <div class="row g-4">
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Your Name</label>
@@ -346,7 +429,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             </div>
 
             <div class="text-end mt-5">
-                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(6)">Previous</button>
+                <button class="btn btn-secondary me-4 px-5 py-3" onclick="prevStep(7)">Previous</button>
                 <button type="button" class="btn btn-secondary px-5 py-3" onclick="sendInquiry()">Send Inquiry →</button>
             </div>
         </div>
@@ -354,7 +437,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const totalSteps = 6;
+        const totalSteps = 7;
         let currentStep = 1;
         const orderData = {};
 
@@ -529,7 +612,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                 checkField(document.getElementById('fabric').value, 'Please select a Fabric.', document.getElementById('fabric'));
                 checkField(document.querySelector('input[name="dye"]:checked'), 'Please select a Dye option.', document.querySelector('input[name="dye"]')?.closest('div'));
                 checkField(orderData.color, 'Please select a Color.', document.getElementById('colorOptions'));
-            } else if (step === 5) {
+            } else if (step === 6) {
                 const sampleVal = document.querySelector('input[name="sample"]:checked')?.value;
                 if (sampleVal === 'No') {
                     const qs = ['qtyXXS','qtyXS','qtyS','qtyM','qtyL','qtyXL','qtyXXL','qtyXXXL','qtyXXXXL'];
@@ -540,7 +623,7 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                     });
                     checkField(total > 0, 'Please enter at least one quantity for your bulk order, or select "Yes" for a sample.', document.getElementById('quantitySection'));
                 }
-            } else if (step === 6) {
+            } else if (step === 7) {
                 const nameEl = document.getElementById('name');
                 const emailEl = document.getElementById('email');
                 const msgEl = document.getElementById('message');
@@ -583,7 +666,13 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
                 orderData.labelDescription = document.getElementById('labelDescription').value;
             } else if (step === 3) {
                 orderData.establishmentComments = document.getElementById('establishmentComments').value;
-            } else if (step === 5) {
+            } else if (step === 4) {
+                orderData.sunfadeOption = document.querySelector('input[name="sunfadeOption"]:checked')?.value || '';
+                orderData.stitchingOption = document.querySelector('input[name="stitchingOption"]:checked')?.value || '';
+                const stitchingColorInput = document.getElementById('stitchingColor');
+                if (stitchingColorInput) { orderData.stitchingColor = stitchingColorInput.value; }
+                orderData.distressingOption = document.querySelector('input[name="distressingOption"]:checked')?.value || '';
+            } else if (step === 6) {
                 orderData.sample = document.querySelector('input[name="sample"]:checked').value;
                 orderData.quantities = {};
                 ['XXS','XS','S','M','L','XL','XXL','XXXL','XXXXL'].forEach(size => {
@@ -660,6 +749,11 @@ Labels: ${orderData.labelOption || 'N/A'} (${orderData.materialOption || ''}) - 
 
 Prints & Requests: ${orderData.establishmentComments || 'None'}
 
+Finishing:
+- Sunfade: ${orderData.sunfadeOption !== 'None' && orderData.sunfadeOption ? orderData.sunfadeOption : 'No'}
+- Stitching: ${orderData.stitchingOption !== 'None' && orderData.stitchingOption ? orderData.stitchingOption + ' (' + (orderData.stitchingColor || 'default') + ')' : 'No'}
+- Distressing: ${orderData.distressingOption !== 'None' && orderData.distressingOption ? orderData.distressingOption : 'No'}
+
 Quantities (Sample first? ${orderData.sample}):
 ${Object.entries(orderData.quantities || {}).map(([k,v]) => `  ${k}: ${v}`).join('\n')}
 
@@ -713,6 +807,47 @@ Sent from Sweatpants Custom Form
                     submitBtn.textContent = originalText;
                 }
             });
+        }
+
+        const sunfadeImages = {
+            'Waist Sunfade': '<?= BASE_URL ?>/pictures/design/Waist Sunfade (P).png',
+            'Waist & Bottom Sunfade': '<?= BASE_URL ?>/pictures/design/Waist & Bottom Sunfade (P).png',
+            'Circular Sunfade': '<?= BASE_URL ?>/pictures/design/Circular Sunfade (P).png',
+            'All-over Sunfade': '<?= BASE_URL ?>/pictures/design/All-over Sunfade (P).png'
+        };
+        const stitchingImages = {
+            'Standard Stitching': '<?= BASE_URL ?>/pictures/design/Standard Stitching (P).png',
+            'Inside-Out Stitching': '<?= BASE_URL ?>/pictures/design/Inside-Out Stitching (P).png',
+            'Raw Edge Stitching': '<?= BASE_URL ?>/pictures/design/Raw Edge Stitching (P).png',
+            'Flatlock Stitching': '<?= BASE_URL ?>/pictures/design/Flatlock Stitching (P).png'
+        };
+        const distressingImages = {
+            'Heavy Distressing': '<?= BASE_URL ?>/pictures/design/Heavy Distressing (P).png',
+            'Light Distressing': '<?= BASE_URL ?>/pictures/design/Light Distressing (P).png'
+        };
+
+        function updateSunfadeImage() { updateImage('sunfade'); }
+        function updateStitchingImage() { updateImage('stitching'); }
+        function updateDistressingImage() { updateImage('distressing'); }
+
+        function updateImage(type) {
+            const option = document.querySelector(`input[name="${type}Option"]:checked`)?.value;
+            let images = {};
+            if (type === 'sunfade') images = sunfadeImages;
+            if (type === 'stitching') images = stitchingImages;
+            if (type === 'distressing') images = distressingImages;
+            const src = images[option] || '<?= BASE_URL ?>/pictures/design/empty_pants.png';
+            const img = document.getElementById(`${type}Image`);
+            if (img) {
+                img.src = src;
+                if (img.parentElement.classList.contains('color-wrapper')) {
+                    const colorLayer = img.parentElement.querySelector('.color-layer');
+                    if (colorLayer) {
+                        colorLayer.style.maskImage = `url("${src}")`;
+                        colorLayer.style.webkitMaskImage = `url("${src}")`;
+                    }
+                }
+            }
         }
 
         // Initialize
