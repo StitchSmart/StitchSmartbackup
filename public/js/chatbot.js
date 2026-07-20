@@ -196,6 +196,8 @@
         let html = text;
         // Escape HTML
         html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // Images ![alt](url)
+        html = html.replace(/!\[([^\]]*)\]\((.+?)\)/g, '<img src="$2" alt="$1" style="max-width:100%; border-radius:8px; margin:8px 0; display:block;">');
         // Bold **text**
         html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
         // Italic *text*
@@ -205,11 +207,12 @@
         // Bullet points: lines starting with • or - or *
         html = html.replace(/^\s*[•\-\*]\s+(.+)/gm, '<li>$1</li>');
         // Wrap consecutive <li> in <ul>
-        html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => '<ul>' + match + '</ul>');
-        // Line breaks
+        html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => '<ul style="margin-top:5px; margin-bottom:5px;">' + match + '</ul>');
+        // Line breaks (Replace double newlines with paragraphs/spaced breaks)
+        html = html.replace(/\n\n/g, '<br><br>');
         html = html.replace(/\n/g, '<br>');
         // Clean up double <br> inside <ul>
-        html = html.replace(/<ul><br>/g, '<ul>').replace(/<br><\/ul>/g, '</ul>');
+        html = html.replace(/<ul[^>]*><br>/g, '<ul>').replace(/<br><\/ul>/g, '</ul>');
         html = html.replace(/<\/li><br><li>/g, '</li><li>');
         return html;
     }
