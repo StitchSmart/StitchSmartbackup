@@ -10,4 +10,4 @@ cmds = [
 ]
 
 [start]
-cmd = "cd FYP-Chatbot/FYP-Chatbot && (uvicorn app.main:app --host 127.0.0.1 --port 5000 &) && cd /app && php -S 0.0.0.0:$PORT router.php"
+cmd = "bash start.sh"

@@ -58,5 +58,15 @@ Aapke project mein 2 main application components hain jo Railway par as separate
 
 ---
 
+### Step 4: Persistent Volume Add Karen (For Images/Products)
+Railway par containers refresh hote rehte hain. Jab aap admin panel se koi nayi product ya category add karte hain toh uski image delete na ho, iske liye aik Volume zaroori hai.
+1. Apne **Service A (PHP Web App)** par click karen.
+2. **"Volumes"** tab mein jayein.
+3. **"New Volume"** par click karen.
+4. Mount Path mein exact yeh path likhein: `/app/storage` aur save kar den.
+5. Railway khud hi app ko redeploy karega aur iske baad aapki upload ki hui har image pakki (persistent) save hogi, kabhi delete/broken nahi hogi!
+
+---
+
 ## 🚀 Mubarak Ho!
 Aapka pora **StitchSmart** project (PHP MySQL Store + RAG Chatbot) Railway par strictly unke requirements ke mutabik bina kisi functionality change ke deploy hone ke liye 100% ready hai!
