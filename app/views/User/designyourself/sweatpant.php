@@ -588,15 +588,16 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             if (!overlay || overlay.style.display === 'none') return;
             const labelType = document.querySelector('input[name="labelType"]:checked')?.value || 'none';
             if (labelType === 'inseam') {
-                overlay.style.top = '70%';
-                overlay.style.left = '65%';
-                overlay.style.width = '10%';
-                overlay.style.height = '10%';
-            } else if (labelType === 'back') {
-                overlay.style.top = '55%';
+                overlay.style.top = '42%';
                 overlay.style.left = '45%';
                 overlay.style.width = '10%';
-                overlay.style.height = '6%';
+                overlay.style.height = '8%';
+                overlay.style.objectFit = 'cover';
+            } else if (labelType === 'back') {
+                overlay.style.top = '42%';
+                overlay.style.left = '45%';
+                overlay.style.width = '10%';
+                overlay.style.height = '8%';
                 overlay.style.objectFit = 'cover';
             } else {
                 overlay.style.display = 'none';
