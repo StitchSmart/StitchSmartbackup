@@ -712,6 +712,61 @@ $validatedTheme = in_array($requestedTheme, $allowedThemes, true) ? $requestedTh
             }
         }
 
+        function makeDraggable(el) {
+            el.style.cursor = 'grab';
+            el.style.pointerEvents = 'auto'; // allow dragging
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+
+            function onDown(e) {
+                isDragging = true;
+                el.style.cursor = 'grabbing';
+                let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+                startX = clientX;
+                startY = clientY;
+                const style = window.getComputedStyle(el);
+                initialLeft = parseFloat(style.left) || 0;
+                initialTop = parseFloat(style.top) || 0;
+                e.preventDefault();
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                let clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+                const dx = clientX - startX;
+                const dy = clientY - startY;
+                el.style.left = (initialLeft + dx) + 'px';
+                el.style.top = (initialTop + dy) + 'px';
+            }
+
+            function onUp(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                el.style.cursor = 'grab';
+                const container = el.parentElement;
+                const containerRect = container.getBoundingClientRect();
+                const elRect = el.getBoundingClientRect();
+                const leftPct = ((elRect.left - containerRect.left) / containerRect.width) * 100;
+                const topPct = ((elRect.top - containerRect.top) / containerRect.height) * 100;
+                el.style.left = leftPct + '%';
+                el.style.top = topPct + '%';
+            }
+
+            el.addEventListener('mousedown', onDown);
+            el.addEventListener('touchstart', onDown, {passive: false});
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('touchmove', onMove, {passive: false});
+            document.addEventListener('mouseup', onUp);
+            document.addEventListener('touchend', onUp);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('customLabelOverlay');
+            if (overlay) makeDraggable(overlay);
+        });
+
         function previewImage(inputId, previewId) {
             const file = document.getElementById(inputId).files[0];
             if (file) {
