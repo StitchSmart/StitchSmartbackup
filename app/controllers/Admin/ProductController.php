@@ -226,6 +226,9 @@ public function featureIndex()
         if ($hasImageUpload) {
             $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
             $uploadDir = BASE_PATH . '/public/uploads/products/';
+            if (!is_dir($uploadDir)) {
+                @mkdir($uploadDir, 0777, true);
+            }
             $files = $_FILES['bimage'];
 
             $names = is_array($files['name']) ? $files['name'] : [$files['name']];
@@ -419,6 +422,9 @@ require BASE_PATH.'/app/views/admin/layout.php';
             if ($hasImageUpload) {
                 $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
                 $uploadDir = BASE_PATH . '/public/uploads/products/';
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
                 $files = $_FILES['bimage'];
 
                 $names = is_array($files['name']) ? $files['name'] : [$files['name']];
