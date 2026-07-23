@@ -32,13 +32,13 @@ class WarrantyController
             // Auto fetch user_id from orders if not provided explicitly
             global $conn;
             $userId = null;
-            $stmt = $conn->prepare("SELECT customer_id FROM orders WHERE id = ?");
+            $stmt = $conn->prepare("SELECT user_id FROM orders WHERE id = ?");
             if ($stmt) {
                 $stmt->bind_param('i', $orderId);
                 $stmt->execute();
                 $res = $stmt->get_result()->fetch_assoc();
-                if ($res && !empty($res['customer_id'])) {
-                    $userId = (int)$res['customer_id'];
+                if ($res && !empty($res['user_id'])) {
+                    $userId = (int)$res['user_id'];
                 }
             }
 
