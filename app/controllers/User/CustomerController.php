@@ -127,6 +127,7 @@ class CustomerController {
                     strpos($referer, 'customer_login') === false &&
                     strpos($referer, 'customer_register') === false &&
                     strpos($referer, 'customer_logout') === false &&
+                    strpos($referer, 'favicon.ico') === false &&
                     !$isAdminRoute) {
                     $_SESSION['redirect_after_login'] = $referer;
                 }
