@@ -60,7 +60,7 @@
                                         <?= htmlspecialchars($c['issue_description']) ?>
                                     </p>
                                     <?php if ($c['image_url']): ?>
-                                        <a href="<?= url($c['image_url']) ?>" target="_blank" class="badge bg-info mt-1 text-decoration-none"><i class="bi bi-image me-1"></i>View Attachment</a>
+                                        <a href="<?= rtrim(BASE_URL, '/') . '/' . ltrim($c['image_url'], '/') ?>" target="_blank" class="badge bg-info mt-1 text-decoration-none"><i class="bi bi-image me-1"></i>View Attachment</a>
                                     <?php endif; ?>
                                 </td>
                                 <td>

@@ -72,17 +72,21 @@ class WarrantyController
     public function updateClaim()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $claimId = (int)$_POST['claim_id'];
-            $status = $_POST['status'];
-            $adminNotes = htmlspecialchars($_POST['admin_notes'] ?? '');
+            try {
+                $claimId = (int)$_POST['claim_id'];
+                $status = $_POST['status'];
+                $adminNotes = htmlspecialchars($_POST['admin_notes'] ?? '');
 
-            if ($this->warrantyModel->updateClaimStatus($claimId, $status, $adminNotes)) {
-                $_SESSION['success_message'] = "Claim status updated.";
-            } else {
-                $_SESSION['error_message'] = "Failed to update claim status.";
+                if ($this->warrantyModel->updateClaimStatus($claimId, $status, $adminNotes)) {
+                    $_SESSION['success_message'] = "Claim status updated.";
+                } else {
+                    $_SESSION['error_message'] = "Failed to update claim status. Please ensure the database schema is up-to-date.";
+                }
+            } catch (Throwable $e) {
+                $_SESSION['error_message'] = "An error occurred: " . $e->getMessage();
             }
-            header('Location: ' . url('admin_warranty_claims'));
-            exit;
         }
+        header('Location: ' . url('admin_warranty_claims'));
+        exit;
     }
 }
