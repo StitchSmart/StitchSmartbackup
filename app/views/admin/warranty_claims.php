@@ -1,5 +1,15 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800 fw-bold" style="font-family: 'Playfair Display', serif;">Warranty Claims Handling</h1>
+    <div>
+        <h1 class="h3 mb-2 text-gray-800 fw-bold" style="font-family: 'Playfair Display', serif;">Warranty Management</h1>
+        <ul class="nav nav-pills border-0">
+            <li class="nav-item">
+                <a class="nav-link rounded-pill px-4 text-muted" href="<?= url('admin_warranties') ?>">Issued Warranties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active rounded-pill px-4 shadow-sm" href="<?= url('admin_warranty_claims') ?>">Pending Claims</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <?php if (isset($_SESSION['success_message'])): ?>

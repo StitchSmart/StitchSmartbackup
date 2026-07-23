@@ -8,8 +8,8 @@ $theme = $global_theme ?? 'theme-default';
 $themeFile = ($theme === 'theme-luxury') ? 'theme-luxury-frontend.css' : 'theme-default-frontend.css';
 
 // The aesthetic colors for the business card design based on user's image
-$cardAccent = '#222222'; // Dark text on yellow
-$cardDark = '#F4D03F';   // Yellow side
+$cardAccent = '#1c1c1c'; // Dark text on yellow
+$cardDark = '#CF9A42';   // Mustard/Golden yellow from new image
 $cardLight = '#ffffff';  // White side
 $textDark = '#111111';
 $textLight = '#ffffff';
@@ -571,38 +571,55 @@ body {
         <?php endif; ?>
 
         <?php if (!empty($claims)): ?>
-            <div class="mt-5 pt-4" style="border-top: 1px dashed #ccc;">
-                <h3 class="w-header-title mb-4" style="font-size: 2.2rem; font-family: 'Playfair Display', serif; color: <?= $cardAccent ?>;">Claim History</h3>
-                <div class="row">
+            <div class="mt-5 pt-5">
+                <h3 class="w-header-title mb-5 text-center" style="font-size: 2.2rem; font-family: 'Playfair Display', serif; color: <?= $cardAccent ?>;">Claim History</h3>
+                <div class="row justify-content-center">
                     <?php foreach ($claims as $c): ?>
-                        <div class="col-md-6 mb-4">
-                            <!-- 3D ANIMATED CLAIM CARD -->
-                            <div class="card h-100 border-0 claim-card-3d" style="border-radius: 16px; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
-                                <div class="card-header border-0 d-flex justify-content-between align-items-center" style="background: #f9f9f9; padding: 15px 20px;">
-                                    <span class="fw-bold text-uppercase" style="font-size: 0.8rem; color: #555;"><i class="bi bi-ticket-detailed me-1"></i> Claim #<?= $c['id'] ?></span>
+                        <div class="col-md-6 col-lg-5 mb-4">
+                            <!-- 3D ANIMATED CLAIM CARD (REDESIGNED) -->
+                            <div class="card h-100 border-0 claim-card-3d" style="border-radius: 24px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.06); padding: 25px;">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width: 45px; height: 45px; background: <?= $cardDark ?>; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px;">
+                                            <i class="bi bi-shield-check"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Claim ID</div>
+                                            <div style="font-size: 1.1rem; font-weight: 800; color: <?= $cardAccent ?>;">#<?= $c['id'] ?></div>
+                                        </div>
+                                    </div>
                                     <?php 
                                         $bg = 'bg-warning text-dark';
                                         if($c['status']=='Approved') $bg='bg-success text-white';
                                         if($c['status']=='Rejected') $bg='bg-danger text-white';
                                     ?>
-                                    <span class="badge rounded-pill <?= $bg ?> px-3 py-2" style="font-size: 0.75rem; letter-spacing: 0.5px;"><?= $c['status'] ?></span>
+                                    <span class="badge rounded-pill <?= $bg ?> px-3 py-2" style="font-size: 0.75rem; letter-spacing: 0.5px; border-radius: 50px !important;"><?= $c['status'] ?></span>
                                 </div>
-                                <div class="card-body p-4" style="background: #fff;">
-                                    <div class="mb-3">
-                                        <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">Warranty Code</div>
-                                        <span class="badge" style="background: <?= $cardDark ?>; color: <?= $cardAccent ?>; font-size: 0.9rem; letter-spacing: 1px;"><?= htmlspecialchars($c['code']) ?></span>
+                                
+                                <div class="mb-3">
+                                    <div class="text-muted text-uppercase mb-2" style="font-size: 0.7rem; letter-spacing: 1px; font-weight: 600;">Warranty Ref</div>
+                                    <div style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: <?= $cardDark ?>; background: rgba(207, 154, 66, 0.1); padding: 5px 15px; border-radius: 50px; display: inline-block;">
+                                        <?= htmlspecialchars($c['code']) ?>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">Issue Description</div>
-                                        <p class="mb-0" style="font-size: 0.9rem; color: #333; line-height: 1.5;"><?= htmlspecialchars($c['issue_description'] ?? 'No description provided.') ?></p>
-                                    </div>
-                                    <?php if(!empty($c['admin_notes'])): ?>
-                                        <div class="p-3 mt-3" style="background: #f8f9fa; border-left: 3px solid <?= $cardDark ?>; border-radius: 0 8px 8px 0;">
-                                            <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="bi bi-person-badge me-1"></i> Admin Notes</div>
-                                            <p class="mb-0 text-dark" style="font-size: 0.85rem; font-style: italic;"><?= htmlspecialchars($c['admin_notes']) ?></p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="text-muted text-uppercase mb-2" style="font-size: 0.7rem; letter-spacing: 1px; font-weight: 600;">Issue Description</div>
+                                    <p class="mb-0" style="font-size: 0.95rem; color: #444; line-height: 1.6;">
+                                        <?= htmlspecialchars($c['issue_description'] ?? 'No description provided.') ?>
+                                    </p>
+                                </div>
+                                
+                                <?php if(!empty($c['admin_notes'])): ?>
+                                    <div class="mt-auto p-3" style="background: #fafafa; border-radius: 12px; border: 1px solid #eee;">
+                                        <div class="text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px; color: <?= $cardDark ?>; font-weight: 700;">
+                                            <i class="bi bi-chat-quote-fill me-1"></i> Admin Response
                                         </div>
-                                    <?php endif; ?>
-                                </div>
+                                        <p class="mb-0" style="font-size: 0.85rem; color: #555; font-style: italic;">
+                                            "<?= htmlspecialchars($c['admin_notes']) ?>"
+                                        </p>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
