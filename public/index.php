@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !in_array($page, [
     'customer_forgot_password', 'customer_forgot_password_process', 
     'admin_login', 'admin_logout', 'admin_forgot_password', 
     'admin_confirm_reset', 'live_search', 'user_search_history',
-    'user_chat_history', 'user_similar_products'
+    'user_chat_history', 'user_similar_products', 'favicon.ico'
 ], true)) {
     $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
 }

@@ -37,8 +37,28 @@ if ($theme === 'theme-luxury') {
    3D FLIP BUSINESS CARD DESIGN
    ============================================================ */
 body {
-    background: var(--co-bg, #f4f4f4) !important;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
     font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Premium Background Pattern overlay */
+.w-page {
+    position: relative;
+    min-height: 100vh;
+}
+.w-page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(#d4af37 0.5px, transparent 0.5px);
+    background-size: 30px 30px;
+    opacity: 0.05;
+    z-index: 0;
+    pointer-events: none;
+}
+.w-header, .container {
+    position: relative;
+    z-index: 1;
 }
 
 .w-header {
@@ -425,10 +445,10 @@ body {
                         <!-- Claim Modal -->
                         <div class="modal fade" id="claimModal<?= $w['id'] ?>" tabindex="-1">
                           <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content overflow-hidden">
-                              <div class="modal-header" style="background: <?= $cardDark ?>; color: <?= $cardAccent ?>; border-bottom: none;">
+                            <div class="modal-content overflow-hidden border-0" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                              <div class="modal-header" style="background: <?= $cardAccent ?>; color: <?= $cardDark ?>; border-bottom: none;">
                                 <h5 class="modal-title fw-bold" style="letter-spacing: 1px;"><i class="bi bi-tools me-2"></i> CLAIM WARRANTY</h5>
-                                <button type="button" class="btn-close" style="filter: invert(1) grayscale(100%) brightness(0);" data-bs-dismiss="modal"></button>
+                                <button type="button" class="btn-close" style="filter: invert(1) sepia(1) saturate(5) hue-rotate(5deg);" data-bs-dismiss="modal"></button>
                               </div>
                               <form action="<?= url('submit_warranty_claim') ?>" method="POST" enctype="multipart/form-data" onsubmit="return validateFileSize(this)">
                                   <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
@@ -436,18 +456,18 @@ body {
                                       <input type="hidden" name="warranty_id" value="<?= $w['id'] ?>">
                                       <div class="mb-4">
                                           <label class="form-label fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; color: #555;">Describe the Issue</label>
-                                          <textarea name="description" class="form-control" rows="4" required placeholder="E.g. stitching opened on the left sleeve..." style="background: #f9f9f9; border: 1px solid #ddd; color: #222; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); resize: none;"></textarea>
+                                          <textarea name="description" class="form-control" rows="4" required placeholder="E.g. stitching opened on the left sleeve..." style="background: #fdfdfd; border: 1px solid #e0e0e0; color: #222; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); resize: none;"></textarea>
                                       </div>
                                       <div class="mb-3">
                                           <label class="form-label fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; color: #555;">Upload Image (Optional)</label>
                                           <div class="input-group">
-                                              <input type="file" name="claim_image" class="form-control" accept="image/*" style="background: #f9f9f9; border: 1px solid #ddd; color: #222; border-radius: 8px;">
+                                              <input type="file" name="claim_image" class="form-control" accept="image/*" style="background: #fdfdfd; border: 1px solid #e0e0e0; color: #222; border-radius: 8px;">
                                           </div>
                                           <small class="text-danger d-none file-error mt-2 fw-bold"><i class="bi bi-exclamation-circle me-1"></i> File size must be under 2MB.</small>
                                       </div>
                                   </div>
                                   <div class="modal-footer" style="background: #f9f9f9; border-top: 1px solid #eaeaea;">
-                                      <button type="submit" class="btn btn-claim w-100 fw-bold py-3" style="border-radius: 50px; background: <?= $cardDark ?>; color: <?= $cardAccent ?> !important; font-size: 1rem;"><i class="bi bi-send-check me-2"></i> Submit Request</button>
+                                      <button type="submit" class="btn w-100 fw-bold py-3 shadow-sm claim-submit-btn" style="border-radius: 50px; background: <?= $cardAccent ?>; color: <?= $cardDark ?>; font-size: 1rem; letter-spacing: 1px; transition: all 0.3s;"><i class="bi bi-send-check me-2"></i> Submit Request</button>
                                   </div>
                               </form>
                             </div>
