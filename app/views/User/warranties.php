@@ -344,9 +344,13 @@ $themeFile = ($theme === 'theme-luxury') ? 'theme-luxury-frontend.css' : 'theme-
                                     </span>
                                 </div>
                                 
-                                <div class="w-details">
+                                <div class="w-details" style="grid-template-columns: 1fr 1fr 1fr;">
                                     <div class="w-detail-box">
-                                        <p>Order Reference</p>
+                                        <p>Customer</p>
+                                        <h5><?= htmlspecialchars($_SESSION['customer_name'] ?? 'Guest') ?></h5>
+                                    </div>
+                                    <div class="w-detail-box">
+                                        <p>Order Ref</p>
                                         <h5>#<?= htmlspecialchars($w['order_id']) ?></h5>
                                     </div>
                                     <div class="w-detail-box">

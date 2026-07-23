@@ -107,13 +107,8 @@
                             <input type="number" name="order_id" class="form-control form-control-solid bg-light" required placeholder="e.g. 1042">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-secondary text-xs text-uppercase">User ID</label>
-                            <input type="number" name="user_id" class="form-control form-control-solid bg-light" placeholder="(Optional)">
-                            <small class="text-muted" style="font-size: 0.75rem;">Leave blank for guests</small>
-                        </div>
-                        <div class="col-12">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Duration</label>
-                            <select name="duration_days" class="form-select form-control-solid bg-light border-0 shadow-none" required>
+                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid bg-light border-0 shadow-none" required>
                                 <option value="7">7 Days (Fitting & Alteration)</option>
                                 <option value="30">30 Days (Stitching Warranty)</option>
                                 <option value="90">90 Days (Fabric Warranty)</option>
@@ -121,8 +116,13 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold text-secondary text-xs text-uppercase">Terms & Coverage</label>
-                            <textarea name="terms" class="form-control bg-light" rows="3" required placeholder="Describe what is covered under this warranty..."></textarea>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label fw-bold text-secondary text-xs text-uppercase m-0">Terms & Coverage</label>
+                                <button type="button" id="btnGenerateAI" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 0.75rem; border-radius: 5px;">
+                                    <i class="bi bi-magic me-1"></i> Generate with AI
+                                </button>
+                            </div>
+                            <textarea name="terms" id="termsBox" class="form-control bg-light" rows="3" required placeholder="Describe what is covered under this warranty..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -134,3 +134,43 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('btnGenerateAI').addEventListener('click', function() {
+    const duration = document.getElementById('durationSelect').value;
+    const box = document.getElementById('termsBox');
+    
+    // Simulate AI generation with preset professional templates based on duration
+    let template = "";
+    if (duration === "7") {
+        template = "This 7-day warranty covers minor fitting adjustments and alteration issues arising post-delivery. Valid only if the garment has not been excessively worn or washed.";
+    } else if (duration === "30") {
+        template = "Our 30-day Stitching Warranty ensures your custom garment holds its integrity. We cover popped seams, loose buttons, and zipper malfunctions at no extra cost.";
+    } else if (duration === "90") {
+        template = "90-Day Extended Warranty: Covers structural stitching integrity, minor fabric pilling on premium blends, and zipper/button replacements. Does not cover accidental tears or chemical damage.";
+    } else {
+        template = "1-Year Premium Coverage: Comprehensive protection against stitching failure, fabric color bleeding under normal wash conditions, and structural wear. Enjoy complete peace of mind.";
+    }
+    
+    // Typewriter effect for AI feel
+    box.value = "";
+    let i = 0;
+    this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Generating...';
+    this.disabled = true;
+    
+    const interval = setInterval(() => {
+        box.value += template.charAt(i);
+        i++;
+        if (i >= template.length) {
+            clearInterval(interval);
+            this.innerHTML = '<i class="bi bi-magic me-1"></i> Generated';
+            this.classList.replace('btn-outline-primary', 'btn-success');
+            setTimeout(() => {
+                this.innerHTML = '<i class="bi bi-magic me-1"></i> Generate with AI';
+                this.classList.replace('btn-success', 'btn-outline-primary');
+                this.disabled = false;
+            }, 2000);
+        }
+    }, 15);
+});
+</script>

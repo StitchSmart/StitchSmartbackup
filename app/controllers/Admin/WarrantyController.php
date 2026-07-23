@@ -28,7 +28,20 @@ class WarrantyController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $orderId = (int)$_POST['order_id'];
-            $userId = !empty($_POST['user_id']) ? (int)$_POST['user_id'] : null;
+            
+            // Auto fetch user_id from orders if not provided explicitly
+            global $conn;
+            $userId = null;
+            $stmt = $conn->prepare("SELECT customer_id FROM orders WHERE id = ?");
+            if ($stmt) {
+                $stmt->bind_param('i', $orderId);
+                $stmt->execute();
+                $res = $stmt->get_result()->fetch_assoc();
+                if ($res && !empty($res['customer_id'])) {
+                    $userId = (int)$res['customer_id'];
+                }
+            }
+
             $durationDays = (int)$_POST['duration_days'];
             $terms = htmlspecialchars($_POST['terms'] ?? '');
 
