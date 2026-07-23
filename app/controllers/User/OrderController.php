@@ -853,6 +853,33 @@ public function markDelivered(){
         $stmt->bind_param("i", $id);
         if ($stmt->execute()) {
             $_SESSION['success'] = "Order #$id marked as Delivered!";
+            
+            // Auto Generate Warranty
+            require_once BASE_PATH . '/app/models/Warranty.php';
+            $warrantyModel = new Warranty($this->conn);
+            
+            // Fetch user id for this order
+            $uStmt = $this->conn->prepare("SELECT user_id FROM orders WHERE id = ?");
+            $uStmt->bind_param("i", $id);
+            $uStmt->execute();
+            $res = $uStmt->get_result();
+            if ($row = $res->fetch_assoc()) {
+                $userId = $row['user_id'];
+                
+                // Default 30-day premium warranty
+                $durationDays = 30;
+                $terms = "Standard 30-Day Premium Quality Guarantee. This digital warranty covers all manufacturing defects, including stitching anomalies, fitting adjustments, and fabric flaws upon arrival. Note: Normal wear and tear resulting from regular use is excluded from this coverage.";
+                
+                // Only create if one doesn't already exist for this order
+                $checkStmt = $this->conn->prepare("SELECT id FROM warranty_cards WHERE order_id = ?");
+                $checkStmt->bind_param("i", $id);
+                $checkStmt->execute();
+                if ($checkStmt->get_result()->num_rows === 0) {
+                    $warrantyModel->createWarranty($id, $userId, $durationDays, $terms);
+                    $_SESSION['success'] .= " A 30-Day Digital Warranty Card has been automatically generated for the customer!";
+                }
+            }
+            
         } else {
             $_SESSION['error'] = "Failed to update order status.";
         }
