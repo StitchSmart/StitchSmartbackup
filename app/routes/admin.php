@@ -68,6 +68,13 @@ return [
     'return_report'           => ['controller' => 'OrderController', 'method' => 'returnReport',            'file' => '../app/controllers/User/OrderController.php'],
     'return_trash'            => ['controller' => 'OrderController', 'method' => 'returnTrash',             'file' => '../app/controllers/User/OrderController.php'],
 
+    // ── Warranty Management ─────────────────────────────────────────────────
+    'admin_warranties'        => ['controller' => 'WarrantyController', 'method' => 'index',         'file' => '../app/controllers/Admin/WarrantyController.php'],
+    'admin_create_warranty'   => ['controller' => 'WarrantyController', 'method' => 'create',        'file' => '../app/controllers/Admin/WarrantyController.php'],
+    'admin_warranty_claims'   => ['controller' => 'WarrantyController', 'method' => 'claims',        'file' => '../app/controllers/Admin/WarrantyController.php'],
+    'admin_update_claim'      => ['controller' => 'WarrantyController', 'method' => 'updateClaim',   'file' => '../app/controllers/Admin/WarrantyController.php'],
+
+
     // ── CMS Pages Management ────────────────────────────────────────────────
     'pages'       => ['controller' => 'PageController', 'method' => 'index',  'file' => '../app/controllers/Admin/PageController.php'],
     'add_page'    => ['controller' => 'PageController', 'method' => 'add',    'file' => '../app/controllers/Admin/PageController.php'],

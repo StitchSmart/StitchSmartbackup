@@ -16,6 +16,7 @@ class SchemaBootstrap
                 $this->ensureJazzCashTableExists();
                 $this->ensureCmsPagesExist();
                 $this->ensureAdminEmailIsUpdated();
+                $this->ensureWarrantyTablesExist();
             } catch (Throwable $e) {
                 $msg = defined('APP_DEBUG') && APP_DEBUG
                     ? 'Schema Bootstrap Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine()
@@ -424,5 +425,41 @@ class SchemaBootstrap
         $stmt->close();
 
         return $result;
+    }
+
+    private function ensureWarrantyTablesExist(): void
+    {
+        $checkCards = $this->conn->query("SHOW TABLES LIKE 'warranty_cards'");
+        if (!$checkCards || $checkCards->num_rows === 0) {
+            $this->conn->query(
+                "CREATE TABLE warranty_cards (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    order_id INT NOT NULL,
+                    user_id INT UNSIGNED DEFAULT NULL,
+                    code VARCHAR(50) NOT NULL UNIQUE,
+                    duration_days INT NOT NULL,
+                    terms TEXT,
+                    status ENUM('Active', 'Expired', 'Revoked') DEFAULT 'Active',
+                    expires_at DATETIME NOT NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+            );
+        }
+
+        $checkClaims = $this->conn->query("SHOW TABLES LIKE 'warranty_claims'");
+        if (!$checkClaims || $checkClaims->num_rows === 0) {
+            $this->conn->query(
+                "CREATE TABLE warranty_claims (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    warranty_id INT NOT NULL,
+                    issue_description TEXT NOT NULL,
+                    image_url VARCHAR(255) DEFAULT NULL,
+                    status ENUM('Pending', 'Approved', 'Rejected', 'Resolved') DEFAULT 'Pending',
+                    admin_notes TEXT,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+            );
+        }
     }
 }

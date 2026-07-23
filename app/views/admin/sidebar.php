@@ -66,6 +66,11 @@ $currentPage = $_GET['page'] ?? 'admin';
                 <span>Returns Report</span>
             </a>
 
+            <a href="<?php echo url('admin_warranties') ?>" class="admin-nav-item <?= in_array($currentPage, ['admin_warranties', 'admin_warranty_claims']) ? 'active' : '' ?>">
+                <i class="bi bi-shield-check fs-5 text-warning"></i>
+                <span>Warranties & Claims</span>
+            </a>
+
             <a href="<?php echo url('return_trash') ?>" class="admin-nav-item <?= ($currentPage === 'return_trash') ? 'active' : '' ?>">
                 <i class="bi bi-trash3-fill fs-5"></i>
                 <span>Return Trash Bin</span>

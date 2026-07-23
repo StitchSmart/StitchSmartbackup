@@ -47,6 +47,11 @@ return [
     'save_review'                      => ['controller' => 'OrderController',    'method' => 'saveReview',            'file' => '../app/controllers/User/OrderController.php'],
     'customer_return_request'          => ['controller' => 'OrderController',    'method' => 'customerReturnRequestPage', 'file' => '../app/controllers/User/OrderController.php'],
     'submit_return_request'            => ['controller' => 'OrderController',    'method' => 'submitReturnRequest',       'file' => '../app/controllers/User/OrderController.php'],
+    
+    // ── Warranty ────────────────────────────────────────────────────────────
+    'my_warranties'                    => ['controller' => 'WarrantyController', 'method' => 'index',                 'file' => '../app/controllers/User/WarrantyController.php'],
+    'submit_warranty_claim'            => ['controller' => 'WarrantyController', 'method' => 'submitClaim',           'file' => '../app/controllers/User/WarrantyController.php'],
+
 
     // ── Design Customizer ───────────────────────────────────────────────────
     'design'              => ['controller' => 'DesignController', 'method' => 'index',             'file' => '../app/controllers/User/DesignController.php'],
