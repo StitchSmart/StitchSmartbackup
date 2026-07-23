@@ -39,26 +39,105 @@ if ($theme === 'theme-luxury') {
 body {
     background: #fdfcf9 !important; /* Clean, premium off-white */
     font-family: 'Montserrat', sans-serif !important;
+    overflow-x: hidden;
 }
 
 .w-page {
     min-height: 100vh;
 }
 
-/* Premium Header */
-.w-header {
-    background: #ffffff;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-    padding: 50px 0;
-    margin-bottom: 50px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+/* ============================================================
+   SPLIT-SCREEN HERO SECTION (MATCHING USER IMAGE)
+   ============================================================ */
+.hero-warranty {
+    position: relative;
+    background-color: <?= $cardDark ?>; /* Yellow left side */
+    padding: 80px 0;
+    overflow: hidden;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
 }
-.w-header-title {
+.hero-curve {
+    position: absolute;
+    right: -5%;
+    top: -10%;
+    height: 120%;
+    width: 65%;
+    background-color: <?= $cardLight ?>; /* White right side */
+    border-top-left-radius: 100% 50%;
+    border-bottom-left-radius: 100% 50%;
+    box-shadow: -15px 0 40px rgba(0,0,0,0.05);
+    z-index: 1;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 10px;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: <?= $cardAccent ?>;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+.hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: <?= $cardAccent ?>;
+    margin-bottom: 15px;
+}
+.hero-text {
+    color: rgba(0,0,0,0.7);
+    font-size: 0.9rem;
+    max-width: 400px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+.hero-icons {
+    display: flex;
+    gap: 15px;
+}
+.hero-icon-box {
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: <?= $cardAccent ?>;
+    transition: all 0.3s;
+    background: transparent;
+}
+.hero-icon-box:hover {
+    background: <?= $cardAccent ?>;
+    color: <?= $cardDark ?>;
+    transform: translateY(-5px);
+}
+.hero-back-btn {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    z-index: 10;
+    color: <?= $cardAccent ?>;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: all 0.3s;
+}
+.hero-back-btn:hover {
+    background: <?= $cardAccent ?>;
+    color: <?= $cardDark ?>;
 }
 
 /* FLIP CONTAINER */
@@ -275,63 +354,52 @@ body {
     border: none;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
-.modal-header {
-    background-color: <?= $cardDark ?>;
-    color: <?= $textLight ?>;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    border-bottom: 3px solid <?= $cardAccent ?>;
+
+/* 3D Claim Card Animation */
+.claim-card-3d {
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+    transform-style: preserve-3d;
+}
+.claim-card-3d:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(-2deg);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.15) !important;
 }
 </style>
 </head>
 <body>
 <div class="w-page">
     
-    <div class="w-header text-center">
-        <div class="container">
-            <h1 class="w-header-title">My Digital Warranty Cards</h1>
-            <p class="text-muted" style="letter-spacing: 1px; font-size: 0.95rem; text-transform: uppercase;">Hover over a card to view your coverage details</p>
-            <div style="width: 60px; height: 3px; background: <?= $cardDark ?>; margin: 20px auto 0;"></div>
-            <div class="mt-4">
-                <a href="<?= url('customer_orders') ?>" class="text-decoration-none text-muted d-inline-block" style="font-size:0.85rem; border: 1px solid #ddd; padding: 8px 20px; border-radius: 50px; transition: all 0.3s;" onmouseover="this.style.background='#222'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='#6c757d';">
-                    <i class="bi bi-arrow-left"></i> Back to Orders
-                </a>
-            </div>
-        </div>
-    </div>
+    <a href="<?= url('customer_orders') ?>" class="hero-back-btn">
+        <i class="bi bi-arrow-left"></i> Back to Orders
+    </a>
 
-    <div class="container pb-5">
-        <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm rounded-4" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: none; color: #155724; font-weight: 600;">
-                <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
-                <div>
-                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Success!</strong>
-                    <?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
+    <!-- THE SPLIT HERO SECTION -->
+    <div class="hero-warranty">
+        <div class="hero-curve"></div>
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <!-- Left Side Content -->
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <h1 class="hero-title">1 Year<br>Warranty</h1>
+                    <div class="hero-subtitle">Welcome to our site</div>
+                    <p class="hero-text">
+                        Experience peace of mind with our premium digital warranty system. We stand by the quality of our craftsmanship, offering comprehensive coverage for your bespoke garments.
+                    </p>
+                    
+                    <a href="#claim-section" class="btn px-4 py-2 mb-4" style="border: 1px solid <?= $cardAccent ?>; color: <?= $cardAccent ?>; border-radius: 50px; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">READ MORE &rarr;</a>
+                    
+                    <div class="hero-icons">
+                        <div class="hero-icon-box"><i class="bi bi-bar-chart-fill"></i></div>
+                        <div class="hero-icon-box"><i class="bi bi-pie-chart-fill"></i></div>
+                        <div class="hero-icon-box"><i class="bi bi-check-lg"></i></div>
+                    </div>
                 </div>
-            </div>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['error_message'])): ?>
-            <div class="alert alert-danger d-flex align-items-center mb-4 shadow-sm rounded-4" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border: none; color: #721c24; font-weight: 600;">
-                <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
-                <div>
-                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Error</strong>
-                    <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if (empty($warranties)): ?>
-            <div class="text-center py-5">
-                <i class="bi bi-shield-x display-1 mb-3 text-muted opacity-50"></i>
-                <h3 class="fw-bold">No Warranty Cards Found</h3>
-                <p class="text-muted">You do not have any active warranty cards at the moment.</p>
-            </div>
-        <?php else: ?>
-            <div class="row justify-content-center">
-                <?php foreach ($warranties as $index => $w): ?>
-                    <div class="col-md-8 col-lg-7 col-xl-6 mb-5">
+                
+                <!-- Right Side Card (Shows the latest warranty, or placeholder) -->
+                <div class="col-lg-7 text-center">
+                    <?php if (!empty($warranties)): $w = $warranties[0]; ?>
                         <!-- THE 3D FLIP CARD -->
-                        <div class="card-container">
+                        <div class="card-container" style="margin: 0 auto;">
                             <div class="card-flip-inner">
                                 
                                 <!-- CARD FRONT -->
@@ -431,8 +499,43 @@ body {
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
+                    <?php else: ?>
+                        <div class="text-center py-5">
+                            <i class="bi bi-shield-x display-1 mb-3 text-muted opacity-25"></i>
+                            <h3 class="fw-bold text-muted">No Warranty Cards</h3>
+                            <p class="text-muted">You do not have any active warranty cards at the moment.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <!-- Claim Modal -->
+    <!-- MAIN CONTAINER FOR MODALS & HISTORY -->
+    <div class="container pb-5" id="claim-section">
+        
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm rounded-4 mt-5" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: none; color: #155724; font-weight: 600;">
+                <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
+                <div>
+                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Success!</strong>
+                    <?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger d-flex align-items-center mb-4 shadow-sm rounded-4 mt-5" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border: none; color: #721c24; font-weight: 600;">
+                <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
+                <div>
+                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Error</strong>
+                    <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($warranties)): ?>
+            <?php foreach ($warranties as $index => $w): ?>
+                <!-- Claim Modal (Render for all warranties) -->
                         <div class="modal fade" id="claimModal<?= $w['id'] ?>" tabindex="-1">
                           <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content overflow-hidden border-0" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
@@ -464,18 +567,17 @@ body {
                           </div>
                         </div>
 
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            <?php endforeach; ?>
         <?php endif; ?>
 
         <?php if (!empty($claims)): ?>
             <div class="mt-5 pt-4" style="border-top: 1px dashed #ccc;">
-                <h3 class="w-header-title mb-4" style="font-size: 1.8rem;">My Claims History</h3>
+                <h3 class="w-header-title mb-4" style="font-size: 2.2rem; font-family: 'Playfair Display', serif; color: <?= $cardAccent ?>;">Claim History</h3>
                 <div class="row">
                     <?php foreach ($claims as $c): ?>
                         <div class="col-md-6 mb-4">
-                            <div class="card h-100 border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+                            <!-- 3D ANIMATED CLAIM CARD -->
+                            <div class="card h-100 border-0 claim-card-3d" style="border-radius: 16px; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
                                 <div class="card-header border-0 d-flex justify-content-between align-items-center" style="background: #f9f9f9; padding: 15px 20px;">
                                     <span class="fw-bold text-uppercase" style="font-size: 0.8rem; color: #555;"><i class="bi bi-ticket-detailed me-1"></i> Claim #<?= $c['id'] ?></span>
                                     <?php 
