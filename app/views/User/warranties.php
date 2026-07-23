@@ -8,17 +8,14 @@ $theme = $global_theme ?? 'theme-default';
 $themeFile = ($theme === 'theme-luxury') ? 'theme-luxury-frontend.css' : 'theme-default-frontend.css';
 
 // The aesthetic colors for the business card design based on user's image
-$cardAccent = '#1a8a2d'; // Green from image
-$cardDark = '#111111';   // Dark side
-$cardLight = '#ffffff';  // Light side
-$textDark = '#222222';
-$textLight = '#f8f8f8';
+$cardAccent = '#222222'; // Dark text on yellow
+$cardDark = '#F4D03F';   // Yellow side
+$cardLight = '#ffffff';  // White side
+$textDark = '#111111';
+$textLight = '#ffffff';
 
 if ($theme === 'theme-luxury') {
-    // For luxury theme, maybe use gold instead of green
-    $cardAccent = '#ca9745'; 
-    $cardLight = '#1c1c1c';
-    $textDark = '#e5e5e5';
+    $cardDark = '#D4AF37'; // Gold
 }
 ?>
 <!DOCTYPE html>
@@ -293,17 +290,23 @@ body {
         </div>
     </div>
 
-    <div class="container">
+    <div class="container pb-5">
         <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success d-flex align-items-center mb-4 border-0 shadow-sm rounded-3">
-                <i class="bi bi-check-circle-fill fs-4 me-3"></i>
-                <div><?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?></div>
+            <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm rounded-4" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: none; color: #155724; font-weight: 600;">
+                <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
+                <div>
+                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Success!</strong>
+                    <?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
+                </div>
             </div>
         <?php endif; ?>
         <?php if (isset($_SESSION['error_message'])): ?>
-            <div class="alert alert-danger d-flex align-items-center mb-4 border-0 shadow-sm rounded-3">
-                <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
-                <div><?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?></div>
+            <div class="alert alert-danger d-flex align-items-center mb-4 shadow-sm rounded-4" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border: none; color: #721c24; font-weight: 600;">
+                <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
+                <div>
+                    <strong class="d-block mb-1" style="font-size: 1.1rem;">Error</strong>
+                    <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
+                </div>
             </div>
         <?php endif; ?>
 
@@ -314,9 +317,9 @@ body {
                 <p class="text-muted">You do not have any active warranty cards at the moment.</p>
             </div>
         <?php else: ?>
-            <div class="row">
+            <div class="row justify-content-center">
                 <?php foreach ($warranties as $index => $w): ?>
-                    <div class="col-lg-6 mb-5">
+                    <div class="col-md-8 col-lg-7 col-xl-6 mb-5">
                         <!-- THE 3D FLIP CARD -->
                         <div class="card-container">
                             <div class="card-flip-inner">
@@ -405,27 +408,29 @@ body {
                         <!-- Claim Modal -->
                         <div class="modal fade" id="claimModal<?= $w['id'] ?>" tabindex="-1">
                           <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title fw-bold"><i class="bi bi-tools me-2"></i> Claim Warranty</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            <div class="modal-content overflow-hidden">
+                              <div class="modal-header" style="background: <?= $cardDark ?>; color: <?= $cardAccent ?>; border-bottom: none;">
+                                <h5 class="modal-title fw-bold" style="letter-spacing: 1px;"><i class="bi bi-tools me-2"></i> CLAIM WARRANTY</h5>
+                                <button type="button" class="btn-close" style="filter: invert(1) grayscale(100%) brightness(0);" data-bs-dismiss="modal"></button>
                               </div>
                               <form action="<?= url('submit_warranty_claim') ?>" method="POST" enctype="multipart/form-data" onsubmit="return validateFileSize(this)">
                                   <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
-                                  <div class="modal-body p-4">
+                                  <div class="modal-body p-4" style="background: #fff; color: #333;">
                                       <input type="hidden" name="warranty_id" value="<?= $w['id'] ?>">
-                                      <div class="mb-3">
-                                          <label class="form-label fw-bold">Describe the Issue</label>
-                                          <textarea name="description" class="form-control bg-light border-0" rows="3" required placeholder="E.g. stitching opened on the left sleeve..."></textarea>
+                                      <div class="mb-4">
+                                          <label class="form-label fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; color: #555;">Describe the Issue</label>
+                                          <textarea name="description" class="form-control" rows="4" required placeholder="E.g. stitching opened on the left sleeve..." style="background: #f9f9f9; border: 1px solid #ddd; color: #222; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); resize: none;"></textarea>
                                       </div>
                                       <div class="mb-3">
-                                          <label class="form-label fw-bold">Upload Image (Optional)</label>
-                                          <input type="file" name="claim_image" class="form-control bg-light border-0" accept="image/*">
-                                          <small class="text-danger d-none file-error">File size must be under 2MB.</small>
+                                          <label class="form-label fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px; color: #555;">Upload Image (Optional)</label>
+                                          <div class="input-group">
+                                              <input type="file" name="claim_image" class="form-control" accept="image/*" style="background: #f9f9f9; border: 1px solid #ddd; color: #222; border-radius: 8px;">
+                                          </div>
+                                          <small class="text-danger d-none file-error mt-2 fw-bold"><i class="bi bi-exclamation-circle me-1"></i> File size must be under 2MB.</small>
                                       </div>
                                   </div>
-                                  <div class="modal-footer bg-light border-0" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-                                      <button type="submit" class="btn btn-dark w-100 fw-bold py-2" style="border-radius: 50px;">Submit Request</button>
+                                  <div class="modal-footer" style="background: #f9f9f9; border-top: 1px solid #eaeaea;">
+                                      <button type="submit" class="btn btn-claim w-100 fw-bold py-3" style="border-radius: 50px; background: <?= $cardDark ?>; color: <?= $cardAccent ?> !important; font-size: 1rem;"><i class="bi bi-send-check me-2"></i> Submit Request</button>
                                   </div>
                               </form>
                             </div>
