@@ -17,7 +17,7 @@ class WarrantyController
         }
     }
 
-    public function customerWarranties() {
+    public function index() {
         $customerId = (int)$_SESSION['customer_id'];
         $warranties = $this->warrantyModel->getUserWarranties($customerId);
         $claims = $this->warrantyModel->getUserClaims($customerId);
