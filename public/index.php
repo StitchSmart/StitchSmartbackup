@@ -25,6 +25,7 @@ $database = new Database();
 $conn = $database->connect();
 
 // Run schema bootstrap only once per session to avoid repeated table-check queries
+unset($_SESSION['db_bootstrapped']); // TEMPORARY: force db schema update
 if (empty($_SESSION['db_bootstrapped'])) {
     (new SchemaBootstrap($conn));
     $_SESSION['db_bootstrapped'] = true;

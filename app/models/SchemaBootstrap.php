@@ -460,6 +460,12 @@ class SchemaBootstrap
                     updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
             );
+        } else {
+            // Ensure admin_notes column exists if the table was created before
+            $checkCol = $this->conn->query("SHOW COLUMNS FROM warranty_claims LIKE 'admin_notes'");
+            if ($checkCol && $checkCol->num_rows === 0) {
+                $this->conn->query("ALTER TABLE warranty_claims ADD COLUMN admin_notes TEXT AFTER status");
+            }
         }
     }
 }

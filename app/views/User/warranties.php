@@ -571,58 +571,79 @@ body {
         <?php endif; ?>
 
         <?php if (!empty($claims)): ?>
-            <div class="mt-5 pt-5">
-                <h3 class="w-header-title mb-5 text-center" style="font-size: 2.2rem; font-family: 'Playfair Display', serif; color: <?= $cardAccent ?>;">Claim History</h3>
-                <div class="row justify-content-center">
-                    <?php foreach ($claims as $c): ?>
-                        <div class="col-md-6 col-lg-5 mb-4">
-                            <!-- 3D ANIMATED CLAIM CARD (REDESIGNED) -->
-                            <div class="card h-100 border-0 claim-card-3d" style="border-radius: 24px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.06); padding: 25px;">
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <div style="width: 45px; height: 45px; background: <?= $cardDark ?>; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px;">
-                                            <i class="bi bi-shield-check"></i>
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Claim ID</div>
-                                            <div style="font-size: 1.1rem; font-weight: 800; color: <?= $cardAccent ?>;">#<?= $c['id'] ?></div>
-                                        </div>
-                                    </div>
-                                    <?php 
-                                        $bg = 'bg-warning text-dark';
-                                        if($c['status']=='Approved') $bg='bg-success text-white';
-                                        if($c['status']=='Rejected') $bg='bg-danger text-white';
-                                    ?>
-                                    <span class="badge rounded-pill <?= $bg ?> px-3 py-2" style="font-size: 0.75rem; letter-spacing: 0.5px; border-radius: 50px !important;"><?= $c['status'] ?></span>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <div class="text-muted text-uppercase mb-2" style="font-size: 0.7rem; letter-spacing: 1px; font-weight: 600;">Warranty Ref</div>
-                                    <div style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: <?= $cardDark ?>; background: rgba(207, 154, 66, 0.1); padding: 5px 15px; border-radius: 50px; display: inline-block;">
-                                        <?= htmlspecialchars($c['code']) ?>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <div class="text-muted text-uppercase mb-2" style="font-size: 0.7rem; letter-spacing: 1px; font-weight: 600;">Issue Description</div>
-                                    <p class="mb-0" style="font-size: 0.95rem; color: #444; line-height: 1.6;">
-                                        <?= htmlspecialchars($c['issue_description'] ?? 'No description provided.') ?>
-                                    </p>
-                                </div>
-                                
-                                <?php if(!empty($c['admin_notes'])): ?>
-                                    <div class="mt-auto p-3" style="background: #fafafa; border-radius: 12px; border: 1px solid #eee;">
-                                        <div class="text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px; color: <?= $cardDark ?>; font-weight: 700;">
-                                            <i class="bi bi-chat-quote-fill me-1"></i> Admin Response
-                                        </div>
-                                        <p class="mb-0" style="font-size: 0.85rem; color: #555; font-style: italic;">
-                                            "<?= htmlspecialchars($c['admin_notes']) ?>"
-                                        </p>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
+            <div class="mt-5 pt-4">
+                <div class="card border-0 mx-auto" style="max-width: 900px; border-radius: 12px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
+                    
+                    <!-- Header -->
+                    <div class="d-flex align-items-center p-4" style="background: #fff; border-bottom: 1px solid #f0f0f0;">
+                        <div style="width: 50px; height: 50px; background: #4caf50; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-right: 20px;">
+                            <i class="bi bi-folder2-open"></i>
                         </div>
-                    <?php endforeach; ?>
+                        <div>
+                            <h3 class="mb-0" style="font-family: 'Playfair Display', serif; font-weight: 800; color: #2e5a31; font-size: 1.6rem;">Claim Summary</h3>
+                            <p class="mb-0 text-success" style="font-size: 0.9rem; font-weight: 600;">Record of your submitted warranty claims</p>
+                        </div>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div class="p-4" style="background: #fdfdfd;">
+                        <div style="border: 1px solid #e0dcd3; border-radius: 8px; overflow: hidden;">
+                            <div class="p-2 px-3 text-white fw-bold text-uppercase" style="background: #a67c52; font-size: 0.85rem; letter-spacing: 1px;">
+                                Claim Summary
+                            </div>
+                            <table class="table table-borderless mb-0 align-middle" style="background: #fff;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #f0f0f0;">
+                                        <th class="text-center text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 1px; width: 20%;">Date</th>
+                                        <th class="text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 1px; width: 35%;">Activity / Issue</th>
+                                        <th class="text-center text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 1px; width: 25%;">Warranty Ref</th>
+                                        <th class="text-center text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 1px; width: 20%;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $rowCount = 0;
+                                    foreach ($claims as $c): 
+                                        $rowCount++;
+                                        $rowBg = ($rowCount % 2 == 0) ? '#fff8e7' : '#ffffff'; // Alternating light yellow
+                                    ?>
+                                        <tr style="background-color: <?= $rowBg ?>; border-bottom: 1px solid #f5f5f5;">
+                                            <td class="text-center" style="font-size: 0.9rem; color: #555; padding: 15px 10px;">
+                                                <?= date('m/d/Y', strtotime($c['created_at'])) ?>
+                                            </td>
+                                            <td style="font-size: 0.9rem; color: #333; padding: 15px 10px;">
+                                                <div class="fw-bold mb-1">Claim Initiated (ID: #<?= $c['id'] ?>)</div>
+                                                <div class="text-muted" style="font-size: 0.85rem; line-height: 1.4;">
+                                                    <?= htmlspecialchars($c['issue_description'] ?? 'No description provided.') ?>
+                                                </div>
+                                                <?php if(!empty($c['admin_notes'])): ?>
+                                                    <div class="mt-2 p-2 rounded" style="background: rgba(166, 124, 82, 0.1); border-left: 2px solid #a67c52; font-size: 0.8rem; color: #555;">
+                                                        <strong>Reply:</strong> <?= htmlspecialchars($c['admin_notes']) ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="text-center" style="padding: 15px 10px;">
+                                                <span style="font-family: monospace; font-size: 0.85rem; font-weight: 700; color: #a67c52; background: rgba(166, 124, 82, 0.1); padding: 4px 10px; border-radius: 4px;">
+                                                    <?= htmlspecialchars($c['code']) ?>
+                                                </span>
+                                            </td>
+                                            <td class="text-center" style="padding: 15px 10px;">
+                                                <?php 
+                                                    $bg = 'bg-warning text-dark';
+                                                    if($c['status']=='Approved') $bg='bg-success text-white';
+                                                    if($c['status']=='Rejected') $bg='bg-danger text-white';
+                                                    if($c['status']=='Resolved') $bg='bg-primary text-white';
+                                                ?>
+                                                <span class="badge <?= $bg ?> px-3 py-2" style="font-size: 0.75rem; letter-spacing: 0.5px; border-radius: 50px !important;">
+                                                    <?= strtoupper($c['status']) ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif; ?>
