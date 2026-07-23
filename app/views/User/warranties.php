@@ -397,11 +397,28 @@ body {
                             </div>
                         </div>
 
+                        <?php 
+                            $hasPendingClaim = false;
+                            if(!empty($claims)) {
+                                foreach($claims as $c) {
+                                    if(isset($c['warranty_id']) && $c['warranty_id'] == $w['id'] && $c['status'] == 'Pending') {
+                                        $hasPendingClaim = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        ?>
                         <?php if (strtolower($w['status']) === 'active'): ?>
                             <div class="claim-btn-container">
-                                <button class="btn-claim" data-bs-toggle="modal" data-bs-target="#claimModal<?= $w['id'] ?>">
-                                    Claim Warranty
-                                </button>
+                                <?php if ($hasPendingClaim): ?>
+                                    <button class="btn py-2 px-4 fw-bold shadow-sm" style="background: #e9ecef; color: #6c757d; border-radius: 50px; cursor: not-allowed;" disabled>
+                                        <i class="bi bi-hourglass-split me-2"></i> Claim Pending Review
+                                    </button>
+                                <?php else: ?>
+                                    <button class="btn-claim" data-bs-toggle="modal" data-bs-target="#claimModal<?= $w['id'] ?>">
+                                        Claim Warranty
+                                    </button>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 
@@ -443,40 +460,40 @@ body {
         <?php endif; ?>
 
         <?php if (!empty($claims)): ?>
-            <div class="mt-5">
-                <h3 class="w-header-title mb-4">My Claims History</h3>
-                <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
-                    <div class="table-responsive">
-                        <table class="table mb-0 align-middle">
-                            <thead style="background: var(--co-header-bg);">
-                                <tr>
-                                    <th class="py-3 px-4 text-uppercase text-muted" style="font-size: 0.8rem; font-weight: 700;">Claim ID</th>
-                                    <th class="py-3 px-4 text-uppercase text-muted" style="font-size: 0.8rem; font-weight: 700;">Warranty Code</th>
-                                    <th class="py-3 px-4 text-uppercase text-muted" style="font-size: 0.8rem; font-weight: 700;">Status</th>
-                                    <th class="py-3 px-4 text-uppercase text-muted" style="font-size: 0.8rem; font-weight: 700;">Admin Notes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($claims as $c): ?>
-                                    <tr>
-                                        <td class="px-4 py-3 fw-bold">#<?= $c['id'] ?></td>
-                                        <td class="px-4 py-3"><span class="badge bg-light text-dark border font-monospace"><?= htmlspecialchars($c['code']) ?></span></td>
-                                        <td class="px-4 py-3">
-                                            <?php 
-                                                $bg = 'bg-warning text-dark';
-                                                if($c['status']=='Approved') $bg='bg-success text-white';
-                                                if($c['status']=='Rejected') $bg='bg-danger text-white';
-                                            ?>
-                                            <span class="badge rounded-pill <?= $bg ?> px-3 py-2"><?= $c['status'] ?></span>
-                                        </td>
-                                        <td class="px-4 py-3 text-muted text-sm">
-                                            <?= empty($c['admin_notes']) ? '<em>Pending Review</em>' : htmlspecialchars($c['admin_notes']) ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="mt-5 pt-4" style="border-top: 1px dashed #ccc;">
+                <h3 class="w-header-title mb-4" style="font-size: 1.8rem;">My Claims History</h3>
+                <div class="row">
+                    <?php foreach ($claims as $c): ?>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+                                <div class="card-header border-0 d-flex justify-content-between align-items-center" style="background: #f9f9f9; padding: 15px 20px;">
+                                    <span class="fw-bold text-uppercase" style="font-size: 0.8rem; color: #555;"><i class="bi bi-ticket-detailed me-1"></i> Claim #<?= $c['id'] ?></span>
+                                    <?php 
+                                        $bg = 'bg-warning text-dark';
+                                        if($c['status']=='Approved') $bg='bg-success text-white';
+                                        if($c['status']=='Rejected') $bg='bg-danger text-white';
+                                    ?>
+                                    <span class="badge rounded-pill <?= $bg ?> px-3 py-2" style="font-size: 0.75rem; letter-spacing: 0.5px;"><?= $c['status'] ?></span>
+                                </div>
+                                <div class="card-body p-4" style="background: #fff;">
+                                    <div class="mb-3">
+                                        <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">Warranty Code</div>
+                                        <span class="badge" style="background: <?= $cardDark ?>; color: <?= $cardAccent ?>; font-size: 0.9rem; letter-spacing: 1px;"><?= htmlspecialchars($c['code']) ?></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">Issue Description</div>
+                                        <p class="mb-0" style="font-size: 0.9rem; color: #333; line-height: 1.5;"><?= htmlspecialchars($c['issue_description'] ?? 'No description provided.') ?></p>
+                                    </div>
+                                    <?php if(!empty($c['admin_notes'])): ?>
+                                        <div class="p-3 mt-3" style="background: #f8f9fa; border-left: 3px solid <?= $cardDark ?>; border-radius: 0 8px 8px 0;">
+                                            <div class="text-muted text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;"><i class="bi bi-person-badge me-1"></i> Admin Notes</div>
+                                            <p class="mb-0 text-dark" style="font-size: 0.85rem; font-style: italic;"><?= htmlspecialchars($c['admin_notes']) ?></p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         <?php endif; ?>
