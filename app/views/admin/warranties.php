@@ -129,11 +129,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Order ID</label>
-                            <input type="number" name="order_id" class="form-control form-control-solid" required placeholder="e.g. 1042">
+                            <input type="text" name="order_id" class="form-control form-control-solid" style="color: #333 !important;" required placeholder="e.g. 1042">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Duration</label>
-                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid border-0 shadow-none" required>
+                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid border-0 shadow-none" style="color: #333 !important;" required>
                                 <option value="7">7 Days (Fitting & Alteration)</option>
                                 <option value="30">30 Days (Stitching Warranty)</option>
                                 <option value="90">90 Days (Fabric Warranty)</option>
@@ -147,7 +147,7 @@
                                     <i class="bi bi-magic me-1"></i> Generate with AI
                                 </button>
                             </div>
-                            <textarea name="terms" id="termsBox" class="form-control" rows="3" required placeholder="Describe what is covered under this warranty..."></textarea>
+                            <textarea name="terms" id="termsBox" class="form-control" rows="3" required placeholder="Describe what is covered under this warranty..." style="color: #333 !important;"></textarea>
                         </div>
                     </div>
                 </div>

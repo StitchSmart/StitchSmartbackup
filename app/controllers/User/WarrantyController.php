@@ -1,4 +1,5 @@
 <?php
+require_once BASE_PATH . '/app/models/settings.php';
 require_once __DIR__ . '/../../models/Warranty.php';
 
 class WarrantyController
@@ -21,6 +22,9 @@ class WarrantyController
         $customerId = (int)$_SESSION['customer_id'];
         $warranties = $this->warrantyModel->getUserWarranties($customerId);
         $claims = $this->warrantyModel->getUserClaims($customerId);
+        $settingsModel = new Settings();
+        $webSettings = $settingsModel->getWebSettings();
+        $global_theme = $webSettings['theme'] ?? 'theme-default';
         require_once __DIR__ . '/../../views/User/warranties.php';
     }
 
