@@ -247,7 +247,7 @@ h1, h2, h3, h4, h5, h6, .card-title, .chart-label, .form-label, label {
     border: none !important;
 }
 
-.card-header h1, .card-header h2, .card-header h3, .card-header h4, .card-header h5 {
+.card-header h1, .card-header h2, .card-header h3, .card-header h4, .card-header h5, .card-header h6 {
     color: #000 !important;
     font-weight: 900 !important;
     text-transform: uppercase;
@@ -291,6 +291,7 @@ h1, h2, h3, h4, h5, h6, .card-title, .chart-label, .form-label, label {
 /* Fix for any remaining blue/green gradients or backgrounds */
 .bg-primary, .bg-info, .bg-success {
     background-color: var(--accent-bronze) !important;
+    color: #000 !important;
 }
 
 /* Category Selector in Add Product */
