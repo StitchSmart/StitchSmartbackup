@@ -4,7 +4,16 @@ $hide_footer = true;
 $hide_chatbot = true;
 include(__DIR__ . '/header.php');
 
-$theme = $global_theme ?? 'theme-default';
+if (!isset($global_theme)) {
+    if (isset($_COOKIE['site_theme'])) {
+        $global_theme = $_COOKIE['site_theme'];
+    } elseif (isset($_SESSION['user_theme'])) {
+        $global_theme = $_SESSION['user_theme'];
+    } else {
+        $global_theme = 'theme-default';
+    }
+}
+$theme = $global_theme;
 $themeFile = ($theme === 'theme-luxury') ? 'theme-luxury-frontend.css' : 'theme-default-frontend.css';
 
 // The aesthetic colors for the business card design based on user's image

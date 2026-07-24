@@ -1,18 +1,33 @@
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <div>
-        <h1 class="h3 mb-2 text-gray-800 fw-bold" style="font-family: 'Playfair Display', serif;">Warranty Management</h1>
-        <ul class="nav nav-pills border-0">
-            <li class="nav-item">
-                <a class="nav-link active rounded-pill px-4 shadow-sm" href="<?= url('admin_warranties') ?>">Issued Warranties</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link rounded-pill px-4 text-muted" href="<?= url('admin_warranty_claims') ?>">Pending Claims</a>
-            </li>
-        </ul>
+<div class="admin-feature-hero p-4 p-md-5 mb-4 rounded-4 position-relative overflow-hidden">
+    <div class="position-absolute top-0 end-0 opacity-10 pointer-events-none d-none d-lg-block" style="transform: translate(10%, -10%);">
+        <i class="bi bi-shield-check text-warning" style="font-size: 15rem;"></i>
     </div>
-    <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#createWarrantyModal" style="border-radius: 50px; padding: 8px 20px;">
-        <i class="bi bi-shield-plus me-2"></i> Issue New Warranty
-    </button>
+    <div class="position-absolute bottom-0 start-0 opacity-5 pointer-events-none d-none d-lg-block" style="transform: translate(-20%, 30%);">
+        <i class="bi bi-award-fill text-warning" style="font-size: 10rem;"></i>
+    </div>
+    <div class="position-relative z-1 text-center text-md-start">
+        <div class="mb-3">
+            <span class="badge rounded-pill px-3 py-2 mb-2" style="background: rgba(202, 151, 69, 0.25); color: #e8c547; border: 1px solid rgba(202,151,69,0.5); font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;">
+                <i class="bi bi-shield-check pe-1"></i> Warranty Center
+            </span>
+        </div>
+        <h2 class="mb-2 fw-bolder" style="font-size: 2.4rem; letter-spacing: -0.5px;">
+            Warranty Management
+            <span style="background: linear-gradient(135deg, #ca9745, #e8c547); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">& CLAIMS</span>
+        </h2>
+        <p class="mb-0 mt-2" style="max-width: 680px; font-size: 1.05rem; line-height: 1.5; opacity: 0.85;">Manage customer warranties, issue new digital warranty cards, and oversee active or resolved warranty claims.</p>
+        <div class="mt-4 d-flex flex-wrap gap-3 align-items-center justify-content-center justify-content-md-start">
+            <button data-bs-toggle="modal" data-bs-target="#createWarrantyModal" class="btn px-4 py-3 rounded-pill d-flex align-items-center gap-2 shadow-sm" style="background: linear-gradient(135deg, #ca9745, #e8c547); color: #1a0f0a; border: none; font-weight: 800; font-size: 0.96rem; transition: all 0.3s ease; text-decoration: none;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(202, 151, 69, 0.6)';" onmouseout="this.style.transform='translateY(0)';">
+                <i class="bi bi-shield-plus fs-5"></i> + Issue New Warranty
+            </button>
+            <a href="<?= url('admin_warranties') ?>" class="btn px-4 py-3 rounded-pill d-flex align-items-center gap-2 shadow-sm" style="background: linear-gradient(135deg, #ca9745, #e8c547); color: #1a0f0a; border: none; font-weight: 700; font-size: 0.96rem; transition: all 0.3s ease; text-decoration: none;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(202, 151, 69, 0.6)';" onmouseout="this.style.transform='translateY(0)';">
+                <i class="bi bi-card-checklist fs-5"></i> Issued Warranties
+            </a>
+            <a href="<?= url('admin_warranty_claims') ?>" class="btn px-4 py-3 rounded-pill d-flex align-items-center gap-2 shadow-sm" style="background: rgba(202, 151, 69, 0.18); color: #ca9745; border: 1px solid rgba(202, 151, 69, 0.5); font-weight: 700; font-size: 0.96rem; transition: all 0.3s ease; text-decoration: none;" onmouseover="this.style.background='rgba(202, 151, 69, 0.3)'; this.style.color='#1a0f0a';" onmouseout="this.style.background='rgba(202, 151, 69, 0.18)'; this.style.color='#ca9745';">
+                <i class="bi bi-envelope-exclamation fs-5"></i> Pending Claims
+            </a>
+        </div>
+    </div>
 </div>
 
 <?php if (isset($_SESSION['success_message'])): ?>
@@ -114,11 +129,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Order ID</label>
-                            <input type="number" name="order_id" class="form-control form-control-solid bg-light" required placeholder="e.g. 1042">
+                            <input type="number" name="order_id" class="form-control form-control-solid" required placeholder="e.g. 1042">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Duration</label>
-                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid bg-light border-0 shadow-none" required>
+                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid border-0 shadow-none" required>
                                 <option value="7">7 Days (Fitting & Alteration)</option>
                                 <option value="30">30 Days (Stitching Warranty)</option>
                                 <option value="90">90 Days (Fabric Warranty)</option>
@@ -132,11 +147,11 @@
                                     <i class="bi bi-magic me-1"></i> Generate with AI
                                 </button>
                             </div>
-                            <textarea name="terms" id="termsBox" class="form-control bg-light" rows="3" required placeholder="Describe what is covered under this warranty..."></textarea>
+                            <textarea name="terms" id="termsBox" class="form-control" rows="3" required placeholder="Describe what is covered under this warranty..."></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-light" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                <div class="modal-footer" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 50px; padding: 6px 20px;">Cancel</button>
                     <button type="submit" class="btn btn-primary" style="border-radius: 50px; padding: 6px 20px;"><i class="bi bi-check2-circle me-1"></i> Generate</button>
                 </div>
