@@ -68,7 +68,7 @@
                                     <span class="text-sm font-weight-bold">#<?= $c['id'] ?></span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark border px-2 py-1 mb-1 font-monospace"><i class="bi bi-shield-check me-1"></i><?= htmlspecialchars($c['code']) ?></span><br>
+                                    <span class="badge px-2 py-1 mb-1 font-monospace" style="background: rgba(255,255,255,0.1); color: #ca9745; border: 1px solid rgba(205, 154, 72, 0.4);"><i class="bi bi-shield-check me-1"></i><?= htmlspecialchars($c['code']) ?></span><br>
                                     <small class="text-muted fw-bold"><?= htmlspecialchars($c['customer_name'] ?? 'User ID: ' . $c['user_id']) ?></small>
                                 </td>
                                 <td>

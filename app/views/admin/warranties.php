@@ -61,7 +61,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex px-2 py-1 align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 40px; height: 40px;">
+                                        <div class="d-flex align-items-center justify-content-center bg-light rounded-circle me-3" style="width: 40px; height: 40px;">
                                             <i class="bi bi-shield-check text-primary"></i>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
@@ -86,7 +86,7 @@
                                     <span class="badge rounded-pill <?= $badge ?> px-3 py-2 text-xs"><?= $w['status'] ?></span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark border px-2 py-1"><i class="bi bi-clock-history me-1"></i><?= $w['duration_days'] ?> Days</span>
+                                    <span class="badge px-2 py-1" style="background: rgba(255,255,255,0.1); color: #ca9745; border: 1px solid rgba(205, 154, 72, 0.4);"><i class="bi bi-clock-history me-1"></i><?= $w['duration_days'] ?> Days</span>
                                 </td>
                                 <td>
                                     <span class="text-secondary text-xs font-weight-bold"><?= date('d M, Y', strtotime($w['expires_at'])) ?></span>
