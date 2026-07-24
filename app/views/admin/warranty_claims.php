@@ -70,6 +70,9 @@
 :root.theme-default .modal-content .form-select {
     color: #333 !important;
 }
+
+:root.theme-luxury .customer-issue-text { color: #eee !important; }
+:root.theme-default .customer-issue-text { color: #333 !important; }
 </style>
 
 <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
@@ -159,7 +162,7 @@
                             
                             <div class="alert mb-4" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
                                 <strong class="d-block mb-1" style="color: #ca9745;">Customer's Issue:</strong>
-                                <span class="text-sm" style="color: #eee;"><?= nl2br(htmlspecialchars($c['issue_description'])) ?></span>
+                                <span class="text-sm customer-issue-text"><?= nl2br(htmlspecialchars($c['issue_description'])) ?></span>
                             </div>
 
                             <div class="mb-3">

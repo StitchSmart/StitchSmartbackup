@@ -655,7 +655,7 @@ $themeFile = ($theme === 'theme-luxury') ? 'theme-luxury-frontend.css' : 'theme-
             </div>
         </div>
         <div class="co-stat-card">
-            <div class="co-stat-icon"><i class="bi bi-currency-rupee"></i></div>
+            <div class="co-stat-icon" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.1rem; line-height: 1;">Rs</div>
             <div>
                 <div class="co-stat-label">Total Spent</div>
                 <div class="co-stat-value">Rs <?= number_format($totalSpent, 0) ?></div>
