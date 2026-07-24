@@ -55,7 +55,7 @@
 /* Dynamic text colors for modals based on active theme */
 :root.theme-luxury .modal-title,
 :root.theme-luxury .modal-header i {
-    color: #fff !important;
+    color: #000 !important;
 }
 :root.theme-luxury .modal-content .form-control,
 :root.theme-luxury .modal-content .form-select {
