@@ -20,6 +20,22 @@
     </div>
 <?php endif; ?>
 
+<?php if (isset($_SESSION['error_message'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show border-0 border-start border-5 border-danger shadow-sm" role="alert">
+        <i class="bi bi-exclamation-circle-fill me-2 text-danger"></i>
+        <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['csrf_error'])): ?>
+    <div class="alert alert-warning alert-dismissible fade show border-0 border-start border-5 border-warning shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+        <?= $_SESSION['csrf_error']; unset($_SESSION['csrf_error']); ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
 <div class="card shadow-sm border-0 mb-4" style="border-radius: 15px;">
     <div class="card-header bg-white py-3" style="border-bottom: 1px solid #f0f0f0;">
         <h6 class="m-0 font-weight-bold text-primary">All Submitted Claims</h6>
