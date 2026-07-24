@@ -164,7 +164,7 @@
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <label class="form-label fw-bold text-secondary text-xs text-uppercase mb-0">Admin Notes / Response</label>
-                                    <button type="button" class="btn btn-outline-primary btn-sm mb-0 px-3 py-1 ai-generate-btn" data-target="admin_notes_<?= $c['id'] ?>" data-status="status_<?= $c['id'] ?>" style="border-radius: 20px; font-size: 0.75rem;">
+                                    <button type="button" class="btn btn-sm mb-0 px-3 py-1 ai-generate-btn" data-target="admin_notes_<?= $c['id'] ?>" data-status="status_<?= $c['id'] ?>" style="border-radius: 20px; font-size: 0.75rem; background-color: #111 !important; color: #ca9745 !important; border: 1px solid #ca9745 !important; font-weight: bold;">
                                         <i class="bi bi-magic me-1"></i> Generate with AI
                                     </button>
                                 </div>

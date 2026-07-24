@@ -151,7 +151,7 @@
                         <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label class="form-label fw-bold text-secondary text-xs text-uppercase m-0">Terms & Coverage</label>
-                                <button type="button" id="btnGenerateAI" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 0.75rem; border-radius: 5px;">
+                                <button type="button" id="btnGenerateAI" class="btn btn-sm py-0 px-2" style="font-size: 0.75rem; border-radius: 5px; background-color: #111 !important; color: #ca9745 !important; border: 1px solid #ca9745 !important; font-weight: bold;">
                                     <i class="bi bi-magic me-1"></i> Generate with AI
                                 </button>
                             </div>
