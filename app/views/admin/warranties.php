@@ -61,8 +61,8 @@
                             <tr>
                                 <td>
                                     <div class="d-flex px-2 py-1 align-items-center">
-                                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 8px;">
-                                            <i class="bi bi-qr-code text-primary"></i>
+                                        <div class="d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-shield-check text-primary"></i>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
                                             <h6 class="mb-0 text-sm font-monospace fw-bold text-primary"><?= htmlspecialchars($w['code']) ?></h6>
