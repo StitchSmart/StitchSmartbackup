@@ -98,51 +98,55 @@
                                 </td>
                             </tr>
 
-                            <!-- Update Modal -->
-                            <div class="modal fade" id="updateClaimModal<?= $c['id'] ?>" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
-                                        <div class="modal-header bg-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                                            <h5 class="modal-title fw-bold">Review Claim #<?= $c['id'] ?></h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <form action="<?= url('admin_update_claim') ?>" method="POST">
-                                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
-                                            <input type="hidden" name="claim_id" value="<?= $c['id'] ?>">
-                                            <div class="modal-body p-4">
-                                                
-                                                <div class="alert alert-light border mb-4">
-                                                    <strong class="d-block mb-1 text-dark">Customer's Issue:</strong>
-                                                    <span class="text-muted text-sm"><?= nl2br(htmlspecialchars($c['issue_description'])) ?></span>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold text-secondary text-xs text-uppercase">Claim Status</label>
-                                                    <select name="status" class="form-select form-control-solid bg-light border-0 shadow-none">
-                                                        <option value="Pending" <?= $c['status'] == 'Pending' ? 'selected' : '' ?>>⏳ Pending</option>
-                                                        <option value="Approved" <?= $c['status'] == 'Approved' ? 'selected' : '' ?>>✅ Approved</option>
-                                                        <option value="Rejected" <?= $c['status'] == 'Rejected' ? 'selected' : '' ?>>❌ Rejected</option>
-                                                        <option value="Resolved" <?= $c['status'] == 'Resolved' ? 'selected' : '' ?>>🎉 Resolved</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold text-secondary text-xs text-uppercase">Admin Notes / Response</label>
-                                                    <textarea name="admin_notes" class="form-control bg-light" rows="3" placeholder="This response will be visible to the customer..."><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer bg-light" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 50px; padding: 6px 20px;">Close</button>
-                                                <button type="submit" class="btn btn-primary" style="border-radius: 50px; padding: 6px 20px;"><i class="bi bi-save me-1"></i> Update Status</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<!-- Render Modals Outside the Table -->
+<?php if (!empty($claims)): ?>
+    <?php foreach ($claims as $c): ?>
+        <!-- Update Modal -->
+        <div class="modal fade" id="updateClaimModal<?= $c['id'] ?>" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+                    <div class="modal-header bg-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <h5 class="modal-title fw-bold">Review Claim #<?= $c['id'] ?></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="<?= url('admin_update_claim') ?>" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                        <input type="hidden" name="claim_id" value="<?= $c['id'] ?>">
+                        <div class="modal-body p-4">
+                            
+                            <div class="alert alert-light border mb-4">
+                                <strong class="d-block mb-1 text-dark">Customer's Issue:</strong>
+                                <span class="text-muted text-sm"><?= nl2br(htmlspecialchars($c['issue_description'])) ?></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-secondary text-xs text-uppercase">Claim Status</label>
+                                <select name="status" class="form-select form-control-solid bg-light border-0 shadow-none">
+                                    <option value="Pending" <?= $c['status'] == 'Pending' ? 'selected' : '' ?>>⏳ Pending</option>
+                                    <option value="Approved" <?= $c['status'] == 'Approved' ? 'selected' : '' ?>>✅ Approved</option>
+                                    <option value="Rejected" <?= $c['status'] == 'Rejected' ? 'selected' : '' ?>>❌ Rejected</option>
+                                    <option value="Resolved" <?= $c['status'] == 'Resolved' ? 'selected' : '' ?>>🎉 Resolved</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-secondary text-xs text-uppercase">Admin Notes / Response</label>
+                                <textarea name="admin_notes" class="form-control bg-light" rows="3" placeholder="This response will be visible to the customer..."><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 50px; padding: 6px 20px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="border-radius: 50px; padding: 6px 20px;"><i class="bi bi-save me-1"></i> Update Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
