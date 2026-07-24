@@ -120,7 +120,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
             <div class="modal-header bg-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                <h5 class="modal-title fw-bold"><i class="bi bi-shield-check me-2"></i> Issue New Warranty</h5>
+                <h5 class="modal-title fw-bold" style="color: #fff !important;"><i class="bi bi-shield-check me-2" style="color: #fff !important;"></i> Issue New Warranty</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="<?= url('admin_create_warranty') ?>" method="POST">
@@ -129,11 +129,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Order ID</label>
-                            <input type="text" name="order_id" class="form-control form-control-solid" style="color: #333 !important;" required placeholder="e.g. 1042">
+                            <input type="text" name="order_id" class="form-control form-control-solid" style="color: #fff !important;" required placeholder="e.g. 1042">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-secondary text-xs text-uppercase">Duration</label>
-                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid border-0 shadow-none" style="color: #333 !important;" required>
+                            <select name="duration_days" id="durationSelect" class="form-select form-control-solid border-0 shadow-none" style="color: #fff !important;" required>
                                 <option value="7">7 Days (Fitting & Alteration)</option>
                                 <option value="30">30 Days (Stitching Warranty)</option>
                                 <option value="90">90 Days (Fabric Warranty)</option>
@@ -147,7 +147,7 @@
                                     <i class="bi bi-magic me-1"></i> Generate with AI
                                 </button>
                             </div>
-                            <textarea name="terms" id="termsBox" class="form-control" rows="3" required placeholder="Describe what is covered under this warranty..." style="color: #333 !important;"></textarea>
+                            <textarea name="terms" id="termsBox" class="form-control" rows="3" required placeholder="Describe what is covered under this warranty..." style="color: #fff !important;"></textarea>
                         </div>
                     </div>
                 </div>
