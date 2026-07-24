@@ -48,9 +48,13 @@
 
 <style>
 /* Dynamic text colors for modals based on active theme */
+:root.theme-luxury .modal-header.bg-primary {
+    background: #111 !important;
+    border-bottom: 1px solid rgba(202, 151, 69, 0.3) !important;
+}
 :root.theme-luxury .modal-title,
 :root.theme-luxury .modal-header i {
-    color: #000 !important;
+    color: #ca9745 !important;
 }
 :root.theme-luxury .modal-content .form-control,
 :root.theme-luxury .modal-content .form-select {
