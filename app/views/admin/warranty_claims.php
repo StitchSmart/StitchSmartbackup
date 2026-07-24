@@ -53,23 +53,6 @@
 
 <style>
 /* Dynamic text colors for modals based on active theme */
-:root.theme-luxury .modal-header.bg-primary {
-    background: #111 !important;
-    border-bottom: 1px solid rgba(202, 151, 69, 0.3) !important;
-}
-:root.theme-luxury .modal-title,
-:root.theme-luxury .modal-header i {
-    color: #ca9745 !important;
-}
-:root.theme-luxury .modal-content .form-control,
-:root.theme-luxury .modal-content .form-select {
-    color: #fff !important;
-}
-
-:root.theme-default .modal-title,
-:root.theme-default .modal-header i {
-    color: #fff !important; /* Keep header text white because background is primary blue */
-}
 :root.theme-default .modal-content .form-control,
 :root.theme-default .modal-content .form-select {
     color: #333 !important;
@@ -155,9 +138,9 @@
         <div class="modal fade" id="updateClaimModal<?= $c['id'] ?>" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
-                    <div class="modal-header bg-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <h5 class="modal-title fw-bold">Review Claim #<?= $c['id'] ?></h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <div class="modal-header" style="background-color: #ca9745; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom: 2px solid #8A6421;">
+                        <h5 class="modal-title fw-bold" style="color: #000 !important;">Review Claim #<?= $c['id'] ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: brightness(0);"></button>
                     </div>
                     <form action="<?= url('admin_update_claim') ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
