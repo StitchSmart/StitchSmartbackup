@@ -128,7 +128,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
                     <div class="modal-header bg-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                        <h5 class="modal-title fw-bold">Review Claim #<?= $c['id'] ?></h5>
+                        <h5 class="modal-title fw-bold" style="color: #fff !important;">Review Claim #<?= $c['id'] ?></h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <form action="<?= url('admin_update_claim') ?>" method="POST">
@@ -143,7 +143,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-secondary text-xs text-uppercase">Claim Status</label>
-                                <select id="status_<?= $c['id'] ?>" name="status" class="form-select form-control-solid border-0 shadow-none" style="color: #333 !important;" required>
+                                <select id="status_<?= $c['id'] ?>" name="status" class="form-select form-control-solid border-0 shadow-none" style="color: #fff !important;" required>
                                     <option value="Pending" <?= $c['status'] == 'Pending' ? 'selected' : '' ?>>⏳ Pending</option>
                                     <option value="Approved" <?= $c['status'] == 'Approved' ? 'selected' : '' ?>>✅ Approved</option>
                                     <option value="Rejected" <?= $c['status'] == 'Rejected' ? 'selected' : '' ?>>❌ Rejected</option>
@@ -157,7 +157,7 @@
                                         <i class="bi bi-magic me-1"></i> Generate with AI
                                     </button>
                                 </div>
-                                <textarea id="admin_notes_<?= $c['id'] ?>" name="admin_notes" class="form-control" rows="3" placeholder="This response will be visible to the customer..." style="color: #333 !important;"><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
+                                <textarea id="admin_notes_<?= $c['id'] ?>" name="admin_notes" class="form-control" rows="3" placeholder="This response will be visible to the customer..." style="color: #fff !important;"><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
                             </div>
                         </div>
                         <div class="modal-footer" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
