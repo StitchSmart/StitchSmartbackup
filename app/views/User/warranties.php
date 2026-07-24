@@ -37,7 +37,6 @@ if ($theme === 'theme-luxury') {
    3D FLIP BUSINESS CARD DESIGN
    ============================================================ */
 body {
-    background: #fdfcf9 !important; /* Clean, premium off-white */
     font-family: 'Montserrat', sans-serif !important;
     overflow-x: hidden;
 }
@@ -90,7 +89,6 @@ body {
     margin-bottom: 15px;
 }
 .hero-text {
-    color: rgba(0,0,0,0.7);
     font-size: 0.9rem;
     max-width: 400px;
     line-height: 1.6;
@@ -235,7 +233,6 @@ body {
 .cf-title {
     font-weight: 800;
     font-size: 1.2rem;
-    color: <?= $textDark ?>;
     letter-spacing: 1px;
     margin: 0;
 }
@@ -346,6 +343,19 @@ body {
 .btn-claim:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.claim-card {
+    background: var(--page-card-bg, #ffffff);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid var(--page-border, rgba(0,0,0,0.05));
+    transition: all 0.3s;
+}
+:root.theme-luxury .claim-card {
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
 }
 
 /* Modals */

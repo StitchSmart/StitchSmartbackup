@@ -128,7 +128,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-secondary text-xs text-uppercase">Claim Status</label>
-                                <select name="status" class="form-select form-control-solid bg-light border-0 shadow-none">
+                                <select id="status_<?= $c['id'] ?>" name="status" class="form-select form-control-solid bg-light border-0 shadow-none">
                                     <option value="Pending" <?= $c['status'] == 'Pending' ? 'selected' : '' ?>>⏳ Pending</option>
                                     <option value="Approved" <?= $c['status'] == 'Approved' ? 'selected' : '' ?>>✅ Approved</option>
                                     <option value="Rejected" <?= $c['status'] == 'Rejected' ? 'selected' : '' ?>>❌ Rejected</option>
@@ -136,8 +136,13 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label fw-bold text-secondary text-xs text-uppercase">Admin Notes / Response</label>
-                                <textarea name="admin_notes" class="form-control bg-light" rows="3" placeholder="This response will be visible to the customer..."><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="form-label fw-bold text-secondary text-xs text-uppercase mb-0">Admin Notes / Response</label>
+                                    <button type="button" class="btn btn-outline-primary btn-sm mb-0 px-3 py-1 ai-generate-btn" data-target="admin_notes_<?= $c['id'] ?>" data-status="status_<?= $c['id'] ?>" style="border-radius: 20px; font-size: 0.75rem;">
+                                        <i class="bi bi-magic me-1"></i> Generate with AI
+                                    </button>
+                                </div>
+                                <textarea id="admin_notes_<?= $c['id'] ?>" name="admin_notes" class="form-control bg-light" rows="3" placeholder="This response will be visible to the customer..."><?= htmlspecialchars($c['admin_notes'] ?? '') ?></textarea>
                             </div>
                         </div>
                         <div class="modal-footer bg-light" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
@@ -150,3 +155,46 @@
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
+
+<script>
+document.querySelectorAll('.ai-generate-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const statusId = this.getAttribute('data-status');
+        const box = document.getElementById(targetId);
+        const status = document.getElementById(statusId).value;
+        
+        let template = "";
+        if (status === "Pending") {
+            template = "Dear customer, your warranty claim has been received and is currently under review by our technical team. We will get back to you with an update shortly.";
+        } else if (status === "Approved") {
+            template = "Good news! Your warranty claim has been reviewed and approved. Please follow the instructions sent to your email to proceed with the repair or replacement.";
+        } else if (status === "Rejected") {
+            template = "We have carefully reviewed your claim. Unfortunately, the issue described does not fall under our warranty coverage terms. Please contact support for alternative repair options.";
+        } else if (status === "Resolved") {
+            template = "Your warranty claim has been successfully resolved. We hope you are satisfied with the outcome. Thank you for choosing Stitch Smart!";
+        }
+        
+        box.value = "";
+        let i = 0;
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Generating...';
+        this.disabled = true;
+        
+        const interval = setInterval(() => {
+            box.value += template.charAt(i);
+            i++;
+            if (i >= template.length) {
+                clearInterval(interval);
+                this.innerHTML = '<i class="bi bi-check-circle me-1"></i> Generated';
+                this.classList.replace('btn-outline-primary', 'btn-success');
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.replace('btn-success', 'btn-outline-primary');
+                    this.disabled = false;
+                }, 2000);
+            }
+        }, 15);
+    });
+});
+</script>
