@@ -108,7 +108,9 @@ class SimpleTFIDFVectorStore:
         self.doc_tfidfs = []
         
         def tokenize(text):
-            return re.findall(r'\w+', text.lower())
+            words = re.findall(r'\w+', text.lower())
+            stopwords = {'is', 'a', 'an', 'the', 'of', 'and', 'in', 'to', 'for', 'with', 'on', 'at', 'by', 'who', 'what', 'where', 'when', 'why', 'how', 'are', 'am', 'was', 'were', 'it', 'this', 'that', 'these', 'those', 'do', 'does', 'did', 'be', 'been', 'has', 'have', 'had'}
+            return [w for w in words if w not in stopwords]
             
         N = len(documents)
         df = {}
@@ -140,7 +142,9 @@ class SimpleTFIDFVectorStore:
 
     def similarity_search_with_score(self, query: str, k: int = 4):
         def tokenize(text):
-            return re.findall(r'\w+', text.lower())
+            words = re.findall(r'\w+', text.lower())
+            stopwords = {'is', 'a', 'an', 'the', 'of', 'and', 'in', 'to', 'for', 'with', 'on', 'at', 'by', 'who', 'what', 'where', 'when', 'why', 'how', 'are', 'am', 'was', 'were', 'it', 'this', 'that', 'these', 'those', 'do', 'does', 'did', 'be', 'been', 'has', 'have', 'had'}
+            return [w for w in words if w not in stopwords]
             
         words = tokenize(query)
         tf = {}
