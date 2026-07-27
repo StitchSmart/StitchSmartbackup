@@ -386,7 +386,7 @@ public function getProductsNotOnSale()
 public function getFeaturedProducts($limit, $offset){
 
     $stmt = $this->conn->prepare(
-        "SELECT * FROM product WHERE featured = 1 ORDER BY id DESC LIMIT ? OFFSET ?"
+        "SELECT * FROM product WHERE featured = 1 AND (sale_discount_percent IS NULL OR sale_discount_percent = 0) ORDER BY id DESC LIMIT ? OFFSET ?"
     );
 
     $stmt->bind_param("ii", $limit, $offset);
@@ -421,7 +421,7 @@ private function resolveProductSort($sort, $defaultOrder = 'id ASC'){
 }
 
 public function getFeaturedProductsCount(){
-    $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM product WHERE featured = 1");
+    $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM product WHERE featured = 1 AND (sale_discount_percent IS NULL OR sale_discount_percent = 0)");
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
