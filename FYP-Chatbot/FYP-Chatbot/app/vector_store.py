@@ -233,7 +233,7 @@ class SimpleTFIDFVectorStore:
                         
                 results = store.similarity_search_with_score(query, k=k)
                 non_zero = [doc for doc, score in results if score > 0.0]
-                return non_zero if non_zero else [doc for doc, score in results[:2]]
+                return non_zero
         return Retriever()
 
     def save_local(self, path: str):
