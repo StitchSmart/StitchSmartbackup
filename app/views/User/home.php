@@ -272,7 +272,7 @@
             <?php 
             $counter = 0;
             foreach($featuredProducts as $product): 
-                if($counter >= 8) break;
+                if($counter >= 4) break;
             ?>
             <div class="col-lg-3 col-md-6 d-flex">
                 <div class="featured-card">

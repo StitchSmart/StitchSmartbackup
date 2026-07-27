@@ -320,7 +320,7 @@ public function getProductsOnSale()
     $this->ensureSaleDiscountColumnExists();
 
     $stmt = $this->conn->prepare(
-        "SELECT * FROM product WHERE sale_discount_percent > 0 AND (featured IS NULL OR featured = 0) ORDER BY id DESC"
+        "SELECT * FROM product WHERE sale_discount_percent > 0 ORDER BY id DESC"
     );
     $stmt->execute();
     $result = $stmt->get_result();
@@ -337,7 +337,7 @@ public function getSaleProductsCount()
 {
     $this->ensureSaleDiscountColumnExists();
 
-    $stmt = $this->conn->prepare("SELECT COUNT(*) AS total FROM product WHERE sale_discount_percent > 0 AND (featured IS NULL OR featured = 0)");
+    $stmt = $this->conn->prepare("SELECT COUNT(*) AS total FROM product WHERE sale_discount_percent > 0");
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
@@ -350,7 +350,7 @@ public function getSaleProductsPaginated($limit, $offset)
     $this->ensureSaleDiscountColumnExists();
 
     $stmt = $this->conn->prepare(
-        "SELECT * FROM product WHERE sale_discount_percent > 0 AND (featured IS NULL OR featured = 0) ORDER BY id DESC LIMIT ? OFFSET ?"
+        "SELECT * FROM product WHERE sale_discount_percent > 0 ORDER BY id DESC LIMIT ? OFFSET ?"
     );
     $stmt->bind_param("ii", $limit, $offset);
     $stmt->execute();
