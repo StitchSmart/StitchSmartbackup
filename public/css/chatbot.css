@@ -175,10 +175,12 @@
     white-space: nowrap;
 }
 
-.quick-btn:hover {
-    background: #405f46;
-    color: #fff;
-    border-color: #405f46;
+.quick-btn:hover,
+.quick-btn:active,
+.quick-btn:focus {
+    background: #405f46 !important;
+    color: #fff !important;
+    border-color: #405f46 !important;
 }
 
 /* Message Bubbles */
@@ -421,8 +423,10 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.chat-link:hover {
-    background: var(--accent-bronze);
+.chat-link:hover,
+.chat-link:active,
+.chat-link:focus {
+    background: var(--accent-bronze) !important;
     color: #fff !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(202, 151, 69, 0.3);
