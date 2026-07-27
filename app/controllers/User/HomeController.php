@@ -68,8 +68,8 @@ class HomeController {
         $meta_keywords = $webSettings['meta_keywords'] ?? '';
         $global_theme = $webSettings['theme'] ?? 'theme-default';
         // fetch data for homepage
-        $products = $this->productModel->getSaleProductsPaginated(4, 0);
-        $featuredProducts = $this->productModel->getFeaturedProducts(4, 0);
+        $products = $this->productModel->getSaleProductsPaginated(8, 0);
+        $featuredProducts = $this->productModel->getFeaturedProducts(8, 0);
         $categories = $this->sanitizeCategoryTree($this->categoryModel->getCategoriesTree());
 
         $wishlistedProductIds = [];
