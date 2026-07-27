@@ -25,4 +25,4 @@ PRODUCTS_JSON_PATH: str = os.path.join(os.path.dirname(__file__), "..", "data", 
 FAISS_INDEX_DIR: str = os.path.join(os.path.dirname(__file__), "..", "faiss_index")
 
 # ── Retriever settings ────────────────────────────────────────
-RETRIEVER_TOP_K: int = 4
+RETRIEVER_TOP_K: int = 15
