@@ -1003,7 +1003,7 @@ a:not(.btn):hover, .nav-link:hover, footer a:hover {
     color: var(--accent-bronze) !important;
 }
 
-.btn, .btn-dark, .headbutton, .btn-link {
+.btn-dark, .headbutton {
     color: #1a0f0a !important;
 }
 
