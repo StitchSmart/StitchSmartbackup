@@ -79,9 +79,13 @@ body {
   border: none;
 }
 
-.success-actions .btn-primary:hover {
+.success-actions .btn-primary:hover,
+.success-actions .btn-primary:active,
+.success-actions .btn-primary:focus {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(202, 151, 69, 0.3);
+  color: #1a0f0a !important;
+  background: linear-gradient(135deg, #ca9745 0%, #ca9745 100%) !important;
 }
 
 .trust-badges {

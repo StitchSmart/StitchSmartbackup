@@ -319,8 +319,7 @@
                         </td>
 
                     <td>
-                       <img src="<?= BASE_URL ?>/<?= htmlspecialchars($item['image']) ?>" width="80px"/>
-                             
+                       <img src="<?= BASE_URL . ltrim(htmlspecialchars($item['image']), '/') ?>" width="80px" alt="Product Image" style="object-fit: cover; border-radius: 4px;"/>
                     </td>
 
                     <td>

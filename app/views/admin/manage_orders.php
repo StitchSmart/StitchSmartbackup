@@ -95,46 +95,29 @@
                                 <div class="d-flex flex-column align-items-center gap-2">
 
                                 <?php if(!$isDelivered && !$isCancelled): ?>
+                                    <select class="form-select form-select-sm rounded-pill fw-bold mb-2" style="background-color: rgba(202,151,69,0.05); border: 1px solid rgba(202,151,69,0.3); color: #ca9745; width: 160px; text-align: center; cursor: pointer;" onchange="if(this.value) { if(this.value.includes('mark_cancelled') && !confirm('Cancel this order? This cannot be undone.')) { this.value=''; return; } window.location.href = this.value; }">
+                                        <option value="">Update Status...</option>
+                                        <option value="<?= url('mark_processing?id=' . $order['id']) ?>" <?= $currentStatus === 'Processing' ? 'disabled' : '' ?>>Processing</option>
+                                        <option value="<?= url('mark_in_transit?id=' . $order['id']) ?>" <?= $currentStatus === 'In Transit' ? 'disabled' : '' ?>>In Transit</option>
+                                        <option value="<?= url('mark_out_for_delivery?id=' . $order['id']) ?>" <?= $currentStatus === 'Out for Delivery' ? 'disabled' : '' ?>>Out for Delivery</option>
+                                        <option value="<?= url('mark_delivered?id=' . $order['id']) ?>">Delivered</option>
+                                        <option value="<?= url('mark_cancelled?id=' . $order['id']) ?>">Cancel Order</option>
+                                    </select>
 
-                                    <?php if($currentStatus === 'Pending'): ?>
-                                        <a href="<?= url('mark_processing?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.4); white-space: nowrap;">
-                                            <i class="bi bi-gear pe-1"></i>Mark Processing
-                                        </a>
-
-                                    <?php elseif($currentStatus === 'Processing'): ?>
+                                    <?php if($currentStatus === 'Processing'): ?>
                                         <?php if(empty($order['tracking_id'])): ?>
-                                            <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold toggle-dispatch" data-order-id="<?= $order['id'] ?>" style="background: rgba(13,110,253,0.15); color: #4d91ff; border: 1px solid rgba(13,110,253,0.4); white-space: nowrap;">
-                                                <i class="bi bi-send pe-1"></i>Dispatch
+                                            <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold toggle-dispatch mb-2" data-order-id="<?= $order['id'] ?>" style="background: rgba(13,110,253,0.15); color: #4d91ff; border: 1px solid rgba(13,110,253,0.4); white-space: nowrap;">
+                                                <i class="bi bi-send pe-1"></i>Dispatch (Add Tracking)
                                             </button>
                                         <?php endif; ?>
-
-                                    <?php elseif($currentStatus === 'Dispatched'): ?>
-                                        <a href="<?= url('mark_in_transit?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(13,202,240,0.15); color: #0dcaf0; border: 1px solid rgba(13,202,240,0.4); white-space: nowrap;">
-                                            <i class="bi bi-truck pe-1"></i>Mark In Transit
-                                        </a>
-
-                                    <?php elseif($currentStatus === 'In Transit'): ?>
-                                        <a href="<?= url('mark_out_for_delivery?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(255,128,0,0.15); color: #ff8c00; border: 1px solid rgba(255,128,0,0.4); white-space: nowrap;">
-                                            <i class="bi bi-scooter pe-1"></i>Out for Delivery
-                                        </a>
-
-                                    <?php elseif($currentStatus === 'Out for Delivery'): ?>
-                                        <a href="<?= url('mark_delivered?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(25,135,84,0.15); color: #198754; border: 1px solid rgba(25,135,84,0.4); white-space: nowrap;">
-                                            <i class="bi bi-check-circle pe-1"></i>Mark Delivered
-                                        </a>
-
-                                    <?php else: ?>
-                                        <a href="<?= url('mark_processing?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.4); white-space: nowrap;">
-                                            <i class="bi bi-arrow-clockwise pe-1"></i>Reset
-                                        </a>
                                     <?php endif; ?>
 
                                     <?php if($currentStatus === 'Processing' || !empty($order['tracking_id'])): ?>
                                         <?php if(!empty($order['tracking_id'])): ?>
-                                            <span class="badge rounded-pill px-3" style="background: rgba(13,202,240,0.15); color: #0dcaf0; border: 1px solid rgba(13,202,240,0.4); font-size: 0.78rem;">
+                                            <span class="badge rounded-pill px-3 mb-2" style="background: rgba(13,202,240,0.15); color: #0dcaf0; border: 1px solid rgba(13,202,240,0.4); font-size: 0.78rem;">
                                                 <i class="bi bi-tag pe-1"></i><?= htmlspecialchars($order['tracking_id']) ?>
                                             </span>
-                                            <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold toggle-dispatch" data-order-id="<?= $order['id'] ?>" style="background: rgba(13,110,253,0.1); color: #4d91ff; border: 1px solid rgba(13,110,253,0.3); white-space: nowrap; font-size: 0.82rem;">
+                                            <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold toggle-dispatch mb-2" data-order-id="<?= $order['id'] ?>" style="background: rgba(13,110,253,0.1); color: #4d91ff; border: 1px solid rgba(13,110,253,0.3); white-space: nowrap; font-size: 0.82rem;">
                                                 <i class="bi bi-pencil pe-1"></i>Update Tracking
                                             </button>
                                         <?php endif; ?>
@@ -149,10 +132,6 @@
                                             </form>
                                         </div>
                                     <?php endif; ?>
-
-                                    <a href="<?= url('mark_cancelled?id=' . $order['id']) ?>" class="btn btn-sm rounded-pill px-3 fw-bold" style="background: rgba(220,53,69,0.12); color: #dc3545; border: 1px solid rgba(220,53,69,0.3); white-space: nowrap;" onclick="return confirm('Cancel this order? This cannot be undone.')">
-                                        <i class="bi bi-x-circle pe-1"></i>Cancel Order
-                                    </a>
 
                                 <?php endif; ?>
 
