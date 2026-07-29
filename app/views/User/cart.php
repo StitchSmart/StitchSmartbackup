@@ -319,7 +319,11 @@
                         </td>
 
                     <td>
-                       <img src="<?= BASE_URL . ltrim(htmlspecialchars($item['image']), '/') ?>" width="80px" alt="Product Image" style="object-fit: cover; border-radius: 4px;"/>
+                        <?php 
+                            $imgPaths = explode(',', $item['image'] ?? '');
+                            $firstImg = trim($imgPaths[0] ?? '');
+                        ?>
+                       <img src="<?= BASE_URL . ltrim(htmlspecialchars($firstImg), '/') ?>" width="80px" alt="Product Image" style="object-fit: cover; border-radius: 4px;"/>
                     </td>
 
                     <td>
